@@ -1,16 +1,14 @@
-# Football Scoreboard
+# Scoreboard Overlay
 
-Updated default setup:
-- Home: FUL / assets/fulham.png
-- Center: assets/premier-league.png
-- Away: MUN / assets/manchester-united.png
+The layout is:
 
-The scoreboard positions are symmetric around the Premier League center badge.
+FULHAM LOGO | FUL | 0 | PREMIER LEAGUE | 0 | MUN | MAN UNITED LOGO | 00:00
 
-IMPORTANT: Put these three files in the assets folder on GitHub:
-- fulham.png
-- premier-league.png
-- manchester-united.png
+The timer is on the RIGHT of the Manchester United logo.
+The score stays immediately before MUN.
+
+## GitHub Pages
+Upload all files and the `assets` folder to your repository.
 
 OBS URL:
 https://YOUR-USERNAME.github.io/YOUR-REPO/?room=premier-league-match
@@ -19,3 +17,10 @@ Control URL:
 https://YOUR-USERNAME.github.io/YOUR-REPO/control.html
 
 Use the same room name on both pages.
+
+## OBS
+Add the OBS URL as a Browser Source.
+The page background is transparent.
+
+## Important
+This version uses PeerJS directly between the online control page and the OBS browser source, so no localhost server is required.

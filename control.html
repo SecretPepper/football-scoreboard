@@ -1,20 +1,40 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Scoreboard Control</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#111;color:#fff;font-family:Arial,sans-serif;padding:24px}.panel{max-width:760px;margin:auto;background:#1c1c1c;border:1px solid #333;border-radius:18px;padding:22px}h1{margin:0 0 8px}.sub{color:#aaa;font-size:14px;margin-bottom:20px}.room{display:flex;gap:8px;margin-bottom:18px}.room input{flex:1}.section{background:#101010;border-radius:14px;padding:16px;margin:12px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.team h2{margin:0 0 12px}.team input[type=text],.team input[type=number],.room input{width:100%;padding:11px;border-radius:9px;border:1px solid #444;background:#222;color:#fff;font-size:16px}.file{font-size:13px;margin-top:10px;color:#bbb}.preview{height:58px;width:110px;object-fit:contain;background:#222;border-radius:8px;margin-top:8px}.buttons{display:flex;gap:8px;flex-wrap:wrap}.buttons button{flex:1;min-width:90px}.scorebox{display:flex;gap:8px}.scorebox input{font-size:28px;text-align:center}.clock{text-align:center;font-family:Impact,"Arial Narrow",Arial,sans-serif;font-size:58px;margin:10px}.button{border:0;border-radius:9px;padding:12px;background:#333;color:#fff;font-weight:800;font-size:16px;cursor:pointer}.start{background:#168a45}.pause{background:#b77916}.reset{background:#b52d36}.save{background:#315fbd}.status{margin-top:14px;color:#aaa;font-size:13px}.hint{color:#888;font-size:12px;margin-top:7px}@media(max-width:600px){.grid{grid-template-columns:1fr}}
+*{box-sizing:border-box}
+body{margin:0;background:#111;color:#fff;font-family:Arial,sans-serif;padding:24px}
+.panel{max-width:760px;margin:auto;background:#1c1c1c;border:1px solid #333;border-radius:18px;padding:22px}
+h1{margin:0 0 8px}.sub{color:#aaa;font-size:14px;margin-bottom:20px}
+.room{display:flex;gap:8px;margin-bottom:18px}.room input{flex:1}
+.section{background:#101010;border-radius:14px;padding:16px;margin:12px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.team h2{margin:0 0 12px}
+.team input[type=text],.team input[type=number],.room input{width:100%;padding:11px;border-radius:9px;border:1px solid #444;background:#222;color:#fff;font-size:16px}
+.file{font-size:13px;margin-top:10px;color:#bbb}
+.preview{height:58px;width:110px;object-fit:contain;background:#222;border-radius:8px;margin-top:8px}
+.buttons{display:flex;gap:8px;flex-wrap:wrap}.buttons button{flex:1;min-width:90px}
+.scorebox{display:flex;gap:8px}.scorebox input{font-size:28px;text-align:center}
+.clock{text-align:center;font-family:Impact,"Arial Narrow",Arial,sans-serif;font-size:58px;margin:10px}
+.button{border:0;border-radius:9px;padding:12px;background:#333;color:#fff;font-weight:800;font-size:16px;cursor:pointer}
+.start{background:#168a45}.pause{background:#b77916}.reset{background:#b52d36}.save{background:#315fbd}
+.status{margin-top:14px;color:#aaa;font-size:13px}.hint{color:#888;font-size:12px;margin-top:7px}
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <main class="panel">
 <h1>Scoreboard Control</h1>
-<div class="sub">No localhost. Open this page online and control the OBS scoreboard remotely.</div>
+<div class="sub">Open this page online and control the OBS scoreboard remotely.</div>
+
 <div class="room">
 <input id="room" value="premier-league-match" placeholder="Room name">
 <button class="button save" id="connect">CONNECT</button>
 </div>
+
 <div class="grid">
 <section class="section team">
 <h2>Home</h2>
@@ -23,6 +43,7 @@
 <input id="homeFile" class="file" type="file" accept="image/*">
 <img id="homePreview" class="preview" src="assets/fulham.png" alt="">
 </section>
+
 <section class="section team">
 <h2>Away</h2>
 <input id="awayName" type="text" value="MUN" maxlength="8" placeholder="Team name">
@@ -31,49 +52,191 @@
 <img id="awayPreview" class="preview" src="assets/manchester-united.png" alt="">
 </section>
 </div>
+
 <div class="buttons">
-<button class="button" id="homeMinus">HOME −1</button><button class="button" id="homePlus">HOME +1</button>
-<button class="button" id="awayMinus">AWAY −1</button><button class="button" id="awayPlus">AWAY +1</button>
+<button class="button" id="homeMinus">HOME −1</button>
+<button class="button" id="homePlus">HOME +1</button>
+<button class="button" id="awayMinus">AWAY −1</button>
+<button class="button" id="awayPlus">AWAY +1</button>
 </div>
+
 <section class="section">
 <div class="clock" id="clock">00:00</div>
-<div class="buttons"><button class="button start" id="start">START</button><button class="button pause" id="pause">PAUSE</button><button class="button reset" id="reset">RESET</button></div>
-<div class="buttons" style="margin-top:8px"><input class="button" id="minutes" type="number" min="0" max="999" value="0" placeholder="Minutes"><input class="button" id="seconds" type="number" min="0" max="59" value="0" placeholder="Seconds"><button class="button save" id="setTime">SET TIME</button></div>
+<div class="buttons">
+<button class="button start" id="start">START</button>
+<button class="button pause" id="pause">PAUSE</button>
+<button class="button reset" id="reset">RESET</button>
+</div>
+<div class="buttons" style="margin-top:8px">
+<input class="button" id="minutes" type="number" min="0" max="999" value="0" placeholder="Minutes">
+<input class="button" id="seconds" type="number" min="0" max="59" value="0" placeholder="Seconds">
+<button class="button save" id="setTime">SET TIME</button>
+</div>
 </section>
-<div class="buttons"><button class="button save" id="apply">APPLY TEAM / SCORE CHANGES</button></div>
+
+<div class="buttons">
+<button class="button save" id="apply">APPLY TEAM / SCORE CHANGES</button>
+</div>
+
 <div class="status" id="status">Enter the same room name in OBS URL and click CONNECT.</div>
-<div class="hint">OBS URL example: https://YOUR-SITE.com/?room=premier-league-match</div>
+<div class="hint">OBS: https://YOUR-USERNAME.github.io/YOUR-REPO/?room=premier-league-match</div>
 </main>
+
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
 "use strict";
-let peer=null,conn=null;
-let state={homeName:"FUL",awayName:"MUN",homeLogo:"assets/fulham.png",awayLogo:"assets/manchester-united.png",homeScore:0,awayScore:0,elapsedMs:0,running:false,startedAt:null};
+
+let peer=null, conn=null;
+
+let state={
+  homeName:"FUL",
+  awayName:"MUN",
+  homeLogo:"assets/fulham.png",
+  awayLogo:"assets/manchester-united.png",
+  homeScore:0,
+  awayScore:0,
+  elapsedMs:0,
+  running:false,
+  startedAt:null
+};
+
 const $=id=>document.getElementById(id);
-function elapsed(){return state.running&&state.startedAt?state.elapsedMs+(Date.now()-state.startedAt):state.elapsedMs}
-function render(){const t=Math.max(0,Math.floor(elapsed()/1000));$("clock").textContent=String(Math.floor(t/60)).padStart(2,"0")+":"+String(t%60);$("homeScore").value=state.homeScore;$("awayScore").value=state.awayScore;$("homeName").value=state.homeName;$("awayName").value=state.awayName;$("homePreview").src=state.homeLogo;$("awayPreview").src=state.awayLogo}
-function send(){if(!conn||!conn.open){$("status").textContent="Not connected to OBS scoreboard.";return}conn.send({type:"state",state});$("status").textContent="Updated scoreboard."}
-function connect(){
- const room=($("room").value||"premier-league-match").replace(/[^a-zA-Z0-9_-]/g,"").slice(0,40)||"premier-league-match";
- if(peer) try{peer.destroy()}catch{}
- peer=new Peer("scoreboard-"+room+"-control-"+Math.random().toString(36).slice(2,8),{debug:0});
- peer.on("open",()=>{conn=peer.connect("scoreboard-"+room+"-display",{reliable:true});conn.on("open",()=>{$("status").textContent="Connected to scoreboard.";send()});conn.on("close",()=>{$("status").textContent="OBS connection closed."})});
- peer.on("error",e=>{$("status").textContent="Connection error. Check the room name and that OBS is open.";});
+
+function elapsed(){
+  return state.running && state.startedAt
+    ? state.elapsedMs + (Date.now()-state.startedAt)
+    : state.elapsedMs;
 }
-function apply(){state.homeName=$("homeName").value.trim().toUpperCase().slice(0,8)||"HOME";state.awayName=$("awayName").value.trim().toUpperCase().slice(0,8)||"AWAY";state.homeScore=Math.max(0,Math.min(999,Number($("homeScore").value)||0));state.awayScore=Math.max(0,Math.min(999,Number($("awayScore").value)||0));send()}
-async function fileToData(file){if(!file)return null; if(file.size>2*1024*1024){$("status").textContent="Logo is too large. Use an image under 2 MB.";return null}return await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file)})}
-$("connect").onclick=connect;$("apply").onclick=apply;
-$("homePlus").onclick=()=>{$("homeScore").value=Math.min(999,Number($("homeScore").value||0)+1);apply()};
-$("homeMinus").onclick=()=>{$("homeScore").value=Math.max(0,Number($("homeScore").value||0)-1);apply()};
-$("awayPlus").onclick=()=>{$("awayScore").value=Math.min(999,Number($("awayScore").value||0)+1);apply()};
-$("awayMinus").onclick=()=>{$("awayScore").value=Math.max(0,Number($("awayScore").value||0)-1);apply()};
-$("start").onclick=()=>{if(!state.running){state.elapsedMs=elapsed();state.startedAt=Date.now();state.running=true;send()}};
-$("pause").onclick=()=>{if(state.running){state.elapsedMs=elapsed();state.startedAt=null;state.running=false;send()}};
-$("reset").onclick=()=>{state.elapsedMs=0;state.startedAt=state.running?Date.now():null;send()};
-$("setTime").onclick=()=>{const m=Math.max(0,Math.min(999,Number($("minutes").value)||0)),s=Math.max(0,Math.min(59,Number($("seconds").value)||0));state.elapsedMs=(m*60+s)*1000;state.startedAt=state.running?Date.now():null;send()};
-$("homeFile").onchange=async e=>{const x=await fileToData(e.target.files[0]);if(x){state.homeLogo=x;$("homePreview").src=x;send()}};
-$("awayFile").onchange=async e=>{const x=await fileToData(e.target.files[0]);if(x){state.awayLogo=x;$("awayPreview").src=x;send()}};
-setInterval(render,250);render();
+
+function render(){
+  const t=Math.max(0,Math.floor(elapsed()/1000));
+  $("clock").textContent=String(Math.floor(t/60)).padStart(2,"0")+":"+String(t%60).padStart(2,"0");
+  $("homeScore").value=state.homeScore;
+  $("awayScore").value=state.awayScore;
+  $("homeName").value=state.homeName;
+  $("awayName").value=state.awayName;
+  $("homePreview").src=state.homeLogo;
+  $("awayPreview").src=state.awayLogo;
+}
+
+function send(){
+  if(!conn || !conn.open){
+    $("status").textContent="Not connected to OBS scoreboard.";
+    return;
+  }
+  conn.send({type:"state",state});
+  $("status").textContent="Updated scoreboard.";
+}
+
+function connect(){
+  const room=($("room").value||"premier-league-match")
+    .replace(/[^a-zA-Z0-9_-]/g,"").slice(0,40)||"premier-league-match";
+
+  if(peer) try{peer.destroy()}catch{}
+
+  peer=new Peer("scoreboard-"+room+"-control-"+Math.random().toString(36).slice(2,8),{debug:0});
+
+  peer.on("open",()=>{
+    conn=peer.connect("scoreboard-"+room+"-display",{reliable:true});
+    conn.on("open",()=>{
+      $("status").textContent="Connected to scoreboard.";
+      send();
+    });
+    conn.on("close",()=>{$("status").textContent="OBS connection closed.";});
+  });
+
+  peer.on("error",e=>{
+    $("status").textContent="Connection error. Check the room name and that OBS is open.";
+    console.error(e);
+  });
+}
+
+function apply(){
+  state.homeName=$("homeName").value.trim().toUpperCase().slice(0,8)||"HOME";
+  state.awayName=$("awayName").value.trim().toUpperCase().slice(0,8)||"AWAY";
+  state.homeScore=Math.max(0,Math.min(999,Number($("homeScore").value)||0));
+  state.awayScore=Math.max(0,Math.min(999,Number($("awayScore").value)||0));
+  send();
+}
+
+async function fileToData(file){
+  if(!file)return null;
+  if(file.size>2*1024*1024){
+    $("status").textContent="Logo is too large. Use an image under 2 MB.";
+    return null;
+  }
+  return await new Promise((resolve,reject)=>{
+    const r=new FileReader();
+    r.onload=()=>resolve(r.result);
+    r.onerror=reject;
+    r.readAsDataURL(file);
+  });
+}
+
+$("connect").onclick=connect;
+$("apply").onclick=apply;
+
+$("homePlus").onclick=()=>{
+  $("homeScore").value=Math.min(999,Number($("homeScore").value||0)+1);
+  apply();
+};
+$("homeMinus").onclick=()=>{
+  $("homeScore").value=Math.max(0,Number($("homeScore").value||0)-1);
+  apply();
+};
+$("awayPlus").onclick=()=>{
+  $("awayScore").value=Math.min(999,Number($("awayScore").value||0)+1);
+  apply();
+};
+$("awayMinus").onclick=()=>{
+  $("awayScore").value=Math.max(0,Number($("awayScore").value||0)-1);
+  apply();
+};
+
+$("start").onclick=()=>{
+  if(!state.running){
+    state.elapsedMs=elapsed();
+    state.startedAt=Date.now();
+    state.running=true;
+    send();
+  }
+};
+
+$("pause").onclick=()=>{
+  if(state.running){
+    state.elapsedMs=elapsed();
+    state.startedAt=null;
+    state.running=false;
+    send();
+  }
+};
+
+$("reset").onclick=()=>{
+  state.elapsedMs=0;
+  state.startedAt=state.running?Date.now():null;
+  send();
+};
+
+$("setTime").onclick=()=>{
+  const m=Math.max(0,Math.min(999,Number($("minutes").value)||0));
+  const s=Math.max(0,Math.min(59,Number($("seconds").value)||0));
+  state.elapsedMs=(m*60+s)*1000;
+  state.startedAt=state.running?Date.now():null;
+  send();
+};
+
+$("homeFile").onchange=async e=>{
+  const x=await fileToData(e.target.files[0]);
+  if(x){state.homeLogo=x;$("homePreview").src=x;send();}
+};
+
+$("awayFile").onchange=async e=>{
+  const x=await fileToData(e.target.files[0]);
+  if(x){state.awayLogo=x;$("awayPreview").src=x;send();}
+};
+
+setInterval(render,250);
+render();
 </script>
 </body>
 </html>

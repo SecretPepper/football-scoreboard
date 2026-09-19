@@ -1,73 +1,86 @@
 (() => {
   "use strict";
 
-  let last = {
+  const params = new URLSearchParams(location.search);
+  const room = (params.get("room") || "premier-league-match")
+    .replace(/[^a-zA-Z0-9_-]/g, "")
+    .slice(0, 40) || "premier-league-match";
+
+  const displayId = "scoreboard-" + room + "-display";
+
+  let state = {
+    homeName: "FUL",
+    awayName: "MUN",
+    homeLogo: "assets/fulham.png",
+    awayLogo: "assets/manchester-united.png",
     homeScore: 0,
     awayScore: 0,
     elapsedMs: 0,
-    running: false
+    running: false,
+    startedAt: null
   };
 
-  function getNumber(value, fallback = 0) {
-    const n = Number(value);
-    return Number.isFinite(n) ? n : fallback;
+  function $(id){ return document.getElementById(id); }
+
+  function elapsedMs() {
+    if (state.running && state.startedAt) {
+      return Math.max(0, Number(state.elapsedMs || 0) + (Date.now() - Number(state.startedAt)));
+    }
+    return Math.max(0, Number(state.elapsedMs || 0));
   }
 
   function formatTime(ms) {
-    const totalSeconds = Math.max(0, Math.floor(getNumber(ms) / 1000));
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-
-    return String(minutes).padStart(2, "0") + ":" +
-           String(seconds).padStart(2, "0");
+    const total = Math.floor(Math.max(0, ms) / 1000);
+    const minutes = Math.floor(total / 60);
+    const seconds = total % 60;
+    return String(minutes).padStart(2,"0") + ":" + String(seconds).padStart(2,"0");
   }
 
-  function render(state) {
-    last = state || last;
-
-    const home = document.getElementById("homeScore");
-    const away = document.getElementById("awayScore");
-    const timer = document.getElementById("timer");
-
-    if (home && state.homeScore !== undefined) {
-      home.textContent = Math.max(0, Math.floor(getNumber(state.homeScore)));
-    }
-
-    if (away && state.awayScore !== undefined) {
-      away.textContent = Math.max(0, Math.floor(getNumber(state.awayScore)));
-    }
-
-    if (timer) {
-      let elapsed = getNumber(state.elapsedMs, 0);
-
-      // Also support alternate state formats from older control pages.
-      if (!state.elapsedMs && state.timeMs !== undefined) {
-        elapsed = getNumber(state.timeMs, 0);
-      }
-
-      if (!state.elapsedMs && state.timer !== undefined) {
-        elapsed = getNumber(state.timer, 0);
-      }
-
-      timer.textContent = formatTime(elapsed);
-    }
+  function render() {
+    $("homeName").textContent = state.homeName || "HOME";
+    $("awayName").textContent = state.awayName || "AWAY";
+    $("homeScore").textContent = Math.max(0, Math.floor(Number(state.homeScore) || 0));
+    $("awayScore").textContent = Math.max(0, Math.floor(Number(state.awayScore) || 0));
+    $("homeLogo").src = state.homeLogo || "assets/fulham.png";
+    $("awayLogo").src = state.awayLogo || "assets/manchester-united.png";
+    $("timer").textContent = formatTime(elapsedMs());
   }
 
-  async function sync() {
-    try {
-      const response = await fetch("/state?_" + Date.now(), {
-        cache: "no-store"
+  function startPeer() {
+    const peer = new Peer(displayId, { debug: 0 });
+
+    peer.on("open", () => {
+      render();
+    });
+
+    peer.on("connection", conn => {
+      conn.on("data", data => {
+        if (!data) return;
+
+        if (data.type === "state" && data.state) {
+          state = {
+            ...state,
+            ...data.state
+          };
+          render();
+        }
       });
 
-      if (!response.ok) return;
+      conn.on("open", () => {
+        conn.send({ type: "state", state });
+      });
+    });
 
-      render(await response.json());
-    } catch {
-      // Keep the last visible scoreboard state if the connection drops.
-    }
+    peer.on("error", err => {
+      console.error("PeerJS error:", err);
+      if (err && err.type === "unavailable-id") {
+        // Another OBS tab may already own the room. Reloading lets
+        // PeerJS reclaim the display ID after the old tab closes.
+      }
+    });
   }
 
-  render(last);
-  sync();
-  setInterval(sync, 250);
+  render();
+  setInterval(render, 250);
+  startPeer();
 })();

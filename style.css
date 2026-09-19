@@ -1,60 +1,112 @@
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:transparent}
 body{display:flex;align-items:flex-start;justify-content:flex-start;font-family:Impact,"Arial Narrow",Arial,sans-serif}
-.scoreboard{position:relative;width:862px;height:112px;margin:0;border-radius:17px;background:linear-gradient(180deg,#080808 0%,#050505 100%);box-shadow:0 0 0 2px rgba(0,0,0,.25),0 5px 12px rgba(0,0,0,.28)}
-.team-logo{position:absolute;top:19px;width:108px;height:72px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:14px}
-.team-logo img{display:block;width:100%;height:72px;object-fit:contain;object-position:center}
-.left-logo{left:28px}.right-logo{left:594px}
-.team-name{position:absolute;top:31px;width:82px;height:50px;color:#fff;font-size:34px;line-height:50px;letter-spacing:-1px;font-weight:900;text-shadow:1px 2px 0 #000;white-space:nowrap;overflow:hidden;text-overflow:clip;text-align:center}
-.left-name{left:145px}.right-name{left:495px}
-.score{position:absolute;top:34px;width:44px;height:43px;color:#f13a46;font-size:49px;line-height:39px;font-weight:900;text-align:center;text-shadow:1px 2px 0 #000}
-.left-score{left:240px}.right-score{left:422px}
-.middle-icon{position:absolute;left:319px;top:15px;width:86px;height:80px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:18px}
-.middle-icon img{width:86px;height:80px;display:block;object-fit:contain;object-position:center}
-.timer{position:absolute;left:728px;top:27px;width:105px;height:54px;color:#090909;font-size:40px;line-height:54px;font-weight:900;letter-spacing:0;text-align:center}
-.team-right {
-    flex-direction: row;
+
+.scoreboard{
+  position:relative;
+  width:862px;
+  height:112px;
+  margin:0;
+  border-radius:18px;
+  overflow:hidden;
+  background:linear-gradient(180deg,#080808 0%,#050505 100%);
+  box-shadow:0 0 0 2px rgba(0,0,0,.25),0 5px 12px rgba(0,0,0,.28);
 }
 
+.team-logo{
+  position:absolute;
+  top:19px;
+  width:108px;
+  height:72px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  border-radius:14px;
+}
+.team-logo img{
+  display:block;
+  width:100%;
+  height:72px;
+  object-fit:contain;
+  object-position:center;
+}
+.left-logo{left:28px}
+.right-logo{left:594px}
 
-/* =========================================================
-   SCOREBOARD FIXES
-   - rounded outer scoreboard
-   - centered composition
-   - always-visible match timer
-========================================================= */
+.team-name{
+  position:absolute;
+  top:31px;
+  width:82px;
+  height:50px;
+  color:#fff;
+  font-size:34px;
+  line-height:50px;
+  letter-spacing:-1px;
+  font-weight:900;
+  text-shadow:1px 2px 0 #000;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:clip;
+  text-align:center;
+}
+.left-name{left:145px}
+.right-name{left:495px}
 
-.scoreboard {
-  position: relative;
-  border-radius: 18px !important;
-  overflow: hidden;
+.score{
+  position:absolute;
+  top:34px;
+  width:44px;
+  height:43px;
+  color:#f13a46;
+  font-size:49px;
+  line-height:39px;
+  font-weight:900;
+  text-align:center;
+  text-shadow:1px 2px 0 #000;
+}
+.left-score{left:240px}
+.right-score{left:422px}
+
+.middle-icon{
+  position:absolute;
+  left:319px;
+  top:15px;
+  width:86px;
+  height:80px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  border-radius:18px;
+}
+.middle-icon img{
+  width:86px;
+  height:80px;
+  display:block;
+  object-fit:contain;
+  object-position:center;
 }
 
-/* The clock belongs inside the scoreboard, centered underneath
-   the main score line so it cannot disappear behind the team
-   elements or transparent page background. */
-.scoreboard .timer,
-#timer {
-  position: absolute !important;
-  left: 50% !important;
-  bottom: 5px !important;
-  top: auto !important;
-  transform: translateX(-50%) !important;
-  z-index: 50 !important;
-
-  display: block !important;
-  width: 110px !important;
-  height: 27px !important;
-
-  color: #ffffff !important;
-  background: #050505 !important;
-  border-radius: 7px !important;
-
-  font-family: Impact, "Arial Narrow", Arial, sans-serif !important;
-  font-size: 22px !important;
-  font-weight: 900 !important;
-  line-height: 27px !important;
-  text-align: center !important;
-  letter-spacing: .5px !important;
-  text-shadow: 1px 1px 0 #000 !important;
+/* Timer is ONLY on the right of the Manchester United logo. */
+.timer{
+  position:absolute !important;
+  left:710px !important;
+  top:30px !important;
+  bottom:auto !important;
+  transform:none !important;
+  z-index:50 !important;
+  display:block !important;
+  width:120px !important;
+  height:50px !important;
+  color:#fff !important;
+  background:transparent !important;
+  border-radius:0 !important;
+  font-family:Impact,"Arial Narrow",Arial,sans-serif !important;
+  font-size:30px !important;
+  font-weight:900 !important;
+  line-height:50px !important;
+  text-align:left !important;
+  letter-spacing:.5px !important;
+  text-shadow:1px 2px 0 #000 !important;
 }
