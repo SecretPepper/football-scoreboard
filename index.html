@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Scoreboard Overlay</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="scoreboard">
+  <div class="team-logo left-logo"><img id="homeLogo" src="assets/fulham.png" alt=""></div>
+  <div class="team-name left-name" id="homeName">FUL</div>
+  <div class="score left-score" id="homeScore">0</div>
+  <div class="middle-icon"><img src="assets/premier-league.png" alt=""></div>
+  <div class="score right-score" id="awayScore">0</div>
+  <div class="team-name right-name" id="awayName">MUN</div>
+  <div class="team-logo right-logo"><img id="awayLogo" src="assets/manchester-united.png" alt=""></div>
+  <div class="timer" id="timer">00:00</div>
+</div>
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script src="overlay.js"></script>
+</body>
+</html>
