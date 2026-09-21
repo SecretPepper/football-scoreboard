@@ -158,17 +158,17 @@ body {
     linear-gradient(
       105deg,
 
-      #080808 0%,
+      var(--club-color) 0%,
+
+      var(--club-color) 48%,
 
       color-mix(
         in srgb,
         var(--club-color) 70%,
         #000000
-      ) 32%,
+      ) 68%,
 
-      var(--club-color) 52%,
-
-      var(--club-color) 100%
+      #080808 100%
     );
 
   border-radius:
@@ -179,6 +179,8 @@ body {
 
 /*
  * Mirror diagonal shape.
+ * Same gradient direction as HOME so the
+ * secondary colour stays on the same vertical side.
  */
 
 .away-panel::after {
@@ -195,7 +197,7 @@ body {
 
   background:
     linear-gradient(
-      45deg,
+      135deg,
       transparent 0%,
       var(--club-secondary) 48%,
       var(--club-color) 49%,
