@@ -9,6 +9,7 @@ const params =
     window.location.search
   );
 
+
 const room =
   params.get("room") ||
   "premier-league-match";
@@ -22,7 +23,7 @@ const displayId =
 
 /*
  * ============================================================
- * INITIAL STATE
+ * STATE
  * ============================================================
  */
 
@@ -55,6 +56,7 @@ let state = {
   elapsedMs: 0,
   running: false,
   startedAt: null
+
 };
 
 
@@ -89,7 +91,9 @@ const awayScore =
   document.getElementById("away-score");
 
 const competitionLogo =
-  document.getElementById("competition-logo");
+  document.getElementById(
+    "competition-logo"
+  );
 
 const timer =
   document.getElementById("timer");
@@ -115,9 +119,11 @@ function getElapsed() {
         state.startedAt
       )
     );
+
   }
 
   return state.elapsedMs;
+
 }
 
 
@@ -131,41 +137,54 @@ function formatTime(milliseconds) {
       ) / 1000
     );
 
+
   const minutes =
     Math.floor(
       totalSeconds / 60
     );
 
+
   const seconds =
     totalSeconds % 60;
+
 
   return (
     String(minutes).padStart(2, "0") +
     ":" +
     String(seconds).padStart(2, "0")
   );
+
 }
 
 
 /*
  * ============================================================
- * RENDER
+ * RENDER SCOREBOARD
  * ============================================================
  */
 
 function render() {
 
+  /*
+   * TEAM NAMES
+   */
+
   homeName.textContent =
-    state.homeName;
+    state.homeName || "FUL";
 
   awayName.textContent =
-    state.awayName;
+    state.awayName || "MUN";
+
+
+  /*
+   * SCORES
+   */
 
   homeScore.textContent =
-    state.homeScore;
+    Number(state.homeScore) || 0;
 
   awayScore.textContent =
-    state.awayScore;
+    Number(state.awayScore) || 0;
 
 
   /*
@@ -176,12 +195,15 @@ function render() {
 
     homeLogo.src =
       state.homeLogo;
+
   }
+
 
   if (state.awayLogo) {
 
     awayLogo.src =
       state.awayLogo;
+
   }
 
 
@@ -193,41 +215,55 @@ function render() {
 
     competitionLogo.src =
       state.competitionLogo;
+
   }
 
 
   /*
-   * CLUB COLOURS
-   *
-   * These are supplied by the club database
-   * in control.html.
+   * HOME COLOUR
    */
 
   homePanel.style.setProperty(
     "--club-color",
-    state.homeColor
+    state.homeColor ||
+    "#000000"
   );
+
 
   homePanel.style.setProperty(
     "--club-secondary",
-    state.homeSecondary
+    state.homeSecondary ||
+    "#ffffff"
   );
+
+
+  /*
+   * AWAY COLOUR
+   */
 
   awayPanel.style.setProperty(
     "--club-color",
-    state.awayColor
+    state.awayColor ||
+    "#000000"
   );
+
 
   awayPanel.style.setProperty(
     "--club-secondary",
-    state.awaySecondary
+    state.awaySecondary ||
+    "#ffffff"
   );
 
+
+  /*
+   * CLOCK
+   */
 
   timer.textContent =
     formatTime(
       getElapsed()
     );
+
 }
 
 
@@ -237,69 +273,144 @@ function render() {
  * ============================================================
  */
 
-const peer =
-  new Peer(
-    displayId,
-    {
-      debug: 0
-    }
+let peer;
+
+
+try {
+
+  peer =
+    new Peer(
+      displayId,
+      {
+        debug: 1
+      }
+    );
+
+} catch (error) {
+
+  console.error(
+    "Could not create PeerJS:",
+    error
   );
 
+}
+
+
+/*
+ * ============================================================
+ * PEER OPEN
+ * ============================================================
+ */
 
 peer.on(
   "open",
   id => {
 
     console.log(
-      "Scoreboard ready:",
+      "================================"
+    );
+
+    console.log(
+      "SCOREBOARD READY"
+    );
+
+    console.log(
+      "Room:",
+      room
+    );
+
+    console.log(
+      "Display ID:",
       id
     );
+
+    console.log(
+      "================================"
+    );
+
   }
 );
 
+
+/*
+ * ============================================================
+ * CONTROL PANEL CONNECTED
+ * ============================================================
+ */
 
 peer.on(
   "connection",
   connection => {
 
     console.log(
-      "Control panel connected."
+      "Control panel connection received."
     );
+
 
     connection.on(
       "open",
       () => {
 
+        console.log(
+          "Control panel connected."
+        );
+
+
         /*
-         * Immediately send the current
-         * scoreboard state to the control panel.
+         * Send current state immediately.
          */
 
-        connection.send({
-          type: "state",
-          state: {
-            ...state
-          }
-        });
+        try {
+
+          connection.send({
+            type: "state",
+            state: {
+              ...state
+            }
+          });
+
+        } catch (error) {
+
+          console.error(
+            "Initial state send failed:",
+            error
+          );
+
+        }
+
       }
     );
 
 
+    /*
+     * ========================================================
+     * RECEIVE STATE
+     * ========================================================
+     */
+
     connection.on(
       "data",
       data => {
+
+        console.log(
+          "Data received:",
+          data
+        );
+
 
         if (
           !data ||
           data.type !== "state" ||
           !data.state
         ) {
+
           return;
+
         }
 
 
         /*
-         * Merge incoming state.
+         * Merge the new state.
          */
 
         state = {
@@ -308,21 +419,37 @@ peer.on(
         };
 
 
+        /*
+         * IMPORTANT:
+         * Render immediately.
+         */
+
         render();
 
 
         /*
-         * Send the new state back to the
-         * control panel so both sides stay
-         * synchronised.
+         * Send the confirmed state
+         * back to the control panel.
          */
 
-        connection.send({
-          type: "state",
-          state: {
-            ...state
-          }
-        });
+        try {
+
+          connection.send({
+            type: "state",
+            state: {
+              ...state
+            }
+          });
+
+        } catch (error) {
+
+          console.error(
+            "State confirmation failed:",
+            error
+          );
+
+        }
+
       }
     );
 
@@ -334,6 +461,7 @@ peer.on(
         console.log(
           "Control panel disconnected."
         );
+
       }
     );
 
@@ -343,9 +471,10 @@ peer.on(
       error => {
 
         console.error(
-          "Connection error:",
+          "Control connection error:",
           error
         );
+
       }
     );
 
@@ -353,31 +482,50 @@ peer.on(
 );
 
 
+/*
+ * ============================================================
+ * PEER ERRORS
+ * ============================================================
+ */
+
 peer.on(
   "error",
   error => {
 
     console.error(
-      "PeerJS error:",
+      "================================"
+    );
+
+    console.error(
+      "PEERJS ERROR:",
       error
     );
+
+    console.error(
+      "================================"
+    );
+
   }
 );
 
 
 /*
  * ============================================================
- * CONTINUOUS CLOCK UPDATE
+ * CONTINUOUS CLOCK
  * ============================================================
  */
 
 setInterval(
   () => {
 
-    timer.textContent =
-      formatTime(
-        getElapsed()
-      );
+    if (timer) {
+
+      timer.textContent =
+        formatTime(
+          getElapsed()
+        );
+
+    }
 
   },
   250
