@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
 
   <meta
@@ -10,18 +12,26 @@
 
   <title>Football Scoreboard</title>
 
-  <!-- VERSION NUMBER FOR OBS CACHE BUSTING -->
+
+  <!-- CACHE-BUSTING VERSION -->
+
   <link
     rel="stylesheet"
-    href="style.css?v=4"
+    href="style.css?v=6"
   >
+
 </head>
+
 
 <body>
 
+
   <div id="scoreboard">
 
-    <!-- HOME TEAM -->
+
+    <!-- ======================================================
+         HOME TEAM
+    ======================================================= -->
 
     <div
       id="home-panel"
@@ -30,6 +40,7 @@
 
       <div class="team-content home-content">
 
+
         <img
           id="home-logo"
           class="club-logo"
@@ -37,44 +48,61 @@
           alt=""
         >
 
+
         <div
           id="home-name"
           class="team-name"
-        >FUL</div>
+        >
+          FUL
+        </div>
+
 
         <div
           id="home-score"
           class="score"
-        >0</div>
+        >
+          0
+        </div>
+
 
       </div>
 
     </div>
 
 
-    <!-- CENTRE -->
+    <!-- ======================================================
+         CENTRE
+    ======================================================= -->
 
     <div class="centre">
 
-  <div class="competition-wrap">
 
-    <img
-      id="competition-logo"
-      class="competition-logo"
-      src="assets/competitions/premier-league.png"
-      alt=""
-    >
+      <div class="competition-wrap">
 
-  </div>
+        <img
+          id="competition-logo"
+          class="competition-logo"
+          src="assets/competitions/premier-league.png"
+          alt=""
+        >
 
-  <div id="timer" class="timer">
-    00:00
-  </div>
-
-</div>
+      </div>
 
 
-    <!-- AWAY TEAM -->
+      <div
+        id="timer"
+        class="timer"
+      >
+        00:00
+      </div>
+
+
+    </div>
+
+
+    <!-- ======================================================
+         AWAY TEAM
+    ======================================================= -->
 
     <div
       id="away-panel"
@@ -83,15 +111,22 @@
 
       <div class="team-content away-content">
 
+
         <div
           id="away-score"
           class="score"
-        >0</div>
+        >
+          0
+        </div>
+
 
         <div
           id="away-name"
           class="team-name"
-        >MUN</div>
+        >
+          MUN
+        </div>
+
 
         <img
           id="away-logo"
@@ -100,17 +135,29 @@
           alt=""
         >
 
+
       </div>
 
     </div>
 
+
   </div>
 
 
+  <!-- ======================================================
+       PEERJS
+  ======================================================= -->
+
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 
-  <!-- VERSION NUMBER FOR OBS CACHE BUSTING -->
-  <script src="overlay.js?v=4"></script>
+
+  <!-- ======================================================
+       SCOREBOARD JAVASCRIPT
+  ======================================================= -->
+
+  <script src="overlay.js?v=6"></script>
+
 
 </body>
+
 </html>

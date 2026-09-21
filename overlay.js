@@ -1,8 +1,21 @@
-const params = new URLSearchParams(window.location.search);
-const room = params.get("room") || "premier-league-match";
+/* ============================================================
+   ROOM
+============================================================ */
 
-const displayId = `scoreboard-${room}-display`;
-const storageKey = `scoreboard-state-${room}`;
+const params =
+    new URLSearchParams(
+        window.location.search
+    );
+
+
+const room =
+    params.get("room") ||
+    "premier-league-match";
+
+
+const displayId =
+    `scoreboard-${room}-display`;
+
 
 console.log("================================");
 console.log("SCOREBOARD READY");
@@ -44,45 +57,27 @@ const defaultState = {
     elapsedMs: 0,
     running: false,
     startedAt: null
+
 };
 
 
 /* ============================================================
-   LOAD LAST SAVED STATE
+   STATE
 ============================================================ */
+
+/*
+ * IMPORTANT:
+ *
+ * OBS does NOT own the scoreboard state.
+ *
+ * The control panel owns the state.
+ *
+ * OBS only displays it.
+ */
 
 let state = {
     ...defaultState
 };
-
-try {
-
-    const saved =
-        localStorage.getItem(storageKey);
-
-    if (saved) {
-
-        const parsed =
-            JSON.parse(saved);
-
-        state = {
-            ...defaultState,
-            ...parsed
-        };
-
-        console.log(
-            "Restored saved scoreboard state."
-        );
-    }
-
-} catch (error) {
-
-    console.warn(
-        "Could not restore saved state:",
-        error
-    );
-
-}
 
 
 /* ============================================================
@@ -90,37 +85,69 @@ try {
 ============================================================ */
 
 const scoreboard =
-    document.getElementById("scoreboard");
+    document.getElementById(
+        "scoreboard"
+    );
+
 
 const homePanel =
-    document.getElementById("home-panel");
+    document.getElementById(
+        "home-panel"
+    );
+
 
 const awayPanel =
-    document.getElementById("away-panel");
+    document.getElementById(
+        "away-panel"
+    );
+
 
 const homeNameEl =
-    document.getElementById("home-name");
+    document.getElementById(
+        "home-name"
+    );
+
 
 const awayNameEl =
-    document.getElementById("away-name");
+    document.getElementById(
+        "away-name"
+    );
+
 
 const homeScoreEl =
-    document.getElementById("home-score");
+    document.getElementById(
+        "home-score"
+    );
+
 
 const awayScoreEl =
-    document.getElementById("away-score");
+    document.getElementById(
+        "away-score"
+    );
+
 
 const homeLogoEl =
-    document.getElementById("home-logo");
+    document.getElementById(
+        "home-logo"
+    );
+
 
 const awayLogoEl =
-    document.getElementById("away-logo");
+    document.getElementById(
+        "away-logo"
+    );
+
 
 const competitionLogoEl =
-    document.getElementById("competition-logo");
+    document.getElementById(
+        "competition-logo"
+    );
+
 
 const timerEl =
-    document.getElementById("timer");
+    document.getElementById(
+        "timer"
+    );
 
 
 /* ============================================================
@@ -128,8 +155,13 @@ const timerEl =
 ============================================================ */
 
 let clockStartTime = null;
+
 let clockStartSeconds = 0;
 
+
+/* ============================================================
+   FORMAT TIME
+============================================================ */
 
 function formatTime(seconds) {
 
@@ -141,19 +173,29 @@ function formatTime(seconds) {
             )
         );
 
+
     const minutes =
-        Math.floor(seconds / 60);
+        Math.floor(
+            seconds / 60
+        );
+
 
     const secs =
         seconds % 60;
+
 
     return (
         String(minutes).padStart(2, "0") +
         ":" +
         String(secs).padStart(2, "0")
     );
+
 }
 
+
+/* ============================================================
+   GET CURRENT CLOCK
+============================================================ */
 
 function getElapsedSeconds() {
 
@@ -163,47 +205,24 @@ function getElapsedSeconds() {
     ) {
 
         return Math.floor(
-            Number(state.elapsedMs || 0) / 1000
+            Number(
+                state.elapsedMs || 0
+            ) / 1000
         );
 
     }
+
 
     return (
         clockStartSeconds +
         Math.floor(
-            (Date.now() - clockStartTime) / 1000
+            (
+                Date.now() -
+                clockStartTime
+            ) / 1000
         )
     );
-}
 
-
-/* ============================================================
-   SAVE STATE
-============================================================ */
-
-function saveState() {
-
-    try {
-
-        localStorage.setItem(
-            storageKey,
-            JSON.stringify({
-                ...state,
-                elapsedMs:
-                    state.running
-                        ? getElapsedSeconds() * 1000
-                        : state.elapsedMs
-            })
-        );
-
-    } catch (error) {
-
-        console.warn(
-            "Could not save scoreboard state:",
-            error
-        );
-
-    }
 }
 
 
@@ -213,18 +232,33 @@ function saveState() {
 
 function render() {
 
+    /* ----------------------------------------
+       TEAM NAMES
+    ---------------------------------------- */
+
     homeNameEl.textContent =
-        state.homeName;
+        state.homeName || "FUL";
+
 
     awayNameEl.textContent =
-        state.awayName;
+        state.awayName || "MUN";
+
+
+    /* ----------------------------------------
+       SCORES
+    ---------------------------------------- */
 
     homeScoreEl.textContent =
-        state.homeScore;
+        Number(state.homeScore) || 0;
+
 
     awayScoreEl.textContent =
-        state.awayScore;
+        Number(state.awayScore) || 0;
 
+
+    /* ----------------------------------------
+       LOGOS
+    ---------------------------------------- */
 
     if (state.homeLogo) {
 
@@ -250,59 +284,90 @@ function render() {
         competitionLogoEl.style.display =
             "block";
 
+    } else {
+
+        competitionLogoEl.style.display =
+            "none";
+
     }
 
 
+    /* ----------------------------------------
+       HOME COLOURS
+    ---------------------------------------- */
+
     homePanel.style.setProperty(
         "--club-color",
-        state.homeColor || "#000000"
+        state.homeColor ||
+        "#000000"
     );
+
 
     homePanel.style.setProperty(
         "--club-secondary",
-        state.homeSecondary || "#ffffff"
+        state.homeSecondary ||
+        "#ffffff"
+    );
+
+
+    /* ----------------------------------------
+       AWAY COLOURS
+    ---------------------------------------- */
+
+    awayPanel.style.setProperty(
+        "--club-color",
+        state.awayColor ||
+        "#111111"
     );
 
 
     awayPanel.style.setProperty(
-        "--club-color",
-        state.awayColor || "#111111"
-    );
-
-    awayPanel.style.setProperty(
         "--club-secondary",
-        state.awaySecondary || "#ffffff"
+        state.awaySecondary ||
+        "#ffffff"
     );
 
+
+    /* ----------------------------------------
+       SCOREBOARD VARIABLES
+    ---------------------------------------- */
 
     scoreboard.style.setProperty(
         "--home-color",
-        state.homeColor || "#000000"
+        state.homeColor ||
+        "#000000"
     );
+
 
     scoreboard.style.setProperty(
         "--home-secondary",
-        state.homeSecondary || "#ffffff"
+        state.homeSecondary ||
+        "#ffffff"
     );
+
 
     scoreboard.style.setProperty(
         "--away-color",
-        state.awayColor || "#111111"
+        state.awayColor ||
+        "#111111"
     );
+
 
     scoreboard.style.setProperty(
         "--away-secondary",
-        state.awaySecondary || "#ffffff"
+        state.awaySecondary ||
+        "#ffffff"
     );
 
+
+    /* ----------------------------------------
+       CLOCK
+    ---------------------------------------- */
 
     timerEl.textContent =
         formatTime(
             getElapsedSeconds()
         );
-
-
-    saveState();
 
 }
 
@@ -345,13 +410,23 @@ function applyIncomingState(newState) {
         state.running;
 
 
+    /*
+     * Replace the scoreboard state with
+     * the control panel state.
+     */
+
     state = {
-        ...state,
+
+        ...defaultState,
+
         ...newState
+
     };
 
 
-    /* CLOCK START */
+    /* ========================================================
+       CLOCK START
+    ======================================================== */
 
     if (
         state.running &&
@@ -360,8 +435,11 @@ function applyIncomingState(newState) {
 
         clockStartSeconds =
             Math.floor(
-                Number(state.elapsedMs || 0) / 1000
+                Number(
+                    state.elapsedMs || 0
+                ) / 1000
             );
+
 
         clockStartTime =
             Date.now();
@@ -369,14 +447,36 @@ function applyIncomingState(newState) {
     }
 
 
-    /* CLOCK STOP */
+    /* ========================================================
+       CLOCK ALREADY RUNNING
+    ======================================================== */
 
-    if (!state.running) {
+    else if (
+        state.running &&
+        wasRunning
+    ) {
+
+        /*
+         * Keep the existing local clock
+         * running smoothly.
+         */
+
+    }
+
+
+    /* ========================================================
+       CLOCK STOPPED
+    ======================================================== */
+
+    else if (!state.running) {
 
         clockStartSeconds =
             Math.floor(
-                Number(state.elapsedMs || 0) / 1000
+                Number(
+                    state.elapsedMs || 0
+                ) / 1000
             );
+
 
         clockStartTime =
             null;
@@ -394,8 +494,13 @@ function applyIncomingState(newState) {
 ============================================================ */
 
 let peer = null;
+
 let controlConnection = null;
 
+
+/* ============================================================
+   CREATE PEER
+============================================================ */
 
 function createPeer() {
 
@@ -404,17 +509,18 @@ function createPeer() {
     );
 
 
-    peer = new Peer(
-        displayId,
-        {
-            debug: 3
-        }
-    );
+    peer =
+        new Peer(
+            displayId,
+            {
+                debug: 3
+            }
+        );
 
 
-    /* --------------------------------------------------------
+    /* ========================================================
        PEER READY
-    -------------------------------------------------------- */
+    ======================================================== */
 
     peer.on(
         "open",
@@ -441,9 +547,9 @@ function createPeer() {
     );
 
 
-    /* --------------------------------------------------------
+    /* ========================================================
        CONTROL CONNECTION
-    -------------------------------------------------------- */
+    ======================================================== */
 
     peer.on(
         "connection",
@@ -454,9 +560,32 @@ function createPeer() {
             );
 
 
+            /*
+             * If an old control connection exists,
+             * close it before accepting the new one.
+             */
+
+            if (
+                controlConnection &&
+                controlConnection !== connection
+            ) {
+
+                try {
+
+                    controlConnection.close();
+
+                } catch (error) {}
+
+            }
+
+
             controlConnection =
                 connection;
 
+
+            /* ==================================================
+               CONNECTION OPEN
+            ================================================== */
 
             connection.on(
                 "open",
@@ -468,12 +597,10 @@ function createPeer() {
 
 
                     /*
-                     * IMPORTANT:
+                     * DO NOT send our own state.
                      *
-                     * DO NOT send our default state here.
-                     *
-                     * Instead ask the control panel
-                     * for the current state.
+                     * Ask the control panel for
+                     * the authoritative state.
                      */
 
                     try {
@@ -481,6 +608,7 @@ function createPeer() {
                         connection.send({
                             type: "request-state"
                         });
+
 
                         console.log(
                             "Requested current state from control."
@@ -499,6 +627,10 @@ function createPeer() {
             );
 
 
+            /* ==================================================
+               DATA FROM CONTROL
+            ================================================== */
+
             connection.on(
                 "data",
                 message => {
@@ -508,10 +640,6 @@ function createPeer() {
                         message
                     );
 
-
-                    /* ----------------------------------------
-                       CONTROL REQUESTED / SENT STATE
-                    ---------------------------------------- */
 
                     if (
                         message &&
@@ -528,6 +656,10 @@ function createPeer() {
                 }
             );
 
+
+            /* ==================================================
+               CONNECTION CLOSE
+            ================================================== */
 
             connection.on(
                 "close",
@@ -552,6 +684,10 @@ function createPeer() {
             );
 
 
+            /* ==================================================
+               CONNECTION ERROR
+            ================================================== */
+
             connection.on(
                 "error",
                 error => {
@@ -568,9 +704,9 @@ function createPeer() {
     );
 
 
-    /* --------------------------------------------------------
+    /* ========================================================
        PEER ERRORS
-    -------------------------------------------------------- */
+    ======================================================== */
 
     peer.on(
         "error",
@@ -585,16 +721,16 @@ function createPeer() {
     );
 
 
-    /* --------------------------------------------------------
+    /* ========================================================
        PEER DISCONNECTED
-    -------------------------------------------------------- */
+    ======================================================== */
 
     peer.on(
         "disconnected",
         () => {
 
             console.warn(
-                "PeerJS disconnected."
+                "PeerJS server disconnected."
             );
 
 
@@ -610,7 +746,19 @@ function createPeer() {
                             "Reconnecting PeerJS..."
                         );
 
-                        peer.reconnect();
+
+                        try {
+
+                            peer.reconnect();
+
+                        } catch (error) {
+
+                            console.error(
+                                "Peer reconnect failed:",
+                                error
+                            );
+
+                        }
 
                     }
 
@@ -636,19 +784,20 @@ setInterval(
                 getElapsedSeconds()
             );
 
-        if (state.running) {
-            saveState();
-        }
-
     },
     250
 );
 
 
 /* ============================================================
-   INITIAL
+   INITIAL RENDER
 ============================================================ */
 
 render();
+
+
+/* ============================================================
+   START PEER
+============================================================ */
 
 createPeer();

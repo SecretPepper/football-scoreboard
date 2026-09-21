@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Scoreboard Control</title>
 
   <style>
@@ -13,7 +14,7 @@
     body {
       margin: 0;
       padding: 20px;
-      background: #111;
+      background: #0d0f12;
       color: #fff;
       font-family: Arial, Helvetica, sans-serif;
     }
@@ -26,11 +27,12 @@
     h1 {
       margin: 0 0 20px;
       font-size: 28px;
+      font-weight: 800;
     }
 
     .card {
-      background: #1c1c1c;
-      border: 1px solid #333;
+      background: #181b1f;
+      border: 1px solid #2d3238;
       border-radius: 12px;
       padding: 18px;
       margin-bottom: 16px;
@@ -39,6 +41,7 @@
     .card h2 {
       margin: 0 0 15px;
       font-size: 20px;
+      font-weight: 700;
     }
 
     .grid {
@@ -55,7 +58,7 @@
       display: block;
       margin-bottom: 6px;
       font-size: 13px;
-      color: #aaa;
+      color: #a9afb6;
     }
 
     input,
@@ -63,8 +66,8 @@
       width: 100%;
       padding: 12px;
       border-radius: 8px;
-      border: 1px solid #444;
-      background: #101010;
+      border: 1px solid #3a4047;
+      background: #0f1114;
       color: white;
       font-size: 16px;
       outline: none;
@@ -72,42 +75,45 @@
 
     input:focus,
     select:focus {
-      border-color: #777;
+      border-color: #6f7780;
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.05);
     }
 
     button {
       border: 0;
       border-radius: 8px;
       padding: 11px 15px;
-      background: #333;
+      background: #30363d;
       color: white;
       cursor: pointer;
       font-size: 15px;
       font-weight: bold;
+      transition: background 0.15s ease, transform 0.1s ease;
     }
 
     button:hover {
-      background: #444;
+      background: #3d444c;
     }
 
-    .primary {
+    button:active {
+      transform: translateY(1px);
+    }
+
+    .connect-button {
       width: 100%;
-      background: #168a45;
+      background: #1677ff;
       padding: 15px;
       font-size: 17px;
     }
 
-    .primary:hover {
-      background: #1da653;
-    }
-
-    .danger {
-      background: #8d2525;
+    .connect-button:hover {
+      background: #3187ff;
     }
 
     .score-controls {
       display: flex;
       gap: 8px;
+      margin-top: 8px;
     }
 
     .score-controls button {
@@ -121,7 +127,8 @@
       margin-top: 10px;
       padding: 10px;
       border-radius: 8px;
-      background: #101010;
+      background: #0f1114;
+      border: 1px solid #252a30;
     }
 
     .preview img {
@@ -135,13 +142,14 @@
     }
 
     .competition-preview {
-      min-height: 70px;
+      min-height: 75px;
       justify-content: center;
     }
 
     .competition-preview img {
-      width: 100px;
-      height: 55px;
+      width: 110px;
+      height: 60px;
+      object-fit: contain;
     }
 
     .clock {
@@ -150,6 +158,7 @@
       font-weight: bold;
       letter-spacing: 2px;
       margin: 10px 0 20px;
+      font-variant-numeric: tabular-nums;
     }
 
     .clock-buttons {
@@ -159,26 +168,35 @@
     }
 
     .status {
-      padding: 10px;
+      padding: 11px 13px;
       border-radius: 8px;
-      background: #101010;
-      color: #aaa;
+      background: #15181c;
+      border: 1px solid #292e34;
+      color: #a9afb6;
       margin-bottom: 15px;
       font-size: 14px;
     }
 
     .connected {
       color: #55d982;
+      border-color: rgba(85, 217, 130, 0.25);
     }
 
     .disconnected {
-      color: #ff6b6b;
+      color: #ff7777;
     }
 
     .club-style {
       margin-top: 8px;
       font-size: 12px;
-      color: #888;
+      color: #777f88;
+    }
+
+    .auto-note {
+      margin-top: 10px;
+      color: #7f8790;
+      font-size: 12px;
+      line-height: 1.5;
     }
 
     @media (max-width: 700px) {
@@ -203,29 +221,51 @@
     Not connected
   </div>
 
+
   <!-- CONNECTION -->
+
   <div class="card">
+
     <h2>Connection</h2>
 
     <div class="field">
+
       <label>Room name</label>
-      <input id="room" value="premier-league-match">
+
+      <input
+        id="room"
+        value="premier-league-match"
+      >
+
     </div>
 
-    <button id="connectButton" onclick="connect()">
+    <button
+      id="connectButton"
+      class="connect-button"
+      onclick="connect()"
+    >
       CONNECT TO OBS
     </button>
+
+    <div class="auto-note">
+      Changes are sent to OBS automatically. There is no Apply button.
+    </div>
+
   </div>
 
 
   <!-- MATCH -->
+
   <div class="card">
+
     <h2>Match</h2>
 
     <div class="field">
+
       <label>Competition</label>
 
       <select id="competition">
+
         <option value="assets/competitions/premier-league.png">
           Premier League
         </option>
@@ -257,26 +297,42 @@
         <option value="assets/competitions/euro.png">
           UEFA Euro
         </option>
+
       </select>
 
+
       <div class="preview competition-preview">
-        <img id="competitionPreview">
+
+        <img
+          id="competitionPreview"
+          alt=""
+        >
+
       </div>
+
     </div>
+
   </div>
 
 
   <!-- TEAMS -->
+
   <div class="grid">
 
+
     <!-- HOME -->
+
     <div class="card">
+
       <h2>Home Team</h2>
 
+
       <div class="field">
+
         <label>Club</label>
 
         <select id="homeClub">
+
           <option value="fulham">Fulham</option>
           <option value="manchester-united">Manchester United</option>
           <option value="arsenal">Arsenal</option>
@@ -297,41 +353,85 @@
           <option value="leicester">Leicester City</option>
           <option value="leeds">Leeds United</option>
           <option value="sunderland">Sunderland</option>
+
         </select>
 
         <div id="homeStyle" class="club-style"></div>
+
       </div>
 
+
       <div class="field">
+
         <label>Short name</label>
-        <input id="homeName" value="FUL" maxlength="5">
+
+        <input
+          id="homeName"
+          value="FUL"
+          maxlength="5"
+        >
+
       </div>
 
+
       <div class="field">
+
         <label>Score</label>
-        <input id="homeScore" type="number" min="0" value="0">
+
+        <input
+          id="homeScore"
+          type="number"
+          min="0"
+          value="0"
+        >
 
         <div class="score-controls">
-          <button onclick="changeScore('home', -1)">−1</button>
-          <button onclick="changeScore('home', 1)">+1</button>
+
+          <button onclick="changeScore('home', -1)">
+            −1
+          </button>
+
+          <button onclick="changeScore('home', 1)">
+            +1
+          </button>
+
         </div>
+
       </div>
 
+
       <div class="preview">
-        <img id="homePreview">
-        <span id="homePreviewName" class="preview-text">FUL</span>
+
+        <img
+          id="homePreview"
+          alt=""
+        >
+
+        <span
+          id="homePreviewName"
+          class="preview-text"
+        >
+          FUL
+        </span>
+
       </div>
+
     </div>
 
 
     <!-- AWAY -->
+
     <div class="card">
+
       <h2>Away Team</h2>
 
+
       <div class="field">
+
         <label>Club</label>
 
         <select id="awayClub">
+
           <option value="fulham">Fulham</option>
           <option value="manchester-united">Manchester United</option>
           <option value="arsenal">Arsenal</option>
@@ -352,66 +452,121 @@
           <option value="leicester">Leicester City</option>
           <option value="leeds">Leeds United</option>
           <option value="sunderland">Sunderland</option>
+
         </select>
 
         <div id="awayStyle" class="club-style"></div>
+
       </div>
 
+
       <div class="field">
+
         <label>Short name</label>
-        <input id="awayName" value="MUN" maxlength="5">
+
+        <input
+          id="awayName"
+          value="MUN"
+          maxlength="5"
+        >
+
       </div>
 
+
       <div class="field">
+
         <label>Score</label>
-        <input id="awayScore" type="number" min="0" value="0">
+
+        <input
+          id="awayScore"
+          type="number"
+          min="0"
+          value="0"
+        >
 
         <div class="score-controls">
-          <button onclick="changeScore('away', -1)">−1</button>
-          <button onclick="changeScore('away', 1)">+1</button>
+
+          <button onclick="changeScore('away', -1)">
+            −1
+          </button>
+
+          <button onclick="changeScore('away', 1)">
+            +1
+          </button>
+
         </div>
+
       </div>
 
+
       <div class="preview">
-        <img id="awayPreview">
-        <span id="awayPreviewName" class="preview-text">MUN</span>
+
+        <img
+          id="awayPreview"
+          alt=""
+        >
+
+        <span
+          id="awayPreviewName"
+          class="preview-text"
+        >
+          MUN
+        </span>
+
       </div>
+
     </div>
 
   </div>
 
 
   <!-- CLOCK -->
+
   <div class="card">
+
     <h2>Match Clock</h2>
 
-    <div id="clock" class="clock">
+    <div
+      id="clock"
+      class="clock"
+    >
       00:00
     </div>
 
+
     <div class="clock-buttons">
-      <button onclick="startClock()">START</button>
-      <button onclick="pauseClock()">PAUSE</button>
-      <button onclick="resetClock()">RESET</button>
-      <button onclick="setTime()">SET TIME</button>
+
+      <button onclick="startClock()">
+        START
+      </button>
+
+      <button onclick="pauseClock()">
+        PAUSE
+      </button>
+
+      <button onclick="resetClock()">
+        RESET
+      </button>
+
+      <button onclick="setTime()">
+        SET TIME
+      </button>
+
     </div>
+
   </div>
-
-
-  <button class="primary" onclick="applyChanges()">
-    APPLY CHANGES TO OBS
-  </button>
 
 </div>
 
 
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 
+
 <script>
 
   /* ============================================================
      CLUB DATABASE
-     ============================================================ */
+  ============================================================ */
 
   const CLUBS = {
 
@@ -580,13 +735,16 @@
 
   /* ============================================================
      CONNECTION
-     ============================================================ */
+  ============================================================ */
 
   let peer = null;
   let conn = null;
   let connecting = false;
-  let pendingSend = false;
 
+
+  /* ============================================================
+     STATE
+  ============================================================ */
 
   let state = {
 
@@ -624,7 +782,7 @@
 
   /* ============================================================
      STATUS
-     ============================================================ */
+  ============================================================ */
 
   function setStatus(message, connected = false) {
 
@@ -642,7 +800,7 @@
 
   /* ============================================================
      CLUB PREVIEWS
-     ============================================================ */
+  ============================================================ */
 
   function updateClubPreview(side) {
 
@@ -654,7 +812,9 @@
     const club =
       CLUBS[select.value];
 
-    if (!club) return;
+    if (!club) {
+      return;
+    }
 
 
     if (side === "home") {
@@ -694,7 +854,7 @@
 
   /* ============================================================
      COMPETITION PREVIEW
-     ============================================================ */
+  ============================================================ */
 
   function updateCompetitionPreview() {
 
@@ -705,33 +865,8 @@
 
 
   /* ============================================================
-     SCORE
-     ============================================================ */
-
-  function changeScore(side, amount) {
-
-    const input =
-      side === "home"
-        ? $("homeScore")
-        : $("awayScore");
-
-    let value =
-      Number(input.value) || 0;
-
-    value += amount;
-
-    if (value < 0) {
-      value = 0;
-    }
-
-    input.value = value;
-
-  }
-
-
-  /* ============================================================
-     BUILD STATE FROM CONTROLS
-     ============================================================ */
+     BUILD STATE
+  ============================================================ */
 
   function buildStateFromControls() {
 
@@ -740,6 +875,7 @@
 
     const awayClub =
       CLUBS[$("awayClub").value];
+
 
     if (!homeClub || !awayClub) {
 
@@ -813,57 +949,29 @@
 
 
   /* ============================================================
-     APPLY
-     ============================================================ */
+     UPDATE + SEND
+  ============================================================ */
 
-  function applyChanges() {
+  function updateAndSend() {
 
     if (!buildStateFromControls()) {
       return;
     }
 
-
-    /*
-     * If we are connected, send immediately.
-     */
-
-    if (
-      conn &&
-      conn.open
-    ) {
-
-      sendState();
-
-      return;
-
-    }
-
-
-    /*
-     * Otherwise remember the change and
-     * automatically reconnect.
-     */
-
-    pendingSend = true;
-
-    setStatus(
-      "Connecting to OBS...",
-      false
-    );
-
-    connect();
+    sendState();
 
   }
 
 
   /* ============================================================
-     * CONNECT TO OBS
-     * ============================================================ */
+     CONNECT
+  ============================================================ */
 
   function connect() {
 
     const room =
       $("room").value.trim();
+
 
     if (!room) {
 
@@ -877,33 +985,19 @@
     }
 
 
-    /*
-     * Don't create multiple simultaneous
-     * PeerJS connections.
-     */
-
     if (connecting) {
       return;
     }
 
 
-    if (
-      conn &&
-      conn.open
-    ) {
+    if (conn && conn.open) {
 
       setStatus(
         "✓ Connected to OBS",
         true
       );
 
-      if (pendingSend) {
-
-        pendingSend = false;
-
-        sendState();
-
-      }
+      sendState();
 
       return;
 
@@ -912,10 +1006,6 @@
 
     connecting = true;
 
-
-    /*
-     * Clean up old connection.
-     */
 
     if (conn) {
 
@@ -1028,15 +1118,13 @@
 
 
             /*
-             * Send the pending change or
-             * current control state.
+             * CONTROL IS AUTHORITATIVE.
+             *
+             * Send the current control-panel
+             * state immediately.
              */
 
-            if (pendingSend) {
-
-              pendingSend = false;
-
-            }
+            buildStateFromControls();
 
             sendState();
 
@@ -1045,85 +1133,49 @@
 
 
         conn.on(
-  "data",
-  data => {
+          "data",
+          data => {
 
-    console.log(
-      "Message from OBS:",
-      data
-    );
-
-
-    /*
-     * OBS has refreshed and is asking
-     * for the current control-panel state.
-     */
-
-    if (
-      data &&
-      data.type === "request-state"
-    ) {
-
-      console.log(
-        "OBS requested current state."
-      );
-
-      sendState();
-
-      return;
-    }
+            console.log(
+              "Message from OBS:",
+              data
+            );
 
 
-    /*
-     * Optional state confirmation from OBS.
-     */
+            /*
+             * OBS may ask for the current state
+             * after it has refreshed.
+             */
 
-    if (
-      data &&
-      data.type === "state" &&
-      data.state
-    ) {
+            if (
+              data &&
+              data.type === "request-state"
+            ) {
 
-      state = {
-        ...state,
-        ...data.state
-      };
+              console.log(
+                "OBS requested current state."
+              );
 
+              buildStateFromControls();
 
-      $("homeScore").value =
-        state.homeScore;
+              sendState();
 
-      $("awayScore").value =
-        state.awayScore;
+              return;
 
-      $("homeName").value =
-        state.homeName;
-
-      $("awayName").value =
-        state.awayName;
-
-      $("competition").value =
-        state.competitionLogo;
-
-      $("homeClub").value =
-        state.homeClub ||
-        "fulham";
-
-      $("awayClub").value =
-        state.awayClub ||
-        "manchester-united";
+            }
 
 
-      updateClubPreview("home");
-      updateClubPreview("away");
-      updateCompetitionPreview();
+            /*
+             * IMPORTANT:
+             *
+             * Never copy a state received from OBS
+             * back into the control panel.
+             *
+             * OBS is NOT authoritative.
+             */
 
-      renderClock();
-
-    }
-
-  }
-);
+          }
+        );
 
 
         conn.on(
@@ -1219,7 +1271,7 @@
 
   /* ============================================================
      SEND STATE
-     ============================================================ */
+  ============================================================ */
 
   function sendState() {
 
@@ -1229,11 +1281,9 @@
     ) {
 
       setStatus(
-        "Not connected to OBS",
+        "Changes saved locally. Connect to OBS to send them.",
         false
       );
-
-      pendingSend = true;
 
       return false;
 
@@ -1286,8 +1336,41 @@
 
 
   /* ============================================================
+     SCORE
+  ============================================================ */
+
+  function changeScore(side, amount) {
+
+    const input =
+      side === "home"
+        ? $("homeScore")
+        : $("awayScore");
+
+
+    let value =
+      Number(input.value) || 0;
+
+
+    value += amount;
+
+
+    if (value < 0) {
+      value = 0;
+    }
+
+
+    input.value =
+      value;
+
+
+    updateAndSend();
+
+  }
+
+
+  /* ============================================================
      CLOCK
-     ============================================================ */
+  ============================================================ */
 
   function getElapsed() {
 
@@ -1305,6 +1388,7 @@
       );
 
     }
+
 
     return state.elapsedMs;
 
@@ -1368,6 +1452,7 @@
     state.elapsedMs =
       getElapsed();
 
+
     state.running = false;
 
     state.startedAt = null;
@@ -1428,7 +1513,7 @@
 
   /* ============================================================
      INPUT EVENTS
-     ============================================================ */
+  ============================================================ */
 
   $("homeClub").addEventListener(
     "change",
@@ -1437,6 +1522,7 @@
       const club =
         CLUBS[$("homeClub").value];
 
+
       if (club) {
 
         $("homeName").value =
@@ -1444,7 +1530,10 @@
 
       }
 
+
       updateClubPreview("home");
+
+      updateAndSend();
 
     }
   );
@@ -1457,6 +1546,7 @@
       const club =
         CLUBS[$("awayClub").value];
 
+
       if (club) {
 
         $("awayName").value =
@@ -1464,7 +1554,10 @@
 
       }
 
+
       updateClubPreview("away");
+
+      updateAndSend();
 
     }
   );
@@ -1475,7 +1568,11 @@
     () => {
 
       $("homePreviewName").textContent =
-        $("homeName").value;
+        $("homeName").value ||
+        CLUBS[$("homeClub").value].short;
+
+
+      updateAndSend();
 
     }
   );
@@ -1486,26 +1583,47 @@
     () => {
 
       $("awayPreviewName").textContent =
-        $("awayName").value;
+        $("awayName").value ||
+        CLUBS[$("awayClub").value].short;
+
+
+      updateAndSend();
 
     }
   );
 
 
+  $("homeScore").addEventListener(
+    "input",
+    updateAndSend
+  );
+
+
+  $("awayScore").addEventListener(
+    "input",
+    updateAndSend
+  );
+
+
   $("competition").addEventListener(
     "change",
-    updateCompetitionPreview
+    () => {
+
+      updateCompetitionPreview();
+
+      updateAndSend();
+
+    }
   );
 
 
   /* ============================================================
      INITIALISE
-     ============================================================ */
+  ============================================================ */
 
   updateClubPreview("home");
   updateClubPreview("away");
   updateCompetitionPreview();
-
   renderClock();
 
 
