@@ -1,538 +1,360 @@
-/*
- * ============================================================
- * FOOTBALL SCOREBOARD OVERLAY
- * ============================================================
- */
+const params = new URLSearchParams(window.location.search);
+const room = params.get("room") || "premier-league-match";
 
-const params =
-  new URLSearchParams(
-    window.location.search
-  );
+const displayId = `scoreboard-${room}-display`;
 
+console.log("=================================");
+console.log("FOOTBALL SCOREBOARD");
+console.log("Room:", room);
+console.log("Display ID:", displayId);
+console.log("=================================");
 
-const room =
-  params.get("room") ||
-  "premier-league-match";
+const state = {
+    homeName: "FUL",
+    awayName: "MUN",
 
+    homeClub: "fulham",
+    awayClub: "manchester-united",
 
-const displayId =
-  "scoreboard-" +
-  room +
-  "-display";
+    homeLogo: "assets/clubs-and-countries/fulham.png",
+    awayLogo: "assets/clubs-and-countries/manchester-united.png",
 
+    homeColor: "#111111",
+    homeSecondary: "#ffffff",
 
-/*
- * ============================================================
- * STATE
- * ============================================================
- */
+    awayColor: "#da291c",
+    awaySecondary: "#fbe122",
 
-let state = {
+    competitionLogo: "assets/competitions/premier-league.png",
 
-  homeName: "FUL",
-  awayName: "MUN",
+    homeScore: 0,
+    awayScore: 0,
 
-  homeClub: "fulham",
-  awayClub: "manchester-united",
-
-  homeLogo:
-    "assets/clubs-and-countries/fulham.png",
-
-  awayLogo:
-    "assets/clubs-and-countries/manchester-united.png",
-
-  homeColor: "#000000",
-  homeSecondary: "#ffffff",
-
-  awayColor: "#da291c",
-  awaySecondary: "#000000",
-
-  competitionLogo:
-    "assets/competitions/premier-league.png",
-
-  homeScore: 0,
-  awayScore: 0,
-
-  elapsedMs: 0,
-  running: false,
-  startedAt: null
-
+    clockRunning: false,
+    clockSeconds: 0
 };
 
+const homeNameEl = document.getElementById("home-name");
+const awayNameEl = document.getElementById("away-name");
 
-/*
- * ============================================================
- * ELEMENTS
- * ============================================================
- */
+const homeScoreEl = document.getElementById("home-score");
+const awayScoreEl = document.getElementById("away-score");
 
-const homePanel =
-  document.getElementById("home-panel");
+const homeLogoEl = document.getElementById("home-logo");
+const awayLogoEl = document.getElementById("away-logo");
 
-const awayPanel =
-  document.getElementById("away-panel");
+const competitionLogoEl =
+    document.getElementById("competition-logo");
 
-const homeLogo =
-  document.getElementById("home-logo");
-
-const awayLogo =
-  document.getElementById("away-logo");
-
-const homeName =
-  document.getElementById("home-name");
-
-const awayName =
-  document.getElementById("away-name");
-
-const homeScore =
-  document.getElementById("home-score");
-
-const awayScore =
-  document.getElementById("away-score");
-
-const competitionLogo =
-  document.getElementById(
-    "competition-logo"
-  );
-
-const timer =
-  document.getElementById("timer");
+const timerEl =
+    document.getElementById("timer");
 
 
-/*
- * ============================================================
- * CLOCK
- * ============================================================
- */
+/* ============================================================
+   CLOCK
+============================================================ */
 
-function getElapsed() {
+function formatTime(seconds) {
+    seconds = Math.max(0, Math.floor(seconds));
 
-  if (
-    state.running &&
-    state.startedAt !== null
-  ) {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
 
     return (
-      state.elapsedMs +
-      (
-        Date.now() -
-        state.startedAt
-      )
+        String(minutes).padStart(2, "0") +
+        ":" +
+        String(secs).padStart(2, "0")
     );
-
-  }
-
-  return state.elapsedMs;
-
 }
 
 
-function formatTime(milliseconds) {
-
-  const totalSeconds =
-    Math.floor(
-      Math.max(
-        0,
-        milliseconds
-      ) / 1000
-    );
+let clockStartTime = null;
+let clockStartSeconds = 0;
 
 
-  const minutes =
-    Math.floor(
-      totalSeconds / 60
-    );
+function getElapsedSeconds() {
 
+    if (!state.clockRunning || clockStartTime === null) {
+        return state.clockSeconds;
+    }
 
-  const seconds =
-    totalSeconds % 60;
-
-
-  return (
-    String(minutes).padStart(2, "0") +
-    ":" +
-    String(seconds).padStart(2, "0")
-  );
-
+    return clockStartSeconds +
+        Math.floor((Date.now() - clockStartTime) / 1000);
 }
 
 
-/*
- * ============================================================
- * RENDER SCOREBOARD
- * ============================================================
- */
+/* ============================================================
+   RENDER
+============================================================ */
 
 function render() {
 
-  /*
-   * TEAM NAMES
-   */
+    console.log("Rendering state:", state);
 
-  homeName.textContent =
-    state.homeName || "FUL";
+    homeNameEl.textContent = state.homeName;
+    awayNameEl.textContent = state.awayName;
 
-  awayName.textContent =
-    state.awayName || "MUN";
+    homeScoreEl.textContent = state.homeScore;
+    awayScoreEl.textContent = state.awayScore;
 
+    homeLogoEl.src = state.homeLogo;
+    awayLogoEl.src = state.awayLogo;
 
-  /*
-   * SCORES
-   */
+    competitionLogoEl.src = state.competitionLogo;
 
-  homeScore.textContent =
-    Number(state.homeScore) || 0;
-
-  awayScore.textContent =
-    Number(state.awayScore) || 0;
-
-
-  /*
-   * CLUB LOGOS
-   */
-
-  if (state.homeLogo) {
-
-    homeLogo.src =
-      state.homeLogo;
-
-  }
-
-
-  if (state.awayLogo) {
-
-    awayLogo.src =
-      state.awayLogo;
-
-  }
-
-
-  /*
-   * COMPETITION
-   */
-
-  if (state.competitionLogo) {
-
-    competitionLogo.src =
-      state.competitionLogo;
-
-  }
-
-
-  /*
-   * HOME COLOUR
-   */
-
-  homePanel.style.setProperty(
-    "--club-color",
-    state.homeColor ||
-    "#000000"
-  );
-
-
-  homePanel.style.setProperty(
-    "--club-secondary",
-    state.homeSecondary ||
-    "#ffffff"
-  );
-
-
-  /*
-   * AWAY COLOUR
-   */
-
-  awayPanel.style.setProperty(
-    "--club-color",
-    state.awayColor ||
-    "#000000"
-  );
-
-
-  awayPanel.style.setProperty(
-    "--club-secondary",
-    state.awaySecondary ||
-    "#ffffff"
-  );
-
-
-  /*
-   * CLOCK
-   */
-
-  timer.textContent =
-    formatTime(
-      getElapsed()
+    document.documentElement.style.setProperty(
+        "--club-color",
+        state.homeColor
     );
 
+    document.documentElement.style.setProperty(
+        "--club-secondary",
+        state.homeSecondary
+    );
+
+    timerEl.textContent =
+        formatTime(getElapsedSeconds());
 }
 
 
-/*
- * ============================================================
- * PEERJS
- * ============================================================
- */
+/* ============================================================
+   APPLY INCOMING STATE
+============================================================ */
 
-let peer;
+function applyIncomingState(newState) {
 
+    console.log("=================================");
+    console.log("NEW STATE RECEIVED FROM CONTROL");
+    console.log(newState);
+    console.log("=================================");
 
-try {
+    const oldRunning = state.clockRunning;
 
-  peer =
-    new Peer(displayId, {
-    debug: 3
-});
-
-} catch (error) {
-
-  console.error(
-    "Could not create PeerJS:",
-    error
-  );
-
-}
-
-
-/*
- * ============================================================
- * PEER OPEN
- * ============================================================
- */
-
-peer.on(
-  "open",
-  id => {
-
-    console.log(
-      "================================"
-    );
-
-    console.log(
-      "SCOREBOARD READY"
-    );
-
-    console.log(
-      "Room:",
-      room
-    );
-
-    console.log(
-      "Display ID:",
-      id
-    );
-
-    console.log(
-      "================================"
-    );
-
-  }
-);
-
-
-/*
- * ============================================================
- * CONTROL PANEL CONNECTED
- * ============================================================
- */
-
-peer.on(
-  "connection",
-  connection => {
-
-    console.log(
-      "Control panel connection received."
-    );
-
-
-    connection.on(
-      "open",
-      () => {
-
-        console.log(
-          "Control panel connected."
-        );
-
-
-        /*
-         * Send current state immediately.
-         */
-
-        try {
-
-          connection.send({
-            type: "state",
-            state: {
-              ...state
-            }
-          });
-
-        } catch (error) {
-
-          console.error(
-            "Initial state send failed:",
-            error
-          );
-
-        }
-
-      }
-    );
-
+    Object.assign(state, newState);
 
     /*
-     * ========================================================
-     * RECEIVE STATE
-     * ========================================================
-     */
+       Handle clock starting/stopping cleanly.
+    */
 
-    connection.on(
-      "data",
-      data => {
+    if (state.clockRunning && !oldRunning) {
 
-        console.log(
-          "Data received:",
-          data
-        );
+        clockStartSeconds = state.clockSeconds;
+        clockStartTime = Date.now();
 
+    } else if (!state.clockRunning) {
 
-        if (
-          !data ||
-          data.type !== "state" ||
-          !data.state
-        ) {
+        state.clockSeconds =
+            Number(state.clockSeconds) || 0;
 
-          return;
-
-        }
-
-
-        /*
-         * Merge the new state.
-         */
-
-        state = {
-          ...state,
-          ...data.state
-        };
-
-
-        /*
-         * IMPORTANT:
-         * Render immediately.
-         */
-
-        render();
-
-
-        /*
-         * Send the confirmed state
-         * back to the control panel.
-         */
-
-        try {
-
-          connection.send({
-            type: "state",
-            state: {
-              ...state
-            }
-          });
-
-        } catch (error) {
-
-          console.error(
-            "State confirmation failed:",
-            error
-          );
-
-        }
-
-      }
-    );
-
-
-    connection.on(
-      "close",
-      () => {
-
-        console.log(
-          "Control panel disconnected."
-        );
-
-      }
-    );
-
-
-    connection.on(
-      "error",
-      error => {
-
-        console.error(
-          "Control connection error:",
-          error
-        );
-
-      }
-    );
-
-  }
-);
-
-
-/*
- * ============================================================
- * PEER ERRORS
- * ============================================================
- */
-
-peer.on(
-  "error",
-  error => {
-
-    console.error(
-      "================================"
-    );
-
-    console.error(
-      "PEERJS ERROR:",
-      error
-    );
-
-    console.error(
-      "================================"
-    );
-
-  }
-);
-
-
-/*
- * ============================================================
- * CONTINUOUS CLOCK
- * ============================================================
- */
-
-setInterval(
-  () => {
-
-    if (timer) {
-
-      timer.textContent =
-        formatTime(
-          getElapsed()
-        );
-
+        clockStartTime = null;
+        clockStartSeconds = state.clockSeconds;
     }
 
-  },
-  250
-);
+    render();
+}
 
 
-/*
- * ============================================================
- * FIRST RENDER
- * ============================================================
- */
+/* ============================================================
+   PEERJS
+============================================================ */
+
+let peer = null;
+let controlConnection = null;
+
+
+function createPeer() {
+
+    console.log("Creating PeerJS display...");
+
+    peer = new Peer(displayId, {
+        debug: 3
+    });
+
+
+    peer.on("open", id => {
+
+        console.log("=================================");
+        console.log("OBS SCOREBOARD PEER READY");
+        console.log("Peer ID:", id);
+        console.log("=================================");
+
+    });
+
+
+    peer.on("connection", connection => {
+
+        console.log("=================================");
+        console.log("CONTROL CONNECTING");
+        console.log("Connection:", connection.peer);
+        console.log("=================================");
+
+        controlConnection = connection;
+
+
+        connection.on("open", () => {
+
+            console.log("=================================");
+            console.log("CONTROL CONNECTED");
+            console.log("=================================");
+
+            /*
+               Immediately send current scoreboard
+               state to the control page.
+            */
+
+            try {
+                connection.send({
+                    type: "state",
+                    state: {
+                        ...state,
+                        clockSeconds: getElapsedSeconds()
+                    }
+                });
+
+                console.log("Initial state sent.");
+            } catch (error) {
+                console.error(
+                    "Could not send initial state:",
+                    error
+                );
+            }
+        });
+
+
+        connection.on("data", message => {
+
+            console.log("=================================");
+            console.log("DATA RECEIVED");
+            console.log(message);
+            console.log("=================================");
+
+
+            if (!message) {
+                return;
+            }
+
+
+            if (message.type === "state") {
+
+                applyIncomingState(message.state);
+
+
+                /*
+                   Send confirmation back to control.
+                */
+
+                try {
+
+                    connection.send({
+                        type: "state",
+                        state: {
+                            ...state,
+                            clockSeconds: getElapsedSeconds()
+                        }
+                    });
+
+                    console.log(
+                        "State confirmation sent."
+                    );
+
+                } catch (error) {
+
+                    console.error(
+                        "Confirmation failed:",
+                        error
+                    );
+                }
+            }
+        });
+
+
+        connection.on("close", () => {
+
+            console.log(
+                "Control connection closed."
+            );
+
+            if (controlConnection === connection) {
+                controlConnection = null;
+            }
+        });
+
+
+        connection.on("error", error => {
+
+            console.error(
+                "CONTROL CONNECTION ERROR:",
+                error
+            );
+        });
+    });
+
+
+    peer.on("error", error => {
+
+        console.error(
+            "================================="
+        );
+
+        console.error(
+            "PEERJS ERROR:",
+            error
+        );
+
+        console.error(
+            "================================="
+        );
+
+    });
+
+
+    peer.on("disconnected", () => {
+
+        console.warn(
+            "PeerJS disconnected from server."
+        );
+
+        /*
+           Try to reconnect automatically.
+        */
+
+        setTimeout(() => {
+
+            if (peer && !peer.destroyed) {
+
+                console.log(
+                    "Attempting PeerJS reconnect..."
+                );
+
+                peer.reconnect();
+            }
+
+        }, 2000);
+    });
+}
+
+
+/* ============================================================
+   TIMER UPDATE
+============================================================ */
+
+setInterval(() => {
+
+    timerEl.textContent =
+        formatTime(getElapsedSeconds());
+
+}, 250);
+
+
+/* ============================================================
+   INITIAL RENDER
+============================================================ */
 
 render();
+
+
+/* ============================================================
+   START PEER
+============================================================ */
+
+createPeer();
