@@ -279,12 +279,9 @@ let peer;
 try {
 
   peer =
-    new Peer(
-      displayId,
-      {
-        debug: 1
-      }
-    );
+    new Peer(displayId, {
+    debug: 3
+});
 
 } catch (error) {
 
