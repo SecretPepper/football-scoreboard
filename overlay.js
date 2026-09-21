@@ -2,6 +2,7 @@ const params = new URLSearchParams(window.location.search);
 const room = params.get("room") || "premier-league-match";
 
 const displayId = `scoreboard-${room}-display`;
+const storageKey = `scoreboard-state-${room}`;
 
 console.log("================================");
 console.log("SCOREBOARD READY");
@@ -11,10 +12,10 @@ console.log("================================");
 
 
 /* ============================================================
-   STATE
+   DEFAULT STATE
 ============================================================ */
 
-const state = {
+const defaultState = {
 
     homeName: "FUL",
     awayName: "MUN",
@@ -22,14 +23,17 @@ const state = {
     homeClub: "fulham",
     awayClub: "manchester-united",
 
-    homeLogo: "assets/clubs-and-countries/fulham.png",
-    awayLogo: "assets/clubs-and-countries/manchester-united.png",
+    homeLogo:
+        "assets/clubs-and-countries/fulham.png",
 
-    homeColor: "#111111",
+    awayLogo:
+        "assets/clubs-and-countries/manchester-united.png",
+
+    homeColor: "#000000",
     homeSecondary: "#ffffff",
 
     awayColor: "#da291c",
-    awaySecondary: "#fbe122",
+    awaySecondary: "#000000",
 
     competitionLogo:
         "assets/competitions/premier-league.png",
@@ -37,9 +41,48 @@ const state = {
     homeScore: 0,
     awayScore: 0,
 
-    clockRunning: false,
-    clockSeconds: 0
+    elapsedMs: 0,
+    running: false,
+    startedAt: null
 };
+
+
+/* ============================================================
+   LOAD LAST SAVED STATE
+============================================================ */
+
+let state = {
+    ...defaultState
+};
+
+try {
+
+    const saved =
+        localStorage.getItem(storageKey);
+
+    if (saved) {
+
+        const parsed =
+            JSON.parse(saved);
+
+        state = {
+            ...defaultState,
+            ...parsed
+        };
+
+        console.log(
+            "Restored saved scoreboard state."
+        );
+    }
+
+} catch (error) {
+
+    console.warn(
+        "Could not restore saved state:",
+        error
+    );
+
+}
 
 
 /* ============================================================
@@ -90,10 +133,13 @@ let clockStartSeconds = 0;
 
 function formatTime(seconds) {
 
-    seconds = Math.max(
-        0,
-        Math.floor(Number(seconds) || 0)
-    );
+    seconds =
+        Math.max(
+            0,
+            Math.floor(
+                Number(seconds) || 0
+            )
+        );
 
     const minutes =
         Math.floor(seconds / 60);
@@ -112,10 +158,14 @@ function formatTime(seconds) {
 function getElapsedSeconds() {
 
     if (
-        !state.clockRunning ||
+        !state.running ||
         clockStartTime === null
     ) {
-        return Number(state.clockSeconds) || 0;
+
+        return Math.floor(
+            Number(state.elapsedMs || 0) / 1000
+        );
+
     }
 
     return (
@@ -128,24 +178,40 @@ function getElapsedSeconds() {
 
 
 /* ============================================================
+   SAVE STATE
+============================================================ */
+
+function saveState() {
+
+    try {
+
+        localStorage.setItem(
+            storageKey,
+            JSON.stringify({
+                ...state,
+                elapsedMs:
+                    state.running
+                        ? getElapsedSeconds() * 1000
+                        : state.elapsedMs
+            })
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Could not save scoreboard state:",
+            error
+        );
+
+    }
+}
+
+
+/* ============================================================
    RENDER
 ============================================================ */
 
 function render() {
-
-    console.log(
-        "Rendering:",
-        state.homeName,
-        state.homeScore,
-        "-",
-        state.awayScore,
-        state.awayName
-    );
-
-
-    /* ----------------------------
-       Text
-    ---------------------------- */
 
     homeNameEl.textContent =
         state.homeName;
@@ -160,24 +226,21 @@ function render() {
         state.awayScore;
 
 
-    /* ----------------------------
-       Club logos
-    ---------------------------- */
-
     if (state.homeLogo) {
+
         homeLogoEl.src =
             state.homeLogo;
+
     }
+
 
     if (state.awayLogo) {
+
         awayLogoEl.src =
             state.awayLogo;
+
     }
 
-
-    /* ----------------------------
-       Competition
-    ---------------------------- */
 
     if (state.competitionLogo) {
 
@@ -186,16 +249,13 @@ function render() {
 
         competitionLogoEl.style.display =
             "block";
+
     }
 
 
-    /* ----------------------------
-       HOME COLORS
-    ---------------------------- */
-
     homePanel.style.setProperty(
         "--club-color",
-        state.homeColor || "#111111"
+        state.homeColor || "#000000"
     );
 
     homePanel.style.setProperty(
@@ -203,10 +263,6 @@ function render() {
         state.homeSecondary || "#ffffff"
     );
 
-
-    /* ----------------------------
-       AWAY COLORS
-    ---------------------------- */
 
     awayPanel.style.setProperty(
         "--club-color",
@@ -219,13 +275,9 @@ function render() {
     );
 
 
-    /* ----------------------------
-       Scoreboard root variables
-    ---------------------------- */
-
     scoreboard.style.setProperty(
         "--home-color",
-        state.homeColor || "#111111"
+        state.homeColor || "#000000"
     );
 
     scoreboard.style.setProperty(
@@ -244,14 +296,14 @@ function render() {
     );
 
 
-    /* ----------------------------
-       Timer
-    ---------------------------- */
-
     timerEl.textContent =
         formatTime(
             getElapsedSeconds()
         );
+
+
+    saveState();
+
 }
 
 
@@ -262,11 +314,15 @@ function render() {
 function applyIncomingState(newState) {
 
     if (!newState) {
+
         console.warn(
             "Received empty state."
         );
+
         return;
+
     }
+
 
     console.log(
         "================================"
@@ -286,26 +342,26 @@ function applyIncomingState(newState) {
 
 
     const wasRunning =
-        state.clockRunning;
+        state.running;
 
 
-    Object.assign(
-        state,
-        newState
-    );
+    state = {
+        ...state,
+        ...newState
+    };
 
 
-    /* ----------------------------
-       Clock transition
-    ---------------------------- */
+    /* CLOCK START */
 
     if (
-        state.clockRunning &&
+        state.running &&
         !wasRunning
     ) {
 
         clockStartSeconds =
-            Number(state.clockSeconds) || 0;
+            Math.floor(
+                Number(state.elapsedMs || 0) / 1000
+            );
 
         clockStartTime =
             Date.now();
@@ -313,24 +369,23 @@ function applyIncomingState(newState) {
     }
 
 
-    if (!state.clockRunning) {
+    /* CLOCK STOP */
 
-        state.clockSeconds =
-            Number(state.clockSeconds) || 0;
+    if (!state.running) {
 
         clockStartSeconds =
-            state.clockSeconds;
+            Math.floor(
+                Number(state.elapsedMs || 0) / 1000
+            );
 
         clockStartTime =
             null;
+
     }
 
 
-    /* ----------------------------
-       Render immediately
-    ---------------------------- */
-
     render();
+
 }
 
 
@@ -357,34 +412,38 @@ function createPeer() {
     );
 
 
-    /* ----------------------------
-       Peer ready
-    ---------------------------- */
+    /* --------------------------------------------------------
+       PEER READY
+    -------------------------------------------------------- */
 
-    peer.on("open", id => {
+    peer.on(
+        "open",
+        id => {
 
-        console.log(
-            "================================"
-        );
+            console.log(
+                "================================"
+            );
 
-        console.log(
-            "SCOREBOARD PEER READY"
-        );
+            console.log(
+                "SCOREBOARD PEER READY"
+            );
 
-        console.log(
-            "Peer ID:",
-            id
-        );
+            console.log(
+                "Peer ID:",
+                id
+            );
 
-        console.log(
-            "================================"
-        );
-    });
+            console.log(
+                "================================"
+            );
+
+        }
+    );
 
 
-    /* ----------------------------
-       Control connection
-    ---------------------------- */
+    /* --------------------------------------------------------
+       CONTROL CONNECTION
+    -------------------------------------------------------- */
 
     peer.on(
         "connection",
@@ -393,6 +452,7 @@ function createPeer() {
             console.log(
                 "Control panel connection received."
             );
+
 
             controlConnection =
                 connection;
@@ -408,13 +468,33 @@ function createPeer() {
 
 
                     /*
-                       Send current state
-                       back to control.
-                    */
+                     * IMPORTANT:
+                     *
+                     * DO NOT send our default state here.
+                     *
+                     * Instead ask the control panel
+                     * for the current state.
+                     */
 
-                    sendCurrentState(
-                        connection
-                    );
+                    try {
+
+                        connection.send({
+                            type: "request-state"
+                        });
+
+                        console.log(
+                            "Requested current state from control."
+                        );
+
+                    } catch (error) {
+
+                        console.error(
+                            "Failed to request state:",
+                            error
+                        );
+
+                    }
+
                 }
             );
 
@@ -429,25 +509,22 @@ function createPeer() {
                     );
 
 
+                    /* ----------------------------------------
+                       CONTROL REQUESTED / SENT STATE
+                    ---------------------------------------- */
+
                     if (
                         message &&
-                        message.type === "state"
+                        message.type === "state" &&
+                        message.state
                     ) {
 
                         applyIncomingState(
                             message.state
                         );
 
-
-                        /*
-                           Confirm the state
-                           back to control.
-                        */
-
-                        sendCurrentState(
-                            connection
-                        );
                     }
+
                 }
             );
 
@@ -460,6 +537,7 @@ function createPeer() {
                         "Control panel disconnected."
                     );
 
+
                     if (
                         controlConnection ===
                         connection
@@ -467,7 +545,9 @@ function createPeer() {
 
                         controlConnection =
                             null;
+
                     }
+
                 }
             );
 
@@ -480,15 +560,17 @@ function createPeer() {
                         "Control connection error:",
                         error
                     );
+
                 }
             );
+
         }
     );
 
 
-    /* ----------------------------
-       Peer errors
-    ---------------------------- */
+    /* --------------------------------------------------------
+       PEER ERRORS
+    -------------------------------------------------------- */
 
     peer.on(
         "error",
@@ -498,13 +580,14 @@ function createPeer() {
                 "PeerJS error:",
                 error
             );
+
         }
     );
 
 
-    /* ----------------------------
-       Peer disconnected
-    ---------------------------- */
+    /* --------------------------------------------------------
+       PEER DISCONNECTED
+    -------------------------------------------------------- */
 
     peer.on(
         "disconnected",
@@ -528,64 +611,16 @@ function createPeer() {
                         );
 
                         peer.reconnect();
+
                     }
 
                 },
                 2000
             );
+
         }
     );
-}
 
-
-/* ============================================================
-   SEND STATE
-============================================================ */
-
-function sendCurrentState(
-    connection
-) {
-
-    if (
-        !connection ||
-        !connection.open
-    ) {
-
-        console.warn(
-            "Cannot send state - connection closed."
-        );
-
-        return;
-    }
-
-
-    try {
-
-        connection.send({
-
-            type: "state",
-
-            state: {
-
-                ...state,
-
-                clockSeconds:
-                    getElapsedSeconds()
-            }
-        });
-
-
-        console.log(
-            "State sent to control."
-        );
-
-    } catch (error) {
-
-        console.error(
-            "Failed to send state:",
-            error
-        );
-    }
 }
 
 
@@ -600,6 +635,10 @@ setInterval(
             formatTime(
                 getElapsedSeconds()
             );
+
+        if (state.running) {
+            saveState();
+        }
 
     },
     250

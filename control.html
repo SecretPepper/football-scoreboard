@@ -1045,64 +1045,85 @@
 
 
         conn.on(
-          "data",
-          data => {
+  "data",
+  data => {
 
-            if (
-              !data ||
-              data.type !== "state" ||
-              !data.state
-            ) {
-              return;
-            }
+    console.log(
+      "Message from OBS:",
+      data
+    );
 
 
-            state = {
-              ...state,
-              ...data.state
-            };
+    /*
+     * OBS has refreshed and is asking
+     * for the current control-panel state.
+     */
+
+    if (
+      data &&
+      data.type === "request-state"
+    ) {
+
+      console.log(
+        "OBS requested current state."
+      );
+
+      sendState();
+
+      return;
+    }
 
 
-            /*
-             * Update controls from OBS.
-             */
+    /*
+     * Optional state confirmation from OBS.
+     */
 
-            $("homeScore").value =
-              state.homeScore;
+    if (
+      data &&
+      data.type === "state" &&
+      data.state
+    ) {
 
-            $("awayScore").value =
-              state.awayScore;
-
-
-            $("homeName").value =
-              state.homeName;
-
-            $("awayName").value =
-              state.awayName;
+      state = {
+        ...state,
+        ...data.state
+      };
 
 
-            $("competition").value =
-              state.competitionLogo;
+      $("homeScore").value =
+        state.homeScore;
+
+      $("awayScore").value =
+        state.awayScore;
+
+      $("homeName").value =
+        state.homeName;
+
+      $("awayName").value =
+        state.awayName;
+
+      $("competition").value =
+        state.competitionLogo;
+
+      $("homeClub").value =
+        state.homeClub ||
+        "fulham";
+
+      $("awayClub").value =
+        state.awayClub ||
+        "manchester-united";
 
 
-            $("homeClub").value =
-              state.homeClub ||
-              "fulham";
+      updateClubPreview("home");
+      updateClubPreview("away");
+      updateCompetitionPreview();
 
-            $("awayClub").value =
-              state.awayClub ||
-              "manchester-united";
+      renderClock();
 
+    }
 
-            updateClubPreview("home");
-            updateClubPreview("away");
-            updateCompetitionPreview();
-
-
-            renderClock();
-
-          }
-        );
+  }
+);
 
 
         conn.on(
