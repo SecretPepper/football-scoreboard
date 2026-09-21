@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Scoreboard Control</title>
+  <title>Football Scoreboard Control</title>
 
   <style>
     * {
@@ -27,7 +26,6 @@
     h1 {
       margin: 0 0 20px;
       font-size: 28px;
-      font-weight: 800;
     }
 
     .card {
@@ -41,7 +39,6 @@
     .card h2 {
       margin: 0 0 15px;
       font-size: 20px;
-      font-weight: 700;
     }
 
     .grid {
@@ -58,7 +55,7 @@
       display: block;
       margin-bottom: 6px;
       font-size: 13px;
-      color: #a9afb6;
+      color: #aaa;
     }
 
     input,
@@ -66,8 +63,8 @@
       width: 100%;
       padding: 12px;
       border-radius: 8px;
-      border: 1px solid #3a4047;
-      background: #0f1114;
+      border: 1px solid #444;
+      background: #101010;
       color: white;
       font-size: 16px;
       outline: none;
@@ -75,28 +72,22 @@
 
     input:focus,
     select:focus {
-      border-color: #6f7780;
-      box-shadow: 0 0 0 2px rgba(255,255,255,0.05);
+      border-color: #777;
     }
 
     button {
       border: 0;
       border-radius: 8px;
       padding: 11px 15px;
-      background: #30363d;
+      background: #333;
       color: white;
       cursor: pointer;
       font-size: 15px;
       font-weight: bold;
-      transition: background 0.15s ease, transform 0.1s ease;
     }
 
     button:hover {
-      background: #3d444c;
-    }
-
-    button:active {
-      transform: translateY(1px);
+      background: #444;
     }
 
     .connect-button {
@@ -127,8 +118,7 @@
       margin-top: 10px;
       padding: 10px;
       border-radius: 8px;
-      background: #0f1114;
-      border: 1px solid #252a30;
+      background: #101010;
     }
 
     .preview img {
@@ -142,14 +132,13 @@
     }
 
     .competition-preview {
-      min-height: 75px;
+      min-height: 70px;
       justify-content: center;
     }
 
     .competition-preview img {
-      width: 110px;
-      height: 60px;
-      object-fit: contain;
+      width: 100px;
+      height: 55px;
     }
 
     .clock {
@@ -158,7 +147,6 @@
       font-weight: bold;
       letter-spacing: 2px;
       margin: 10px 0 20px;
-      font-variant-numeric: tabular-nums;
     }
 
     .clock-buttons {
@@ -168,35 +156,26 @@
     }
 
     .status {
-      padding: 11px 13px;
+      padding: 10px;
       border-radius: 8px;
-      background: #15181c;
-      border: 1px solid #292e34;
-      color: #a9afb6;
+      background: #101010;
+      color: #aaa;
       margin-bottom: 15px;
       font-size: 14px;
     }
 
     .connected {
       color: #55d982;
-      border-color: rgba(85, 217, 130, 0.25);
     }
 
     .disconnected {
-      color: #ff7777;
+      color: #ff6b6b;
     }
 
     .club-style {
       margin-top: 8px;
       font-size: 12px;
-      color: #777f88;
-    }
-
-    .auto-note {
-      margin-top: 10px;
-      color: #7f8790;
-      font-size: 12px;
-      line-height: 1.5;
+      color: #888;
     }
 
     @media (max-width: 700px) {
@@ -247,10 +226,6 @@
       CONNECT TO OBS
     </button>
 
-    <div class="auto-note">
-      Changes are sent to OBS automatically. There is no Apply button.
-    </div>
-
   </div>
 
 
@@ -300,14 +275,8 @@
 
       </select>
 
-
       <div class="preview competition-preview">
-
-        <img
-          id="competitionPreview"
-          alt=""
-        >
-
+        <img id="competitionPreview" alt="">
       </div>
 
     </div>
@@ -325,7 +294,6 @@
     <div class="card">
 
       <h2>Home Team</h2>
-
 
       <div class="field">
 
@@ -360,7 +328,6 @@
 
       </div>
 
-
       <div class="field">
 
         <label>Short name</label>
@@ -372,7 +339,6 @@
         >
 
       </div>
-
 
       <div class="field">
 
@@ -399,13 +365,9 @@
 
       </div>
 
-
       <div class="preview">
 
-        <img
-          id="homePreview"
-          alt=""
-        >
+        <img id="homePreview" alt="">
 
         <span
           id="homePreviewName"
@@ -424,7 +386,6 @@
     <div class="card">
 
       <h2>Away Team</h2>
-
 
       <div class="field">
 
@@ -459,7 +420,6 @@
 
       </div>
 
-
       <div class="field">
 
         <label>Short name</label>
@@ -471,7 +431,6 @@
         >
 
       </div>
-
 
       <div class="field">
 
@@ -498,13 +457,9 @@
 
       </div>
 
-
       <div class="preview">
 
-        <img
-          id="awayPreview"
-          alt=""
-        >
+        <img id="awayPreview" alt="">
 
         <span
           id="awayPreviewName"
@@ -526,31 +481,16 @@
 
     <h2>Match Clock</h2>
 
-    <div
-      id="clock"
-      class="clock"
-    >
+    <div id="clock" class="clock">
       00:00
     </div>
 
-
     <div class="clock-buttons">
 
-      <button onclick="startClock()">
-        START
-      </button>
-
-      <button onclick="pauseClock()">
-        PAUSE
-      </button>
-
-      <button onclick="resetClock()">
-        RESET
-      </button>
-
-      <button onclick="setTime()">
-        SET TIME
-      </button>
+      <button onclick="startClock()">START</button>
+      <button onclick="pauseClock()">PAUSE</button>
+      <button onclick="resetClock()">RESET</button>
+      <button onclick="setTime()">SET TIME</button>
 
     </div>
 
@@ -561,1077 +501,931 @@
 
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 
-
 <script>
 
-  /* ============================================================
-     CLUB DATABASE
-  ============================================================ */
+const CLUBS = {
 
-  const CLUBS = {
+  fulham: {
+    short: "FUL",
+    logo: "assets/clubs-and-countries/fulham.png",
+    color: "#000000",
+    secondary: "#ffffff"
+  },
 
-    fulham: {
-      name: "Fulham",
-      short: "FUL",
-      logo: "assets/clubs-and-countries/fulham.png",
-      color: "#000000",
-      secondary: "#ffffff"
-    },
+  "manchester-united": {
+    short: "MUN",
+    logo: "assets/clubs-and-countries/manchester-united.png",
+    color: "#da291c",
+    secondary: "#000000"
+  },
 
-    "manchester-united": {
-      name: "Manchester United",
-      short: "MUN",
-      logo: "assets/clubs-and-countries/manchester-united.png",
-      color: "#da291c",
-      secondary: "#000000"
-    },
+  arsenal: {
+    short: "ARS",
+    logo: "assets/clubs-and-countries/arsenal.png",
+    color: "#db0007",
+    secondary: "#ffffff"
+  },
 
-    arsenal: {
-      name: "Arsenal",
-      short: "ARS",
-      logo: "assets/clubs-and-countries/arsenal.png",
-      color: "#db0007",
-      secondary: "#ffffff"
-    },
+  chelsea: {
+    short: "CHE",
+    logo: "assets/clubs-and-countries/chelsea.png",
+    color: "#034694",
+    secondary: "#ffffff"
+  },
 
-    chelsea: {
-      name: "Chelsea",
-      short: "CHE",
-      logo: "assets/clubs-and-countries/chelsea.png",
-      color: "#034694",
-      secondary: "#ffffff"
-    },
+  liverpool: {
+    short: "LIV",
+    logo: "assets/clubs-and-countries/liverpool.png",
+    color: "#c8102e",
+    secondary: "#ffffff"
+  },
 
-    liverpool: {
-      name: "Liverpool",
-      short: "LIV",
-      logo: "assets/clubs-and-countries/liverpool.png",
-      color: "#c8102e",
-      secondary: "#ffffff"
-    },
+  "manchester-city": {
+    short: "MCI",
+    logo: "assets/clubs-and-countries/manchester-city.png",
+    color: "#6cabdd",
+    secondary: "#ffffff"
+  },
 
-    "manchester-city": {
-      name: "Manchester City",
-      short: "MCI",
-      logo: "assets/clubs-and-countries/manchester-city.png",
-      color: "#6cabdd",
-      secondary: "#ffffff"
-    },
+  tottenham: {
+    short: "TOT",
+    logo: "assets/clubs-and-countries/tottenham.png",
+    color: "#132257",
+    secondary: "#ffffff"
+  },
 
-    tottenham: {
-      name: "Tottenham Hotspur",
-      short: "TOT",
-      logo: "assets/clubs-and-countries/tottenham.png",
-      color: "#132257",
-      secondary: "#ffffff"
-    },
+  newcastle: {
+    short: "NEW",
+    logo: "assets/clubs-and-countries/newcastle.png",
+    color: "#241f20",
+    secondary: "#ffffff"
+  },
 
-    newcastle: {
-      name: "Newcastle United",
-      short: "NEW",
-      logo: "assets/clubs-and-countries/newcastle.png",
-      color: "#241f20",
-      secondary: "#ffffff"
-    },
+  brighton: {
+    short: "BHA",
+    logo: "assets/clubs-and-countries/brighton.png",
+    color: "#0057b8",
+    secondary: "#ffffff"
+  },
 
-    brighton: {
-      name: "Brighton",
-      short: "BHA",
-      logo: "assets/clubs-and-countries/brighton.png",
-      color: "#0057b8",
-      secondary: "#ffffff"
-    },
+  "aston-villa": {
+    short: "AVL",
+    logo: "assets/clubs-and-countries/aston-villa.png",
+    color: "#670e36",
+    secondary: "#ffffff"
+  },
 
-    "aston-villa": {
-      name: "Aston Villa",
-      short: "AVL",
-      logo: "assets/clubs-and-countries/aston-villa.png",
-      color: "#670e36",
-      secondary: "#ffffff"
-    },
+  "west-ham": {
+    short: "WHU",
+    logo: "assets/clubs-and-countries/west-ham.png",
+    color: "#7a263a",
+    secondary: "#1bb1e7"
+  },
 
-    "west-ham": {
-      name: "West Ham United",
-      short: "WHU",
-      logo: "assets/clubs-and-countries/west-ham.png",
-      color: "#7a263a",
-      secondary: "#1bb1e7"
-    },
+  "crystal-palace": {
+    short: "CRY",
+    logo: "assets/clubs-and-countries/crystal-palace.png",
+    color: "#1b458f",
+    secondary: "#c4122e"
+  },
 
-    "crystal-palace": {
-      name: "Crystal Palace",
-      short: "CRY",
-      logo: "assets/clubs-and-countries/crystal-palace.png",
-      color: "#1b458f",
-      secondary: "#c4122e"
-    },
+  everton: {
+    short: "EVE",
+    logo: "assets/clubs-and-countries/everton.png",
+    color: "#003399",
+    secondary: "#ffffff"
+  },
 
-    everton: {
-      name: "Everton",
-      short: "EVE",
-      logo: "assets/clubs-and-countries/everton.png",
-      color: "#003399",
-      secondary: "#ffffff"
-    },
+  wolves: {
+    short: "WOL",
+    logo: "assets/clubs-and-countries/wolves.png",
+    color: "#fdb913",
+    secondary: "#000000"
+  },
 
-    wolves: {
-      name: "Wolverhampton Wanderers",
-      short: "WOL",
-      logo: "assets/clubs-and-countries/wolves.png",
-      color: "#fdb913",
-      secondary: "#000000"
-    },
+  "nottingham-forest": {
+    short: "NFO",
+    logo: "assets/clubs-and-countries/nottingham-forest.png",
+    color: "#e53233",
+    secondary: "#ffffff"
+  },
 
-    "nottingham-forest": {
-      name: "Nottingham Forest",
-      short: "NFO",
-      logo: "assets/clubs-and-countries/nottingham-forest.png",
-      color: "#e53233",
-      secondary: "#ffffff"
-    },
+  brentford: {
+    short: "BRE",
+    logo: "assets/clubs-and-countries/brentford.png",
+    color: "#e30613",
+    secondary: "#ffffff"
+  },
 
-    brentford: {
-      name: "Brentford",
-      short: "BRE",
-      logo: "assets/clubs-and-countries/brentford.png",
-      color: "#e30613",
-      secondary: "#ffffff"
-    },
+  bournemouth: {
+    short: "BOU",
+    logo: "assets/clubs-and-countries/bournemouth.png",
+    color: "#da291c",
+    secondary: "#000000"
+  },
 
-    bournemouth: {
-      name: "Bournemouth",
-      short: "BOU",
-      logo: "assets/clubs-and-countries/bournemouth.png",
-      color: "#da291c",
-      secondary: "#000000"
-    },
+  leicester: {
+    short: "LEI",
+    logo: "assets/clubs-and-countries/leicester.png",
+    color: "#003090",
+    secondary: "#f5f5f5"
+  },
 
-    leicester: {
-      name: "Leicester City",
-      short: "LEI",
-      logo: "assets/clubs-and-countries/leicester.png",
-      color: "#003090",
-      secondary: "#f5f5f5"
-    },
+  leeds: {
+    short: "LEE",
+    logo: "assets/clubs-and-countries/leeds.png",
+    color: "#ffcd00",
+    secondary: "#1d428a"
+  },
 
-    leeds: {
-      name: "Leeds United",
-      short: "LEE",
-      logo: "assets/clubs-and-countries/leeds.png",
-      color: "#ffcd00",
-      secondary: "#1d428a"
-    },
+  sunderland: {
+    short: "SUN",
+    logo: "assets/clubs-and-countries/sunderland.png",
+    color: "#eb172b",
+    secondary: "#ffffff"
+  }
 
-    sunderland: {
-      name: "Sunderland",
-      short: "SUN",
-      logo: "assets/clubs-and-countries/sunderland.png",
-      color: "#eb172b",
-      secondary: "#ffffff"
-    }
-
-  };
+};
 
 
-  /* ============================================================
-     CONNECTION
-  ============================================================ */
+/* ============================================================
+   STATE
+============================================================ */
 
-  let peer = null;
-  let conn = null;
-  let connecting = false;
+let state = {
 
+  homeName: "FUL",
+  awayName: "MUN",
 
-  /* ============================================================
-     STATE
-  ============================================================ */
+  homeClub: "fulham",
+  awayClub: "manchester-united",
 
-  let state = {
+  homeLogo: CLUBS.fulham.logo,
+  awayLogo: CLUBS["manchester-united"].logo,
 
-    homeName: "FUL",
-    awayName: "MUN",
+  homeColor: CLUBS.fulham.color,
+  homeSecondary: CLUBS.fulham.secondary,
 
-    homeClub: "fulham",
-    awayClub: "manchester-united",
+  awayColor: CLUBS["manchester-united"].color,
+  awaySecondary: CLUBS["manchester-united"].secondary,
 
-    homeLogo: CLUBS.fulham.logo,
-    awayLogo: CLUBS["manchester-united"].logo,
+  competitionLogo:
+    "assets/competitions/premier-league.png",
 
-    homeColor: CLUBS.fulham.color,
-    homeSecondary: CLUBS.fulham.secondary,
+  homeScore: 0,
+  awayScore: 0,
 
-    awayColor: CLUBS["manchester-united"].color,
-    awaySecondary: CLUBS["manchester-united"].secondary,
+  elapsedMs: 0,
+  running: false,
+  startedAt: null
 
-    competitionLogo:
-      "assets/competitions/premier-league.png",
-
-    homeScore: 0,
-    awayScore: 0,
-
-    elapsedMs: 0,
-    running: false,
-    startedAt: null
-
-  };
+};
 
 
-  const $ = id =>
-    document.getElementById(id);
+let peer = null;
+let connection = null;
+let connecting = false;
 
 
-  /* ============================================================
-     STATUS
-  ============================================================ */
+const $ = id =>
+  document.getElementById(id);
 
-  function setStatus(message, connected = false) {
 
-    const status = $("status");
+/* ============================================================
+   STATUS
+============================================================ */
 
-    status.textContent = message;
+function status(text, connected = false) {
 
-    status.className =
-      connected
-        ? "status connected"
-        : "status disconnected";
+  const el = $("status");
 
+  el.textContent = text;
+
+  el.className =
+    connected
+      ? "status connected"
+      : "status disconnected";
+
+}
+
+
+/* ============================================================
+   BUILD CURRENT STATE
+============================================================ */
+
+function buildState() {
+
+  const home =
+    CLUBS[$("homeClub").value];
+
+  const away =
+    CLUBS[$("awayClub").value];
+
+
+  if (!home || !away) {
+    return;
   }
 
 
-  /* ============================================================
-     CLUB PREVIEWS
-  ============================================================ */
+  state.homeClub =
+    $("homeClub").value;
 
-  function updateClubPreview(side) {
+  state.awayClub =
+    $("awayClub").value;
 
-    const select =
-      side === "home"
-        ? $("homeClub")
-        : $("awayClub");
 
-    const club =
-      CLUBS[select.value];
+  state.homeName =
+    $("homeName").value.trim() ||
+    home.short;
 
-    if (!club) {
-      return;
-    }
+  state.awayName =
+    $("awayName").value.trim() ||
+    away.short;
 
 
-    if (side === "home") {
+  state.homeLogo =
+    home.logo;
 
-      $("homePreview").src =
-        club.logo;
+  state.awayLogo =
+    away.logo;
 
-      $("homePreviewName").textContent =
-        $("homeName").value ||
-        club.short;
 
-      $("homeStyle").textContent =
-        "Scoreboard style: " +
-        club.color +
-        " / " +
-        club.secondary;
+  state.homeColor =
+    home.color;
 
-    } else {
+  state.homeSecondary =
+    home.secondary;
 
-      $("awayPreview").src =
-        club.logo;
 
-      $("awayPreviewName").textContent =
-        $("awayName").value ||
-        club.short;
+  state.awayColor =
+    away.color;
 
-      $("awayStyle").textContent =
-        "Scoreboard style: " +
-        club.color +
-        " / " +
-        club.secondary;
+  state.awaySecondary =
+    away.secondary;
 
-    }
 
-  }
+  state.competitionLogo =
+    $("competition").value;
 
 
-  /* ============================================================
-     COMPETITION PREVIEW
-  ============================================================ */
-
-  function updateCompetitionPreview() {
-
-    $("competitionPreview").src =
-      $("competition").value;
-
-  }
-
-
-  /* ============================================================
-     BUILD STATE
-  ============================================================ */
-
-  function buildStateFromControls() {
-
-    const homeClub =
-      CLUBS[$("homeClub").value];
-
-    const awayClub =
-      CLUBS[$("awayClub").value];
-
-
-    if (!homeClub || !awayClub) {
-
-      setStatus(
-        "Invalid club selection.",
-        false
-      );
-
-      return false;
-
-    }
-
-
-    state.homeClub =
-      $("homeClub").value;
-
-    state.awayClub =
-      $("awayClub").value;
-
-
-    state.homeName =
-      $("homeName").value.trim() ||
-      homeClub.short;
-
-    state.awayName =
-      $("awayName").value.trim() ||
-      awayClub.short;
-
-
-    state.homeLogo =
-      homeClub.logo;
-
-    state.awayLogo =
-      awayClub.logo;
-
-
-    state.homeColor =
-      homeClub.color;
-
-    state.homeSecondary =
-      homeClub.secondary;
-
-
-    state.awayColor =
-      awayClub.color;
-
-    state.awaySecondary =
-      awayClub.secondary;
-
-
-    state.competitionLogo =
-      $("competition").value;
-
-
-    state.homeScore =
-      Math.max(
-        0,
-        Number($("homeScore").value) || 0
-      );
-
-    state.awayScore =
-      Math.max(
-        0,
-        Number($("awayScore").value) || 0
-      );
-
-
-    return true;
-
-  }
-
-
-  /* ============================================================
-     UPDATE + SEND
-  ============================================================ */
-
-  function updateAndSend() {
-
-    if (!buildStateFromControls()) {
-      return;
-    }
-
-    sendState();
-
-  }
-
-
-  /* ============================================================
-     CONNECT
-  ============================================================ */
-
-  function connect() {
-
-    const room =
-      $("room").value.trim();
-
-
-    if (!room) {
-
-      setStatus(
-        "Enter a room name.",
-        false
-      );
-
-      return;
-
-    }
-
-
-    if (connecting) {
-      return;
-    }
-
-
-    if (conn && conn.open) {
-
-      setStatus(
-        "✓ Connected to OBS",
-        true
-      );
-
-      sendState();
-
-      return;
-
-    }
-
-
-    connecting = true;
-
-
-    if (conn) {
-
-      try {
-        conn.close();
-      } catch (e) {}
-
-      conn = null;
-
-    }
-
-
-    if (peer) {
-
-      try {
-        peer.destroy();
-      } catch (e) {}
-
-      peer = null;
-
-    }
-
-
-    setStatus(
-      "Starting connection...",
-      false
+  state.homeScore =
+    Math.max(
+      0,
+      Number($("homeScore").value) || 0
     );
 
 
-    const controlId =
-      "scoreboard-" +
-      room +
-      "-control-" +
-      Math.random()
-        .toString(36)
-        .substring(2, 10);
+  state.awayScore =
+    Math.max(
+      0,
+      Number($("awayScore").value) || 0
+    );
+
+}
 
 
-    peer =
-      new Peer(
-        controlId,
-        {
-          debug: 1
+/* ============================================================
+   SEND
+============================================================ */
+
+function sendState() {
+
+  if (
+    !connection ||
+    !connection.open
+  ) {
+
+    return;
+
+  }
+
+
+  connection.send({
+
+    type: "state",
+
+    state: {
+      ...state
+    }
+
+  });
+
+
+  console.log(
+    "SENT TO OBS:",
+    state
+  );
+
+
+  status(
+    "✓ Scoreboard updated",
+    true
+  );
+
+}
+
+
+/* ============================================================
+   BUILD + SEND
+============================================================ */
+
+function update() {
+
+  buildState();
+
+  sendState();
+
+}
+
+
+/* ============================================================
+   CONNECT
+============================================================ */
+
+function connect() {
+
+  if (connecting) {
+    return;
+  }
+
+
+  const room =
+    $("room").value.trim();
+
+
+  if (!room) {
+
+    status(
+      "Enter a room name.",
+      false
+    );
+
+    return;
+
+  }
+
+
+  if (
+    connection &&
+    connection.open
+  ) {
+
+    sendState();
+
+    return;
+
+  }
+
+
+  connecting = true;
+
+
+  status(
+    "Connecting to OBS...",
+    false
+  );
+
+
+  if (peer) {
+
+    try {
+      peer.destroy();
+    } catch (e) {}
+
+    peer = null;
+
+  }
+
+
+  const controlId =
+    "scoreboard-" +
+    room +
+    "-control-" +
+    Math.random()
+      .toString(36)
+      .substring(2, 9);
+
+
+  const displayId =
+    "scoreboard-" +
+    room +
+    "-display";
+
+
+  peer =
+    new Peer(
+      controlId,
+      {
+        debug: 2
+      }
+    );
+
+
+  peer.on(
+    "open",
+    () => {
+
+      console.log(
+        "Control peer ready:",
+        controlId
+      );
+
+
+      connection =
+        peer.connect(
+          displayId,
+          {
+            reliable: true
+          }
+        );
+
+
+      connection.on(
+        "open",
+        () => {
+
+          connecting = false;
+
+
+          console.log(
+            "CONNECTED TO OBS:",
+            displayId
+          );
+
+
+          status(
+            "✓ Connected to OBS",
+            true
+          );
+
+
+          /*
+           * Send the control panel's current
+           * state immediately.
+           */
+
+          buildState();
+
+          sendState();
+
         }
       );
 
 
-    peer.on(
-      "open",
-      () => {
+      connection.on(
+        "data",
+        message => {
 
-        console.log(
-          "Control Peer opened:",
-          controlId
-        );
-
-
-        const displayId =
-          "scoreboard-" +
-          room +
-          "-display";
-
-
-        setStatus(
-          "Connecting to OBS...",
-          false
-        );
-
-
-        conn =
-          peer.connect(
-            displayId,
-            {
-              reliable: true
-            }
+          console.log(
+            "OBS MESSAGE:",
+            message
           );
 
 
-        if (!conn) {
+          /*
+           * OBS can request the current state
+           * after refreshing.
+           */
 
-          connecting = false;
+          if (
+            message &&
+            message.type === "request-state"
+          ) {
 
-          setStatus(
-            "Could not create OBS connection.",
-            false
-          );
-
-          return;
-
-        }
-
-
-        conn.on(
-          "open",
-          () => {
-
-            connecting = false;
-
-
-            console.log(
-              "Connected to scoreboard:",
-              displayId
-            );
-
-
-            setStatus(
-              "✓ Connected to OBS",
-              true
-            );
-
-
-            /*
-             * CONTROL IS AUTHORITATIVE.
-             *
-             * Send the current control-panel
-             * state immediately.
-             */
-
-            buildStateFromControls();
+            buildState();
 
             sendState();
 
           }
-        );
+
+        }
+      );
 
 
-        conn.on(
-          "data",
-          data => {
+      connection.on(
+        "close",
+        () => {
 
-            console.log(
-              "Message from OBS:",
-              data
-            );
+          connection = null;
 
-
-            /*
-             * OBS may ask for the current state
-             * after it has refreshed.
-             */
-
-            if (
-              data &&
-              data.type === "request-state"
-            ) {
-
-              console.log(
-                "OBS requested current state."
-              );
-
-              buildStateFromControls();
-
-              sendState();
-
-              return;
-
-            }
-
-
-            /*
-             * IMPORTANT:
-             *
-             * Never copy a state received from OBS
-             * back into the control panel.
-             *
-             * OBS is NOT authoritative.
-             */
-
-          }
-        );
-
-
-        conn.on(
-          "close",
-          () => {
-
-            connecting = false;
-
-            conn = null;
-
-            setStatus(
-              "Disconnected from OBS",
-              false
-            );
-
-          }
-        );
-
-
-        conn.on(
-          "error",
-          error => {
-
-            console.error(
-              "Connection error:",
-              error
-            );
-
-            connecting = false;
-
-            setStatus(
-              "OBS connection error",
-              false
-            );
-
-          }
-        );
-
-      }
-    );
-
-
-    peer.on(
-      "error",
-      error => {
-
-        console.error(
-          "PeerJS error:",
-          error
-        );
-
-
-        connecting = false;
-
-
-        if (
-          error.type ===
-          "peer-unavailable"
-        ) {
-
-          setStatus(
-            "OBS scoreboard not found. Open the OBS scoreboard first.",
-            false
-          );
-
-        } else {
-
-          setStatus(
-            "PeerJS error: " +
-            error.type,
+          status(
+            "Disconnected from OBS",
             false
           );
 
         }
-
-      }
-    );
-
-
-    peer.on(
-      "disconnected",
-      () => {
-
-        console.log(
-          "PeerJS server disconnected."
-        );
-
-      }
-    );
-
-  }
-
-
-  /* ============================================================
-     SEND STATE
-  ============================================================ */
-
-  function sendState() {
-
-    if (
-      !conn ||
-      !conn.open
-    ) {
-
-      setStatus(
-        "Changes saved locally. Connect to OBS to send them.",
-        false
       );
 
-      return false;
+
+      connection.on(
+        "error",
+        error => {
+
+          console.error(
+            "Connection error:",
+            error
+          );
+
+          status(
+            "OBS connection error",
+            false
+          );
+
+        }
+      );
 
     }
+  );
 
 
-    try {
+  peer.on(
+    "error",
+    error => {
 
-      conn.send({
-        type: "state",
-        state: {
-          ...state
-        }
-      });
-
-
-      setStatus(
-        "✓ Scoreboard updated in OBS",
-        true
-      );
-
-
-      console.log(
-        "State sent to OBS:",
-        state
-      );
-
-
-      return true;
-
-    } catch (error) {
+      connecting = false;
 
       console.error(
-        "Failed to send state:",
+        "PeerJS error:",
         error
       );
 
 
-      setStatus(
-        "Failed to update OBS",
-        false
-      );
+      if (
+        error.type ===
+        "peer-unavailable"
+      ) {
 
+        status(
+          "OBS scoreboard not found. Open OBS scoreboard first.",
+          false
+        );
 
-      return false;
+      } else {
+
+        status(
+          "PeerJS error: " +
+          error.type,
+          false
+        );
+
+      }
 
     }
+  );
 
-  }
+}
 
 
-  /* ============================================================
-     SCORE
-  ============================================================ */
+/* ============================================================
+   CLUB PREVIEWS
+============================================================ */
 
-  function changeScore(side, amount) {
+function updateClubPreview(side) {
 
-    const input =
+  const club =
+    CLUBS[
       side === "home"
-        ? $("homeScore")
-        : $("awayScore");
+        ? $("homeClub").value
+        : $("awayClub").value
+    ];
 
 
-    let value =
-      Number(input.value) || 0;
+  if (!club) {
+    return;
+  }
 
 
-    value += amount;
+  if (side === "home") {
+
+    $("homePreview").src =
+      club.logo;
+
+    $("homePreviewName").textContent =
+      $("homeName").value ||
+      club.short;
+
+    $("homeStyle").textContent =
+      club.color +
+      " / " +
+      club.secondary;
+
+  } else {
+
+    $("awayPreview").src =
+      club.logo;
+
+    $("awayPreviewName").textContent =
+      $("awayName").value ||
+      club.short;
+
+    $("awayStyle").textContent =
+      club.color +
+      " / " +
+      club.secondary;
+
+  }
+
+}
 
 
-    if (value < 0) {
-      value = 0;
-    }
+/* ============================================================
+   COMPETITION
+============================================================ */
+
+function updateCompetitionPreview() {
+
+  $("competitionPreview").src =
+    $("competition").value;
+
+}
 
 
-    input.value =
-      value;
+/* ============================================================
+   SCORE
+============================================================ */
+
+function changeScore(side, amount) {
+
+  const input =
+    side === "home"
+      ? $("homeScore")
+      : $("awayScore");
 
 
-    updateAndSend();
+  let value =
+    Number(input.value) || 0;
+
+
+  value += amount;
+
+
+  if (value < 0) {
+    value = 0;
+  }
+
+
+  input.value = value;
+
+
+  update();
+
+}
+
+
+/* ============================================================
+   CLOCK
+============================================================ */
+
+function getElapsed() {
+
+  if (
+    state.running &&
+    state.startedAt !== null
+  ) {
+
+    return (
+      state.elapsedMs +
+      (
+        Date.now() -
+        state.startedAt
+      )
+    );
 
   }
 
 
-  /* ============================================================
-     CLOCK
-  ============================================================ */
+  return state.elapsedMs;
 
-  function getElapsed() {
-
-    if (
-      state.running &&
-      state.startedAt !== null
-    ) {
-
-      return (
-        state.elapsedMs +
-        (
-          Date.now() -
-          state.startedAt
-        )
-      );
-
-    }
+}
 
 
-    return state.elapsedMs;
+function renderClock() {
 
-  }
-
-
-  function renderClock() {
-
-    const totalSeconds =
-      Math.floor(
-        Math.max(
-          0,
-          getElapsed()
-        ) / 1000
-      );
-
-
-    const minutes =
-      Math.floor(
-        totalSeconds / 60
-      );
-
-
-    const seconds =
-      totalSeconds % 60;
-
-
-    $("clock").textContent =
-      String(minutes).padStart(2, "0") +
-      ":" +
-      String(seconds).padStart(2, "0");
-
-  }
-
-
-  function startClock() {
-
-    if (state.running) {
-      return;
-    }
-
-
-    state.running = true;
-
-    state.startedAt =
-      Date.now();
-
-
-    sendState();
-
-  }
-
-
-  function pauseClock() {
-
-    if (!state.running) {
-      return;
-    }
-
-
-    state.elapsedMs =
-      getElapsed();
-
-
-    state.running = false;
-
-    state.startedAt = null;
-
-
-    sendState();
-
-  }
-
-
-  function resetClock() {
-
-    state.elapsedMs = 0;
-
-    state.running = false;
-
-    state.startedAt = null;
-
-
-    sendState();
-
-  }
-
-
-  function setTime() {
-
-    const value =
-      prompt(
-        "Enter match time in minutes:",
-        "0"
-      );
-
-
-    if (value === null) {
-      return;
-    }
-
-
-    const minutes =
+  const seconds =
+    Math.floor(
       Math.max(
         0,
-        Number(value) || 0
-      );
+        getElapsed()
+      ) / 1000
+    );
 
 
-    state.elapsedMs =
-      minutes * 60 * 1000;
-
-    state.running = false;
-
-    state.startedAt = null;
+  const minutes =
+    Math.floor(
+      seconds / 60
+    );
 
 
-    sendState();
+  const secs =
+    seconds % 60;
 
+
+  $("clock").textContent =
+    String(minutes).padStart(2, "0") +
+    ":" +
+    String(secs).padStart(2, "0");
+
+}
+
+
+function startClock() {
+
+  if (state.running) {
+    return;
   }
 
 
-  /* ============================================================
-     INPUT EVENTS
-  ============================================================ */
+  state.running = true;
 
-  $("homeClub").addEventListener(
-    "change",
-    () => {
-
-      const club =
-        CLUBS[$("homeClub").value];
+  state.startedAt =
+    Date.now();
 
 
-      if (club) {
+  sendState();
 
-        $("homeName").value =
-          club.short;
-
-      }
+}
 
 
-      updateClubPreview("home");
+function pauseClock() {
 
-      updateAndSend();
-
-    }
-  );
-
-
-  $("awayClub").addEventListener(
-    "change",
-    () => {
-
-      const club =
-        CLUBS[$("awayClub").value];
+  if (!state.running) {
+    return;
+  }
 
 
-      if (club) {
-
-        $("awayName").value =
-          club.short;
-
-      }
+  state.elapsedMs =
+    getElapsed();
 
 
-      updateClubPreview("away");
+  state.running = false;
 
-      updateAndSend();
-
-    }
-  );
+  state.startedAt = null;
 
 
-  $("homeName").addEventListener(
-    "input",
-    () => {
+  sendState();
 
-      $("homePreviewName").textContent =
-        $("homeName").value ||
-        CLUBS[$("homeClub").value].short;
+}
 
 
-      updateAndSend();
+function resetClock() {
 
-    }
-  );
+  state.elapsedMs = 0;
 
+  state.running = false;
 
-  $("awayName").addEventListener(
-    "input",
-    () => {
-
-      $("awayPreviewName").textContent =
-        $("awayName").value ||
-        CLUBS[$("awayClub").value].short;
+  state.startedAt = null;
 
 
-      updateAndSend();
+  sendState();
 
-    }
-  );
-
-
-  $("homeScore").addEventListener(
-    "input",
-    updateAndSend
-  );
+}
 
 
-  $("awayScore").addEventListener(
-    "input",
-    updateAndSend
-  );
+function setTime() {
+
+  const value =
+    prompt(
+      "Enter match time in minutes:",
+      "0"
+    );
 
 
-  $("competition").addEventListener(
-    "change",
-    () => {
-
-      updateCompetitionPreview();
-
-      updateAndSend();
-
-    }
-  );
+  if (value === null) {
+    return;
+  }
 
 
-  /* ============================================================
-     INITIALISE
-  ============================================================ */
-
-  updateClubPreview("home");
-  updateClubPreview("away");
-  updateCompetitionPreview();
-  renderClock();
+  const minutes =
+    Math.max(
+      0,
+      Number(value) || 0
+    );
 
 
-  setInterval(
-    renderClock,
-    250
-  );
+  state.elapsedMs =
+    minutes * 60 * 1000;
 
+
+  state.running = false;
+
+  state.startedAt = null;
+
+
+  sendState();
+
+}
+
+
+/* ============================================================
+   INPUT EVENTS
+============================================================ */
+
+$("homeClub").addEventListener(
+  "change",
+  () => {
+
+    const club =
+      CLUBS[$("homeClub").value];
+
+
+    $("homeName").value =
+      club.short;
+
+
+    updateClubPreview("home");
+
+    update();
+
+  }
+);
+
+
+$("awayClub").addEventListener(
+  "change",
+  () => {
+
+    const club =
+      CLUBS[$("awayClub").value];
+
+
+    $("awayName").value =
+      club.short;
+
+
+    updateClubPreview("away");
+
+    update();
+
+  }
+);
+
+
+$("homeName").addEventListener(
+  "input",
+  () => {
+
+    $("homePreviewName").textContent =
+      $("homeName").value;
+
+
+    update();
+
+  }
+);
+
+
+$("awayName").addEventListener(
+  "input",
+  () => {
+
+    $("awayPreviewName").textContent =
+      $("awayName").value;
+
+
+    update();
+
+  }
+);
+
+
+$("homeScore").addEventListener(
+  "input",
+  update
+);
+
+
+$("awayScore").addEventListener(
+  "input",
+  update
+);
+
+
+$("competition").addEventListener(
+  "change",
+  () => {
+
+    updateCompetitionPreview();
+
+    update();
+
+  }
+);
+
+
+/* ============================================================
+   INITIAL
+============================================================ */
+
+updateClubPreview("home");
+updateClubPreview("away");
+updateCompetitionPreview();
+renderClock();
+
+
+setInterval(
+  renderClock,
+  250
+);
 
 </script>
 
