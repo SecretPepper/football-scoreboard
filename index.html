@@ -10,9 +10,10 @@
 
   <title>Football Scoreboard</title>
 
+  <!-- VERSION NUMBER FOR OBS CACHE BUSTING -->
   <link
     rel="stylesheet"
-    href="style.css"
+    href="style.css?v=4"
   >
 </head>
 
@@ -20,9 +21,7 @@
 
   <div id="scoreboard">
 
-    <!-- =========================
-         HOME TEAM
-         ========================= -->
+    <!-- HOME TEAM -->
 
     <div
       id="home-panel"
@@ -41,29 +40,27 @@
         <div
           id="home-name"
           class="team-name"
-        >
-          FUL
-        </div>
+        >FUL</div>
 
         <div
           id="home-score"
           class="score"
-        >
-          0
-        </div>
+        >0</div>
 
       </div>
 
     </div>
 
 
-    <!-- =========================
-         CENTRE
-         ========================= -->
+    <!-- CENTRE -->
 
     <div class="centre">
 
-      <div class="purple-spikes"></div>
+      <div class="centre-glow"></div>
+
+      <div class="centre-accent-left"></div>
+
+      <div class="centre-accent-right"></div>
 
       <div class="competition-wrap">
 
@@ -76,20 +73,15 @@
 
       </div>
 
-
       <div
         id="timer"
         class="timer"
-      >
-        00:00
-      </div>
+      >00:00</div>
 
     </div>
 
 
-    <!-- =========================
-         AWAY TEAM
-         ========================= -->
+    <!-- AWAY TEAM -->
 
     <div
       id="away-panel"
@@ -101,16 +93,12 @@
         <div
           id="away-score"
           class="score"
-        >
-          0
-        </div>
+        >0</div>
 
         <div
           id="away-name"
           class="team-name"
-        >
-          MUN
-        </div>
+        >MUN</div>
 
         <img
           id="away-logo"
@@ -128,7 +116,8 @@
 
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 
-  <script src="overlay.js"></script>
+  <!-- VERSION NUMBER FOR OBS CACHE BUSTING -->
+  <script src="overlay.js?v=4"></script>
 
 </body>
 </html>
