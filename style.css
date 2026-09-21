@@ -156,19 +156,19 @@ body {
 
   background:
     linear-gradient(
-      255deg,
+      105deg,
 
-      var(--club-color) 0%,
-
-      var(--club-color) 48%,
+      #080808 0%,
 
       color-mix(
         in srgb,
         var(--club-color) 70%,
         #000000
-      ) 68%,
+      ) 32%,
 
-      #080808 100%
+      var(--club-color) 52%,
+
+      var(--club-color) 100%
     );
 
   border-radius:
@@ -209,7 +209,6 @@ body {
   pointer-events: none;
 
 }
-
 
 /* ============================================================
    TEAM CONTENT
