@@ -1,112 +1,923 @@
-*{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:transparent}
-body{display:flex;align-items:flex-start;justify-content:flex-start;font-family:Impact,"Arial Narrow",Arial,sans-serif}
+/* ============================================================
+   FOOTBALL SCOREBOARD
+   ============================================================ */
 
-.scoreboard{
-  position:relative;
-  width:862px;
-  height:112px;
-  margin:0;
-  border-radius:18px;
-  overflow:hidden;
-  background:linear-gradient(180deg,#080808 0%,#050505 100%);
-  box-shadow:0 0 0 2px rgba(0,0,0,.25),0 5px 12px rgba(0,0,0,.28);
+:root {
+  --dark: #080808;
+  --white: #ffffff;
+
+  --scoreboard-width: 1000px;
+  --scoreboard-height: 155px;
 }
 
-.team-logo{
-  position:absolute;
-  top:19px;
-  width:108px;
-  height:72px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-  border-radius:14px;
-}
-.team-logo img{
-  display:block;
-  width:100%;
-  height:72px;
-  object-fit:contain;
-  object-position:center;
-}
-.left-logo{left:28px}
-.right-logo{left:594px}
 
-.team-name{
-  position:absolute;
-  top:31px;
-  width:82px;
-  height:50px;
-  color:#fff;
-  font-size:34px;
-  line-height:50px;
-  letter-spacing:-1px;
-  font-weight:900;
-  text-shadow:1px 2px 0 #000;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:clip;
-  text-align:center;
-}
-.left-name{left:145px}
-.right-name{left:495px}
+/* ============================================================
+   PAGE
+   ============================================================ */
 
-.score{
-  position:absolute;
-  top:34px;
-  width:44px;
-  height:43px;
-  color:#f13a46;
-  font-size:49px;
-  line-height:39px;
-  font-weight:900;
-  text-align:center;
-  text-shadow:1px 2px 0 #000;
-}
-.left-score{left:240px}
-.right-score{left:422px}
-
-.middle-icon{
-  position:absolute;
-  left:319px;
-  top:15px;
-  width:86px;
-  height:80px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-  border-radius:18px;
-}
-.middle-icon img{
-  width:86px;
-  height:80px;
-  display:block;
-  object-fit:contain;
-  object-position:center;
+* {
+  box-sizing: border-box;
 }
 
-/* Timer is ONLY on the right of the Manchester United logo. */
-.timer{
-  position:absolute !important;
-  left:710px !important;
-  top:30px !important;
-  bottom:auto !important;
-  transform:none !important;
-  z-index:50 !important;
-  display:block !important;
-  width:120px !important;
-  height:50px !important;
-  color:#fff !important;
-  background:transparent !important;
-  border-radius:0 !important;
-  font-family:Impact,"Arial Narrow",Arial,sans-serif !important;
-  font-size:30px !important;
-  font-weight:900 !important;
-  line-height:50px !important;
-  text-align:left !important;
-  letter-spacing:.5px !important;
-  text-shadow:1px 2px 0 #000 !important;
+html,
+body {
+  margin: 0;
+  padding: 0;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+
+  background: transparent;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+}
+
+
+/* ============================================================
+   MAIN SCOREBOARD
+   ============================================================ */
+
+#scoreboard {
+
+  position: relative;
+
+  width: var(--scoreboard-width);
+  height: var(--scoreboard-height);
+
+  margin: 0;
+
+  overflow: visible;
+
+  display: grid;
+
+  grid-template-columns:
+    445px
+    110px
+    445px;
+
+  background: transparent;
+}
+
+
+/* ============================================================
+   TEAM PANELS
+   ============================================================ */
+
+.team-panel {
+
+  position: relative;
+
+  height: 100px;
+
+  top: 15px;
+
+  overflow: hidden;
+
+  color: var(--white);
+
+  z-index: 2;
+
+}
+
+
+/* ============================================================
+   HOME PANEL
+   ============================================================ */
+
+.home-panel {
+
+  background:
+    linear-gradient(
+      105deg,
+
+      var(--club-color) 0%,
+
+      var(--club-color) 48%,
+
+      color-mix(
+        in srgb,
+        var(--club-color) 70%,
+        #000000
+      ) 68%,
+
+      #080808 100%
+    );
+
+  border-radius:
+    8px 0 0 8px;
+
+}
+
+
+/*
+ * Diagonal club-colour shape.
+ */
+
+.home-panel::after {
+
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  right: -45px;
+
+  width: 120px;
+  height: 100%;
+
+  background:
+    linear-gradient(
+      135deg,
+      transparent 0%,
+      var(--club-secondary) 48%,
+      var(--club-color) 49%,
+      var(--club-color) 100%
+    );
+
+  opacity: 0.28;
+
+  transform: skewX(-18deg);
+
+  pointer-events: none;
+
+}
+
+
+/* ============================================================
+   AWAY PANEL
+   ============================================================ */
+
+.away-panel {
+
+  background:
+    linear-gradient(
+      255deg,
+
+      var(--club-color) 0%,
+
+      var(--club-color) 48%,
+
+      color-mix(
+        in srgb,
+        var(--club-color) 70%,
+        #000000
+      ) 68%,
+
+      #080808 100%
+    );
+
+  border-radius:
+    0 8px 8px 0;
+
+}
+
+
+/*
+ * Mirror diagonal shape.
+ */
+
+.away-panel::after {
+
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: -45px;
+
+  width: 120px;
+  height: 100%;
+
+  background:
+    linear-gradient(
+      45deg,
+      transparent 0%,
+      var(--club-secondary) 48%,
+      var(--club-color) 49%,
+      var(--club-color) 100%
+    );
+
+  opacity: 0.28;
+
+  transform: skewX(18deg);
+
+  pointer-events: none;
+
+}
+
+
+/* ============================================================
+   TEAM CONTENT
+   ============================================================ */
+
+.team-content {
+
+  position: relative;
+
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  z-index: 5;
+
+}
+
+
+/* ============================================================
+   HOME CONTENT
+   ============================================================ */
+
+.home-content {
+
+  justify-content: flex-start;
+
+  padding-left: 24px;
+
+}
+
+
+/* ============================================================
+   AWAY CONTENT
+   ============================================================ */
+
+.away-content {
+
+  justify-content: flex-end;
+
+  padding-right: 24px;
+
+}
+
+
+/* ============================================================
+   CLUB LOGOS
+   ============================================================ */
+
+.club-logo {
+
+  width: 66px;
+  height: 66px;
+
+  object-fit: contain;
+
+  flex-shrink: 0;
+
+  position: relative;
+
+  z-index: 10;
+
+  filter:
+    drop-shadow(
+      0 3px 5px
+      rgba(0, 0, 0, 0.55)
+    );
+
+}
+
+
+/* ============================================================
+   TEAM NAMES
+   ============================================================ */
+
+.team-name {
+
+  position: relative;
+
+  font-size: 27px;
+
+  font-weight: 900;
+
+  letter-spacing: 1px;
+
+  line-height: 1;
+
+  white-space: nowrap;
+
+  z-index: 10;
+
+  text-shadow:
+    0 2px 4px
+    rgba(0, 0, 0, 0.55);
+
+}
+
+
+/* ============================================================
+   HOME NAME
+   ============================================================ */
+
+.home-content .team-name {
+
+  margin-left: 13px;
+
+}
+
+
+/* ============================================================
+   AWAY NAME
+   ============================================================ */
+
+.away-content .team-name {
+
+  margin-right: 13px;
+
+}
+
+
+/* ============================================================
+   SCORES
+   ============================================================ */
+
+.score {
+
+  position: relative;
+
+  min-width: 58px;
+
+  font-size: 55px;
+
+  font-weight: 900;
+
+  line-height: 1;
+
+  text-align: center;
+
+  z-index: 10;
+
+  text-shadow:
+    0 3px 5px
+    rgba(0, 0, 0, 0.65);
+
+}
+
+
+/* ============================================================
+   HOME SCORE
+   ============================================================ */
+
+.home-content .score {
+
+  margin-left: 25px;
+
+}
+
+
+/* ============================================================
+   AWAY SCORE
+   ============================================================ */
+
+.away-content .score {
+
+  margin-right: 25px;
+
+}
+
+/* ============================================================
+   PREMIUM BROADCAST CENTRE
+   ============================================================ */
+
+.centre {
+
+  position: relative;
+
+  height: 155px;
+
+  z-index: 30;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  isolation: isolate;
+
+  --purple: #8b00ff;
+  --purple-bright: #c92cff;
+  --purple-dark: #42005f;
+
+}
+
+
+/* ============================================================
+   MAIN 3D CENTRE HOUSING
+   ============================================================ */
+
+.centre::before {
+
+  content: "";
+
+  position: absolute;
+
+  top: 4px;
+  left: 50%;
+
+  width: 178px;
+  height: 126px;
+
+  transform: translateX(-50%);
+
+  background:
+    linear-gradient(
+      180deg,
+      #292929 0%,
+      #171717 22%,
+      #0b0b0b 58%,
+      #030303 100%
+    );
+
+  border-radius: 18px;
+
+  box-shadow:
+
+    0 10px 25px
+    rgba(0,0,0,.85),
+
+    0 2px 4px
+    rgba(0,0,0,.9),
+
+    inset 0 1px 0
+    rgba(255,255,255,.13),
+
+    inset 0 -5px 8px
+    rgba(0,0,0,.8);
+
+  z-index: -5;
+
+}
+
+
+/* ============================================================
+   PURPLE INNER EDGE
+   ============================================================ */
+
+.centre::after {
+
+  content: "";
+
+  position: absolute;
+
+  top: 5px;
+  left: 50%;
+
+  width: 176px;
+  height: 124px;
+
+  transform: translateX(-50%);
+
+  border-radius: 17px;
+
+  border: 1px solid
+    rgba(255,255,255,.10);
+
+  box-shadow:
+
+    inset 0 -2px 0
+    rgba(139,0,255,.65),
+
+    inset 0 -5px 12px
+    rgba(100,0,170,.20),
+
+    0 0 0 1px
+    rgba(0,0,0,.35);
+
+  pointer-events: none;
+
+  z-index: 4;
+
+}
+
+
+/* ============================================================
+   PURPLE AMBIENT GLOW
+   ============================================================ */
+
+.centre .centre-glow {
+
+  position: absolute;
+
+  left: 50%;
+  bottom: 12px;
+
+  width: 180px;
+  height: 58px;
+
+  transform: translateX(-50%);
+
+  background:
+    radial-gradient(
+      ellipse,
+      rgba(164,0,255,.70) 0%,
+      rgba(122,0,210,.42) 28%,
+      rgba(78,0,130,.18) 52%,
+      transparent 75%
+    );
+
+  filter: blur(10px);
+
+  opacity: .95;
+
+  pointer-events: none;
+
+  z-index: 0;
+
+}
+
+
+/* ============================================================
+   TOP PURPLE LIGHT
+   ============================================================ */
+
+.centre .centre-glow::before {
+
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+  top: -25px;
+
+  width: 100px;
+  height: 55px;
+
+  transform: translateX(-50%);
+
+  background:
+    radial-gradient(
+      ellipse,
+      rgba(170,0,255,.22),
+      transparent 70%
+    );
+
+  filter: blur(10px);
+
+}
+
+
+/* ============================================================
+   LEFT / RIGHT PURPLE CHEVRONS
+   ============================================================ */
+
+.centre .centre-accent-left,
+.centre .centre-accent-right {
+
+  position: absolute;
+
+  top: 32px;
+
+  width: 34px;
+  height: 56px;
+
+  background:
+    linear-gradient(
+      180deg,
+      var(--purple-bright) 0%,
+      var(--purple) 45%,
+      var(--purple-dark) 100%
+    );
+
+  opacity: .95;
+
+  box-shadow:
+
+    0 0 7px
+    rgba(150,0,255,.65),
+
+    inset 0 1px 0
+    rgba(255,255,255,.25);
+
+  pointer-events: none;
+
+  z-index: 3;
+
+}
+
+
+/* LEFT CHEVRON */
+
+.centre .centre-accent-left {
+
+  left: calc(50% - 100px);
+
+  clip-path:
+    polygon(
+      100% 0%,
+      100% 100%,
+      25% 100%,
+      0% 50%,
+      25% 0%
+    );
+
+}
+
+
+/* RIGHT CHEVRON */
+
+.centre .centre-accent-right {
+
+  right: calc(50% - 100px);
+
+  clip-path:
+    polygon(
+      0% 0%,
+      0% 100%,
+      75% 100%,
+      100% 50%,
+      75% 0%
+    );
+
+}
+
+
+/* ============================================================
+   SMALL PURPLE LIGHT BARS
+   ============================================================ */
+
+.centre .centre-accent-left::after,
+.centre .centre-accent-right::after {
+
+  content: "";
+
+  position: absolute;
+
+  top: 6px;
+
+  width: 3px;
+  height: 44px;
+
+  background: rgba(255,255,255,.55);
+
+  filter:
+    blur(.5px);
+
+  opacity: .65;
+
+}
+
+
+.centre .centre-accent-left::after {
+
+  right: 7px;
+
+}
+
+
+.centre .centre-accent-right::after {
+
+  left: 7px;
+
+}
+
+
+/* ============================================================
+   COMPETITION LOGO
+   ============================================================ */
+
+.competition-wrap {
+
+  position: relative;
+
+  width: 100px;
+  height: 91px;
+
+  margin-top: 5px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  z-index: 6;
+
+}
+
+
+/* NO CIRCLE */
+
+.competition-wrap::before {
+
+  display: none;
+
+}
+
+
+/* LOGO */
+
+.competition-logo {
+
+  width: 76px;
+  height: 76px;
+
+  object-fit: contain;
+
+  filter:
+
+    drop-shadow(
+      0 4px 4px
+      rgba(0,0,0,.95)
+    )
+
+    drop-shadow(
+      0 0 9px
+      rgba(170,0,255,.28)
+    );
+
+}
+
+
+/* ============================================================
+   TIMER
+   ============================================================ */
+
+.timer {
+
+  position: relative;
+
+  width: 148px;
+  height: 42px;
+
+  margin-top: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background:
+
+    linear-gradient(
+      180deg,
+      #3a0052 0%,
+      #21002f 35%,
+      #0e0015 100%
+    );
+
+  color: #ffffff;
+
+  border-radius: 7px;
+
+  border:
+
+    1px solid
+    rgba(255,255,255,.18);
+
+  box-shadow:
+
+    0 5px 12px
+    rgba(0,0,0,.8),
+
+    0 0 16px
+    rgba(130,0,210,.30),
+
+    inset 0 1px 0
+    rgba(255,255,255,.18),
+
+    inset 0 -4px 8px
+    rgba(0,0,0,.5);
+
+  font-size: 28px;
+
+  font-weight: 900;
+
+  line-height: 1;
+
+  letter-spacing: 1.5px;
+
+  text-shadow:
+
+    0 2px 4px
+    rgba(0,0,0,.8);
+
+  z-index: 10;
+
+}
+
+
+/* TIMER TOP HIGHLIGHT */
+
+.timer::before {
+
+  content: "";
+
+  position: absolute;
+
+  top: 1px;
+
+  left: 14px;
+  right: 14px;
+
+  height: 2px;
+
+  border-radius: 2px;
+
+  background:
+
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255,255,255,.55),
+      transparent
+    );
+
+}
+
+
+/* TIMER PURPLE BOTTOM LIGHT */
+
+.timer::after {
+
+  content: "";
+
+  position: absolute;
+
+  left: 18px;
+  right: 18px;
+
+  bottom: -2px;
+
+  height: 3px;
+
+  border-radius: 5px;
+
+  background:
+
+    linear-gradient(
+      90deg,
+      transparent,
+      #a900ff,
+      transparent
+    );
+
+  box-shadow:
+
+    0 0 8px
+    rgba(170,0,255,.8);
+
+}
+
+
+/* ============================================================
+   SCOREBOARD LINE
+   ============================================================ */
+
+#scoreboard::before {
+
+  content: "";
+
+  position: absolute;
+
+  top: 15px;
+  left: 0;
+
+  width: 100%;
+  height: 2px;
+
+  background:
+
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.18),
+      rgba(255,255,255,.28) 42%,
+      transparent 47%,
+      transparent 53%,
+      rgba(255,255,255,.28) 58%,
+      rgba(255,255,255,.18)
+    );
+
+  z-index: 1;
+
+}
+
+
+/* ============================================================
+   BOTTOM SHADOW
+   ============================================================ */
+
+#scoreboard::after {
+
+  content: "";
+
+  position: absolute;
+
+  top: 111px;
+  left: 20px;
+
+  width: 960px;
+  height: 18px;
+
+  background:
+    rgba(0, 0, 0, 0.35);
+
+  filter:
+    blur(12px);
+
+  z-index: 0;
+
 }

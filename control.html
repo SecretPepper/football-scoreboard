@@ -1,242 +1,1148 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Scoreboard Control</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#111;color:#fff;font-family:Arial,sans-serif;padding:24px}
-.panel{max-width:760px;margin:auto;background:#1c1c1c;border:1px solid #333;border-radius:18px;padding:22px}
-h1{margin:0 0 8px}.sub{color:#aaa;font-size:14px;margin-bottom:20px}
-.room{display:flex;gap:8px;margin-bottom:18px}.room input{flex:1}
-.section{background:#101010;border-radius:14px;padding:16px;margin:12px 0}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.team h2{margin:0 0 12px}
-.team input[type=text],.team input[type=number],.room input{width:100%;padding:11px;border-radius:9px;border:1px solid #444;background:#222;color:#fff;font-size:16px}
-.file{font-size:13px;margin-top:10px;color:#bbb}
-.preview{height:58px;width:110px;object-fit:contain;background:#222;border-radius:8px;margin-top:8px}
-.buttons{display:flex;gap:8px;flex-wrap:wrap}.buttons button{flex:1;min-width:90px}
-.scorebox{display:flex;gap:8px}.scorebox input{font-size:28px;text-align:center}
-.clock{text-align:center;font-family:Impact,"Arial Narrow",Arial,sans-serif;font-size:58px;margin:10px}
-.button{border:0;border-radius:9px;padding:12px;background:#333;color:#fff;font-weight:800;font-size:16px;cursor:pointer}
-.start{background:#168a45}.pause{background:#b77916}.reset{background:#b52d36}.save{background:#315fbd}
-.status{margin-top:14px;color:#aaa;font-size:13px}.hint{color:#888;font-size:12px;margin-top:7px}
-@media(max-width:600px){.grid{grid-template-columns:1fr}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scoreboard Control</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      background: #111;
+      color: #fff;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
+
+    h1 {
+      margin: 0 0 20px;
+      font-size: 28px;
+    }
+
+    .card {
+      background: #1c1c1c;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .card h2 {
+      margin: 0 0 15px;
+      font-size: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      color: #aaa;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #101010;
+      color: white;
+      font-size: 16px;
+      outline: none;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #777;
+    }
+
+    button {
+      border: 0;
+      border-radius: 8px;
+      padding: 11px 15px;
+      background: #333;
+      color: white;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #444;
+    }
+
+    .primary {
+      width: 100%;
+      background: #168a45;
+      padding: 15px;
+      font-size: 17px;
+    }
+
+    .primary:hover {
+      background: #1da653;
+    }
+
+    .danger {
+      background: #8d2525;
+    }
+
+    .score-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .score-controls button {
+      flex: 1;
+    }
+
+    .preview {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      background: #101010;
+    }
+
+    .preview img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+    }
+
+    .preview-text {
+      font-weight: bold;
+    }
+
+    .competition-preview {
+      min-height: 70px;
+      justify-content: center;
+    }
+
+    .competition-preview img {
+      width: 100px;
+      height: 55px;
+    }
+
+    .clock {
+      text-align: center;
+      font-size: 36px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      margin: 10px 0 20px;
+    }
+
+    .clock-buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .status {
+      padding: 10px;
+      border-radius: 8px;
+      background: #101010;
+      color: #aaa;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    .connected {
+      color: #55d982;
+    }
+
+    .disconnected {
+      color: #ff6b6b;
+    }
+
+    .club-style {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #888;
+    }
+
+    @media (max-width: 700px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .clock-buttons {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
 </head>
+
 <body>
-<main class="panel">
-<h1>Scoreboard Control</h1>
-<div class="sub">Open this page online and control the OBS scoreboard remotely.</div>
 
-<div class="room">
-<input id="room" value="premier-league-match" placeholder="Room name">
-<button class="button save" id="connect">CONNECT</button>
+<div class="container">
+
+  <h1>Football Scoreboard Control</h1>
+
+  <div id="status" class="status disconnected">
+    Not connected
+  </div>
+
+  <!-- CONNECTION -->
+  <div class="card">
+    <h2>Connection</h2>
+
+    <div class="field">
+      <label>Room name</label>
+      <input id="room" value="premier-league-match">
+    </div>
+
+    <button id="connectButton" onclick="connect()">
+      CONNECT TO OBS
+    </button>
+  </div>
+
+
+  <!-- MATCH -->
+  <div class="card">
+    <h2>Match</h2>
+
+    <div class="field">
+      <label>Competition</label>
+
+      <select id="competition">
+        <option value="assets/competitions/premier-league.png">
+          Premier League
+        </option>
+
+        <option value="assets/competitions/champions-league.png">
+          Champions League
+        </option>
+
+        <option value="assets/competitions/europa-league.png">
+          Europa League
+        </option>
+
+        <option value="assets/competitions/conference-league.png">
+          Conference League
+        </option>
+
+        <option value="assets/competitions/fa-cup.png">
+          FA Cup
+        </option>
+
+        <option value="assets/competitions/efl-cup.png">
+          EFL Cup
+        </option>
+
+        <option value="assets/competitions/world-cup.png">
+          World Cup
+        </option>
+
+        <option value="assets/competitions/euro.png">
+          UEFA Euro
+        </option>
+      </select>
+
+      <div class="preview competition-preview">
+        <img id="competitionPreview">
+      </div>
+    </div>
+  </div>
+
+
+  <!-- TEAMS -->
+  <div class="grid">
+
+    <!-- HOME -->
+    <div class="card">
+      <h2>Home Team</h2>
+
+      <div class="field">
+        <label>Club</label>
+
+        <select id="homeClub">
+          <option value="fulham">Fulham</option>
+          <option value="manchester-united">Manchester United</option>
+          <option value="arsenal">Arsenal</option>
+          <option value="chelsea">Chelsea</option>
+          <option value="liverpool">Liverpool</option>
+          <option value="manchester-city">Manchester City</option>
+          <option value="tottenham">Tottenham Hotspur</option>
+          <option value="newcastle">Newcastle United</option>
+          <option value="brighton">Brighton</option>
+          <option value="aston-villa">Aston Villa</option>
+          <option value="west-ham">West Ham United</option>
+          <option value="crystal-palace">Crystal Palace</option>
+          <option value="everton">Everton</option>
+          <option value="wolves">Wolverhampton Wanderers</option>
+          <option value="nottingham-forest">Nottingham Forest</option>
+          <option value="brentford">Brentford</option>
+          <option value="bournemouth">Bournemouth</option>
+          <option value="leicester">Leicester City</option>
+          <option value="leeds">Leeds United</option>
+          <option value="sunderland">Sunderland</option>
+        </select>
+
+        <div id="homeStyle" class="club-style"></div>
+      </div>
+
+      <div class="field">
+        <label>Short name</label>
+        <input id="homeName" value="FUL" maxlength="5">
+      </div>
+
+      <div class="field">
+        <label>Score</label>
+        <input id="homeScore" type="number" min="0" value="0">
+
+        <div class="score-controls">
+          <button onclick="changeScore('home', -1)">−1</button>
+          <button onclick="changeScore('home', 1)">+1</button>
+        </div>
+      </div>
+
+      <div class="preview">
+        <img id="homePreview">
+        <span id="homePreviewName" class="preview-text">FUL</span>
+      </div>
+    </div>
+
+
+    <!-- AWAY -->
+    <div class="card">
+      <h2>Away Team</h2>
+
+      <div class="field">
+        <label>Club</label>
+
+        <select id="awayClub">
+          <option value="fulham">Fulham</option>
+          <option value="manchester-united">Manchester United</option>
+          <option value="arsenal">Arsenal</option>
+          <option value="chelsea">Chelsea</option>
+          <option value="liverpool">Liverpool</option>
+          <option value="manchester-city">Manchester City</option>
+          <option value="tottenham">Tottenham Hotspur</option>
+          <option value="newcastle">Newcastle United</option>
+          <option value="brighton">Brighton</option>
+          <option value="aston-villa">Aston Villa</option>
+          <option value="west-ham">West Ham United</option>
+          <option value="crystal-palace">Crystal Palace</option>
+          <option value="everton">Everton</option>
+          <option value="wolves">Wolverhampton Wanderers</option>
+          <option value="nottingham-forest">Nottingham Forest</option>
+          <option value="brentford">Brentford</option>
+          <option value="bournemouth">Bournemouth</option>
+          <option value="leicester">Leicester City</option>
+          <option value="leeds">Leeds United</option>
+          <option value="sunderland">Sunderland</option>
+        </select>
+
+        <div id="awayStyle" class="club-style"></div>
+      </div>
+
+      <div class="field">
+        <label>Short name</label>
+        <input id="awayName" value="MUN" maxlength="5">
+      </div>
+
+      <div class="field">
+        <label>Score</label>
+        <input id="awayScore" type="number" min="0" value="0">
+
+        <div class="score-controls">
+          <button onclick="changeScore('away', -1)">−1</button>
+          <button onclick="changeScore('away', 1)">+1</button>
+        </div>
+      </div>
+
+      <div class="preview">
+        <img id="awayPreview">
+        <span id="awayPreviewName" class="preview-text">MUN</span>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- CLOCK -->
+  <div class="card">
+    <h2>Match Clock</h2>
+
+    <div id="clock" class="clock">
+      00:00
+    </div>
+
+    <div class="clock-buttons">
+      <button onclick="startClock()">START</button>
+      <button onclick="pauseClock()">PAUSE</button>
+      <button onclick="resetClock()">RESET</button>
+      <button onclick="setTime()">SET TIME</button>
+    </div>
+  </div>
+
+
+  <button class="primary" onclick="applyChanges()">
+    APPLY CHANGES TO OBS
+  </button>
+
 </div>
 
-<div class="grid">
-<section class="section team">
-<h2>Home</h2>
-<input id="homeName" type="text" value="FUL" maxlength="8" placeholder="Team name">
-<input id="homeScore" type="number" min="0" max="999" value="0" style="margin-top:8px">
-<input id="homeFile" class="file" type="file" accept="image/*">
-<img id="homePreview" class="preview" src="assets/fulham.png" alt="">
-</section>
-
-<section class="section team">
-<h2>Away</h2>
-<input id="awayName" type="text" value="MUN" maxlength="8" placeholder="Team name">
-<input id="awayScore" type="number" min="0" max="999" value="0" style="margin-top:8px">
-<input id="awayFile" class="file" type="file" accept="image/*">
-<img id="awayPreview" class="preview" src="assets/manchester-united.png" alt="">
-</section>
-</div>
-
-<div class="buttons">
-<button class="button" id="homeMinus">HOME −1</button>
-<button class="button" id="homePlus">HOME +1</button>
-<button class="button" id="awayMinus">AWAY −1</button>
-<button class="button" id="awayPlus">AWAY +1</button>
-</div>
-
-<section class="section">
-<div class="clock" id="clock">00:00</div>
-<div class="buttons">
-<button class="button start" id="start">START</button>
-<button class="button pause" id="pause">PAUSE</button>
-<button class="button reset" id="reset">RESET</button>
-</div>
-<div class="buttons" style="margin-top:8px">
-<input class="button" id="minutes" type="number" min="0" max="999" value="0" placeholder="Minutes">
-<input class="button" id="seconds" type="number" min="0" max="59" value="0" placeholder="Seconds">
-<button class="button save" id="setTime">SET TIME</button>
-</div>
-</section>
-
-<div class="buttons">
-<button class="button save" id="apply">APPLY TEAM / SCORE CHANGES</button>
-</div>
-
-<div class="status" id="status">Enter the same room name in OBS URL and click CONNECT.</div>
-<div class="hint">OBS: https://YOUR-USERNAME.github.io/YOUR-REPO/?room=premier-league-match</div>
-</main>
 
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+
 <script>
-"use strict";
 
-let peer=null, conn=null;
+  /*
+   * ============================================================
+   * CLUB DATABASE
+   * ============================================================
+   *
+   * This is where each club gets its own scoreboard style.
+   *
+   * To add another club:
+   *
+   * 1. Put its logo in:
+   *    assets/clubs-and-countries/
+   *
+   * 2. Add it here.
+   *
+   * The colours here control the scoreboard automatically.
+   */
 
-let state={
-  homeName:"FUL",
-  awayName:"MUN",
-  homeLogo:"assets/fulham.png",
-  awayLogo:"assets/manchester-united.png",
-  homeScore:0,
-  awayScore:0,
-  elapsedMs:0,
-  running:false,
-  startedAt:null
-};
+  const CLUBS = {
 
-const $=id=>document.getElementById(id);
+    fulham: {
+      name: "Fulham",
+      short: "FUL",
+      logo: "assets/clubs-and-countries/fulham.png",
+      color: "#000000",
+      secondary: "#ffffff"
+    },
 
-function elapsed(){
-  return state.running && state.startedAt
-    ? state.elapsedMs + (Date.now()-state.startedAt)
-    : state.elapsedMs;
-}
+    "manchester-united": {
+      name: "Manchester United",
+      short: "MUN",
+      logo: "assets/clubs-and-countries/manchester-united.png",
+      color: "#da291c",
+      secondary: "#000000"
+    },
 
-function render(){
-  const t=Math.max(0,Math.floor(elapsed()/1000));
-  $("clock").textContent=String(Math.floor(t/60)).padStart(2,"0")+":"+String(t%60).padStart(2,"0");
-  $("homeScore").value=state.homeScore;
-  $("awayScore").value=state.awayScore;
-  $("homeName").value=state.homeName;
-  $("awayName").value=state.awayName;
-  $("homePreview").src=state.homeLogo;
-  $("awayPreview").src=state.awayLogo;
-}
+    arsenal: {
+      name: "Arsenal",
+      short: "ARS",
+      logo: "assets/clubs-and-countries/arsenal.png",
+      color: "#db0007",
+      secondary: "#ffffff"
+    },
 
-function send(){
-  if(!conn || !conn.open){
-    $("status").textContent="Not connected to OBS scoreboard.";
-    return;
+    chelsea: {
+      name: "Chelsea",
+      short: "CHE",
+      logo: "assets/clubs-and-countries/chelsea.png",
+      color: "#034694",
+      secondary: "#ffffff"
+    },
+
+    liverpool: {
+      name: "Liverpool",
+      short: "LIV",
+      logo: "assets/clubs-and-countries/liverpool.png",
+      color: "#c8102e",
+      secondary: "#ffffff"
+    },
+
+    "manchester-city": {
+      name: "Manchester City",
+      short: "MCI",
+      logo: "assets/clubs-and-countries/manchester-city.png",
+      color: "#6cabdd",
+      secondary: "#ffffff"
+    },
+
+    tottenham: {
+      name: "Tottenham Hotspur",
+      short: "TOT",
+      logo: "assets/clubs-and-countries/tottenham.png",
+      color: "#132257",
+      secondary: "#ffffff"
+    },
+
+    newcastle: {
+      name: "Newcastle United",
+      short: "NEW",
+      logo: "assets/clubs-and-countries/newcastle.png",
+      color: "#241f20",
+      secondary: "#ffffff"
+    },
+
+    brighton: {
+      name: "Brighton",
+      short: "BHA",
+      logo: "assets/clubs-and-countries/brighton.png",
+      color: "#0057b8",
+      secondary: "#ffffff"
+    },
+
+    "aston-villa": {
+      name: "Aston Villa",
+      short: "AVL",
+      logo: "assets/clubs-and-countries/aston-villa.png",
+      color: "#670e36",
+      secondary: "#ffffff"
+    },
+
+    "west-ham": {
+      name: "West Ham United",
+      short: "WHU",
+      logo: "assets/clubs-and-countries/west-ham.png",
+      color: "#7a263a",
+      secondary: "#1bb1e7"
+    },
+
+    "crystal-palace": {
+      name: "Crystal Palace",
+      short: "CRY",
+      logo: "assets/clubs-and-countries/crystal-palace.png",
+      color: "#1b458f",
+      secondary: "#c4122e"
+    },
+
+    everton: {
+      name: "Everton",
+      short: "EVE",
+      logo: "assets/clubs-and-countries/everton.png",
+      color: "#003399",
+      secondary: "#ffffff"
+    },
+
+    wolves: {
+      name: "Wolverhampton Wanderers",
+      short: "WOL",
+      logo: "assets/clubs-and-countries/wolves.png",
+      color: "#fdb913",
+      secondary: "#000000"
+    },
+
+    "nottingham-forest": {
+      name: "Nottingham Forest",
+      short: "NFO",
+      logo: "assets/clubs-and-countries/nottingham-forest.png",
+      color: "#e53233",
+      secondary: "#ffffff"
+    },
+
+    brentford: {
+      name: "Brentford",
+      short: "BRE",
+      logo: "assets/clubs-and-countries/brentford.png",
+      color: "#e30613",
+      secondary: "#ffffff"
+    },
+
+    bournemouth: {
+      name: "Bournemouth",
+      short: "BOU",
+      logo: "assets/clubs-and-countries/bournemouth.png",
+      color: "#da291c",
+      secondary: "#000000"
+    },
+
+    leicester: {
+      name: "Leicester City",
+      short: "LEI",
+      logo: "assets/clubs-and-countries/leicester.png",
+      color: "#003090",
+      secondary: "#f5f5f5"
+    },
+
+    leeds: {
+      name: "Leeds United",
+      short: "LEE",
+      logo: "assets/clubs-and-countries/leeds.png",
+      color: "#ffcd00",
+      secondary: "#1d428a"
+    },
+
+    sunderland: {
+      name: "Sunderland",
+      short: "SUN",
+      logo: "assets/clubs-and-countries/sunderland.png",
+      color: "#eb172b",
+      secondary: "#ffffff"
+    }
+
+  };
+
+
+  let peer = null;
+  let conn = null;
+
+  let state = {
+    homeName: "FUL",
+    awayName: "MUN",
+
+    homeClub: "fulham",
+    awayClub: "manchester-united",
+
+    homeLogo: CLUBS.fulham.logo,
+    awayLogo: CLUBS["manchester-united"].logo,
+
+    homeColor: CLUBS.fulham.color,
+    homeSecondary: CLUBS.fulham.secondary,
+
+    awayColor: CLUBS["manchester-united"].color,
+    awaySecondary: CLUBS["manchester-united"].secondary,
+
+    competitionLogo:
+      "assets/competitions/premier-league.png",
+
+    homeScore: 0,
+    awayScore: 0,
+
+    elapsedMs: 0,
+    running: false,
+    startedAt: null
+  };
+
+
+  const $ = id => document.getElementById(id);
+
+
+  /*
+   * ------------------------------------------------------------
+   * CLUB PREVIEWS
+   * ------------------------------------------------------------
+   */
+
+  function updateClubPreview(side) {
+
+    const select =
+      side === "home"
+        ? $("homeClub")
+        : $("awayClub");
+
+    const club = CLUBS[select.value];
+
+    if (!club) return;
+
+    if (side === "home") {
+
+      $("homePreview").src = club.logo;
+      $("homePreviewName").textContent =
+        $("homeName").value || club.short;
+
+      $("homeStyle").textContent =
+        "Scoreboard style: " +
+        club.color +
+        " / " +
+        club.secondary;
+
+    } else {
+
+      $("awayPreview").src = club.logo;
+      $("awayPreviewName").textContent =
+        $("awayName").value || club.short;
+
+      $("awayStyle").textContent =
+        "Scoreboard style: " +
+        club.color +
+        " / " +
+        club.secondary;
+    }
   }
-  conn.send({type:"state",state});
-  $("status").textContent="Updated scoreboard.";
-}
 
-function connect(){
-  const room=($("room").value||"premier-league-match")
-    .replace(/[^a-zA-Z0-9_-]/g,"").slice(0,40)||"premier-league-match";
 
-  if(peer) try{peer.destroy()}catch{}
+  /*
+   * ------------------------------------------------------------
+   * COMPETITION PREVIEW
+   * ------------------------------------------------------------
+   */
 
-  peer=new Peer("scoreboard-"+room+"-control-"+Math.random().toString(36).slice(2,8),{debug:0});
+  function updateCompetitionPreview() {
 
-  peer.on("open",()=>{
-    conn=peer.connect("scoreboard-"+room+"-display",{reliable:true});
-    conn.on("open",()=>{
-      $("status").textContent="Connected to scoreboard.";
-      send();
+    $("competitionPreview").src =
+      $("competition").value;
+  }
+
+
+  /*
+   * ------------------------------------------------------------
+   * SCORE
+   * ------------------------------------------------------------
+   */
+
+  function changeScore(side, amount) {
+
+    const input =
+      side === "home"
+        ? $("homeScore")
+        : $("awayScore");
+
+    let value = Number(input.value) || 0;
+
+    value += amount;
+
+    if (value < 0) value = 0;
+
+    input.value = value;
+  }
+
+
+  /*
+   * ------------------------------------------------------------
+   * APPLY EVERYTHING
+   * ------------------------------------------------------------
+   */
+
+  function applyChanges() {
+
+    const homeClub = CLUBS[$("homeClub").value];
+    const awayClub = CLUBS[$("awayClub").value];
+
+    if (!homeClub || !awayClub) {
+      setStatus("Invalid club selection.", false);
+      return;
+    }
+
+    state.homeClub = $("homeClub").value;
+    state.awayClub = $("awayClub").value;
+
+    state.homeName =
+      $("homeName").value.trim() ||
+      homeClub.short;
+
+    state.awayName =
+      $("awayName").value.trim() ||
+      awayClub.short;
+
+    state.homeLogo = homeClub.logo;
+    state.awayLogo = awayClub.logo;
+
+    /*
+     * Colours automatically come from the selected clubs.
+     */
+    state.homeColor = homeClub.color;
+    state.homeSecondary = homeClub.secondary;
+
+    state.awayColor = awayClub.color;
+    state.awaySecondary = awayClub.secondary;
+
+    state.competitionLogo =
+      $("competition").value;
+
+    state.homeScore =
+      Math.max(0, Number($("homeScore").value) || 0);
+
+    state.awayScore =
+      Math.max(0, Number($("awayScore").value) || 0);
+
+    sendState();
+  }
+
+
+  /*
+   * ------------------------------------------------------------
+   * PEERJS
+   * ------------------------------------------------------------
+   */
+
+  function connect() {
+
+    const room =
+      $("room").value.trim();
+
+    if (!room) {
+      setStatus("Enter a room name.", false);
+      return;
+    }
+
+    if (conn) {
+      try {
+        conn.close();
+      } catch (e) {}
+    }
+
+    if (peer) {
+      try {
+        peer.destroy();
+      } catch (e) {}
+    }
+
+    setStatus("Connecting...", false);
+
+    const controlId =
+      "scoreboard-" +
+      room +
+      "-control-" +
+      Math.random()
+        .toString(36)
+        .substring(2, 8);
+
+    peer = new Peer(controlId, {
+      debug: 0
     });
-    conn.on("close",()=>{$("status").textContent="OBS connection closed.";});
-  });
 
-  peer.on("error",e=>{
-    $("status").textContent="Connection error. Check the room name and that OBS is open.";
-    console.error(e);
-  });
-}
+    peer.on("open", () => {
 
-function apply(){
-  state.homeName=$("homeName").value.trim().toUpperCase().slice(0,8)||"HOME";
-  state.awayName=$("awayName").value.trim().toUpperCase().slice(0,8)||"AWAY";
-  state.homeScore=Math.max(0,Math.min(999,Number($("homeScore").value)||0));
-  state.awayScore=Math.max(0,Math.min(999,Number($("awayScore").value)||0));
-  send();
-}
+      const displayId =
+        "scoreboard-" +
+        room +
+        "-display";
 
-async function fileToData(file){
-  if(!file)return null;
-  if(file.size>2*1024*1024){
-    $("status").textContent="Logo is too large. Use an image under 2 MB.";
-    return null;
+      setStatus("Connecting to OBS...", false);
+
+      conn = peer.connect(displayId, {
+        reliable: true
+      });
+
+      conn.on("open", () => {
+
+        setStatus(
+          "✓ Connected to OBS",
+          true
+        );
+
+        /*
+         * Send current control state.
+         */
+        sendState();
+      });
+
+      conn.on("data", data => {
+
+        if (
+          data &&
+          data.type === "state" &&
+          data.state
+        ) {
+
+          /*
+           * Synchronise the clock/state from OBS
+           * without constantly overwriting the text
+           * inputs while the user is typing.
+           */
+
+          state = {
+            ...state,
+            ...data.state
+          };
+
+          $("homeScore").value =
+            state.homeScore;
+
+          $("awayScore").value =
+            state.awayScore;
+
+          $("homeName").value =
+            state.homeName;
+
+          $("awayName").value =
+            state.awayName;
+
+          $("competition").value =
+            state.competitionLogo;
+
+          $("homeClub").value =
+            state.homeClub || "fulham";
+
+          $("awayClub").value =
+            state.awayClub || "manchester-united";
+
+          updateClubPreview("home");
+          updateClubPreview("away");
+          updateCompetitionPreview();
+        }
+      });
+
+      conn.on("close", () => {
+        setStatus(
+          "Disconnected from OBS",
+          false
+        );
+      });
+
+      conn.on("error", error => {
+        console.error(error);
+
+        setStatus(
+          "Connection error",
+          false
+        );
+      });
+    });
+
+    peer.on("error", error => {
+
+      console.error(error);
+
+      setStatus(
+        "PeerJS error: " + error.type,
+        false
+      );
+    });
   }
-  return await new Promise((resolve,reject)=>{
-    const r=new FileReader();
-    r.onload=()=>resolve(r.result);
-    r.onerror=reject;
-    r.readAsDataURL(file);
-  });
-}
 
-$("connect").onclick=connect;
-$("apply").onclick=apply;
 
-$("homePlus").onclick=()=>{
-  $("homeScore").value=Math.min(999,Number($("homeScore").value||0)+1);
-  apply();
-};
-$("homeMinus").onclick=()=>{
-  $("homeScore").value=Math.max(0,Number($("homeScore").value||0)-1);
-  apply();
-};
-$("awayPlus").onclick=()=>{
-  $("awayScore").value=Math.min(999,Number($("awayScore").value||0)+1);
-  apply();
-};
-$("awayMinus").onclick=()=>{
-  $("awayScore").value=Math.max(0,Number($("awayScore").value||0)-1);
-  apply();
-};
+  function sendState() {
 
-$("start").onclick=()=>{
-  if(!state.running){
-    state.elapsedMs=elapsed();
-    state.startedAt=Date.now();
-    state.running=true;
-    send();
+    if (!conn || !conn.open) {
+
+      setStatus(
+        "Not connected to OBS",
+        false
+      );
+
+      return;
+    }
+
+    conn.send({
+      type: "state",
+      state: {
+        ...state
+      }
+    });
+
+    setStatus(
+      "✓ Scoreboard updated in OBS",
+      true
+    );
   }
-};
 
-$("pause").onclick=()=>{
-  if(state.running){
-    state.elapsedMs=elapsed();
-    state.startedAt=null;
-    state.running=false;
-    send();
+
+  /*
+   * ------------------------------------------------------------
+   * CLOCK
+   * ------------------------------------------------------------
+   */
+
+  function getElapsed() {
+
+    if (
+      state.running &&
+      state.startedAt !== null
+    ) {
+
+      return (
+        state.elapsedMs +
+        (Date.now() - state.startedAt)
+      );
+    }
+
+    return state.elapsedMs;
   }
-};
 
-$("reset").onclick=()=>{
-  state.elapsedMs=0;
-  state.startedAt=state.running?Date.now():null;
-  send();
-};
 
-$("setTime").onclick=()=>{
-  const m=Math.max(0,Math.min(999,Number($("minutes").value)||0));
-  const s=Math.max(0,Math.min(59,Number($("seconds").value)||0));
-  state.elapsedMs=(m*60+s)*1000;
-  state.startedAt=state.running?Date.now():null;
-  send();
-};
+  function renderClock() {
 
-$("homeFile").onchange=async e=>{
-  const x=await fileToData(e.target.files[0]);
-  if(x){state.homeLogo=x;$("homePreview").src=x;send();}
-};
+    const totalSeconds =
+      Math.floor(
+        Math.max(0, getElapsed()) / 1000
+      );
 
-$("awayFile").onchange=async e=>{
-  const x=await fileToData(e.target.files[0]);
-  if(x){state.awayLogo=x;$("awayPreview").src=x;send();}
-};
+    const minutes =
+      Math.floor(totalSeconds / 60);
 
-setInterval(render,250);
-render();
+    const seconds =
+      totalSeconds % 60;
+
+    $("clock").textContent =
+      String(minutes).padStart(2, "0") +
+      ":" +
+      String(seconds).padStart(2, "0");
+  }
+
+
+  function startClock() {
+
+    if (state.running) return;
+
+    state.running = true;
+    state.startedAt = Date.now();
+
+    sendState();
+  }
+
+
+  function pauseClock() {
+
+    if (!state.running) return;
+
+    state.elapsedMs = getElapsed();
+
+    state.running = false;
+    state.startedAt = null;
+
+    sendState();
+  }
+
+
+  function resetClock() {
+
+    state.elapsedMs = 0;
+    state.running = false;
+    state.startedAt = null;
+
+    sendState();
+  }
+
+
+  function setTime() {
+
+    const value =
+      prompt(
+        "Enter match time in minutes:",
+        "0"
+      );
+
+    if (value === null) return;
+
+    const minutes =
+      Math.max(0, Number(value) || 0);
+
+    state.elapsedMs =
+      minutes * 60 * 1000;
+
+    state.running = false;
+    state.startedAt = null;
+
+    sendState();
+  }
+
+
+  /*
+   * ------------------------------------------------------------
+   * STATUS
+   * ------------------------------------------------------------
+   */
+
+  function setStatus(message, connected) {
+
+    $("status").textContent = message;
+
+    $("status").className =
+      connected
+        ? "status connected"
+        : "status disconnected";
+  }
+
+
+  /*
+   * ------------------------------------------------------------
+   * INPUT EVENTS
+   * ------------------------------------------------------------
+   */
+
+  $("homeClub").addEventListener(
+    "change",
+    () => {
+
+      const club =
+        CLUBS[$("homeClub").value];
+
+      if (club) {
+
+        /*
+         * Selecting a different club automatically
+         * changes the suggested short name.
+         */
+
+        $("homeName").value =
+          club.short;
+      }
+
+      updateClubPreview("home");
+    }
+  );
+
+
+  $("awayClub").addEventListener(
+    "change",
+    () => {
+
+      const club =
+        CLUBS[$("awayClub").value];
+
+      if (club) {
+
+        $("awayName").value =
+          club.short;
+      }
+
+      updateClubPreview("away");
+    }
+  );
+
+
+  $("homeName").addEventListener(
+    "input",
+    () => {
+      $("homePreviewName").textContent =
+        $("homeName").value;
+    }
+  );
+
+
+  $("awayName").addEventListener(
+    "input",
+    () => {
+      $("awayPreviewName").textContent =
+        $("awayName").value;
+    }
+  );
+
+
+  $("competition").addEventListener(
+    "change",
+    updateCompetitionPreview
+  );
+
+
+  /*
+   * ------------------------------------------------------------
+   * INITIAL DISPLAY
+   * ------------------------------------------------------------
+   */
+
+  updateClubPreview("home");
+  updateClubPreview("away");
+  updateCompetitionPreview();
+
+  renderClock();
+
+  /*
+   * IMPORTANT:
+   *
+   * Only the CLOCK is updated every 250ms.
+   *
+   * The input boxes are NOT re-rendered every 250ms.
+   *
+   * This fixes the old problem where the short name
+   * could not be typed properly.
+   */
+
+  setInterval(
+    renderClock,
+    250
+  );
+
 </script>
+
 </body>
 </html>
