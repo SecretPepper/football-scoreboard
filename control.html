@@ -178,6 +178,29 @@
       color: #888;
     }
 
+    .obs-link-wrap {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 8px;
+      background: #101010;
+    }
+
+    .obs-link-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .obs-link-row input {
+      flex: 1;
+      min-width: 0;
+      font-size: 13px;
+    }
+
+    .secondary-button {
+      margin-top: 10px;
+      width: 100%;
+    }
+
     @media (max-width: 700px) {
       .grid {
         grid-template-columns: 1fr;
@@ -213,7 +236,8 @@
 
       <input
         id="room"
-        value="premier-league-match"
+        value=""
+        placeholder="Generated automatically"
       >
 
     </div>
@@ -225,6 +249,34 @@
     >
       CONNECT TO OBS
     </button>
+
+    <div class="obs-link-wrap">
+      <label>OBS Browser Source URL</label>
+
+      <div class="obs-link-row">
+        <input
+          id="obsUrl"
+          type="text"
+          readonly
+          placeholder="Generate a room first"
+        >
+
+        <button
+          type="button"
+          onclick="copyObsUrl()"
+        >
+          COPY
+        </button>
+      </div>
+
+      <button
+        type="button"
+        class="secondary-button"
+        onclick="newRoom()"
+      >
+        NEW OBS LINK / NEW MATCH
+      </button>
+    </div>
 
   </div>
 
@@ -277,6 +329,7 @@
 
         <select id="homeClub">
 
+          <option value="" selected disabled>Choose a club...</option>
           <option value="fulham">Fulham</option>
           <option value="manchester-united">Manchester United</option>
           <option value="arsenal">Arsenal</option>
@@ -312,7 +365,7 @@
 
         <input
           id="homeName"
-          value="FUL"
+          value=""
           maxlength="5"
         >
 
@@ -351,7 +404,7 @@
           id="homePreviewName"
           class="preview-text"
         >
-          FUL
+          —
         </span>
 
       </div>
@@ -371,6 +424,7 @@
 
         <select id="awayClub">
 
+          <option value="" selected disabled>Choose a club...</option>
           <option value="fulham">Fulham</option>
           <option value="manchester-united">Manchester United</option>
           <option value="arsenal">Arsenal</option>
@@ -406,7 +460,7 @@
 
         <input
           id="awayName"
-          value="MUN"
+          value=""
           maxlength="5"
         >
 
@@ -445,7 +499,7 @@
           id="awayPreviewName"
           class="preview-text"
         >
-          MUN
+          —
         </span>
 
       </div>
@@ -648,20 +702,20 @@ const CLUBS = {
 
 let state = {
 
-  homeName: "FUL",
-  awayName: "MUN",
+  homeName: "...",
+  awayName: "...",
 
-  homeClub: "fulham",
-  awayClub: "manchester-united",
+  homeClub: "",
+  awayClub: "",
 
-  homeLogo: CLUBS.fulham.logo,
-  awayLogo: CLUBS["manchester-united"].logo,
+  homeLogo: "assets/clubs-and-countries/default.png",
+  awayLogo: "assets/clubs-and-countries/default.png",
 
-  homeColor: CLUBS.fulham.color,
-  homeSecondary: CLUBS.fulham.secondary,
+  homeColor: "#7a7a7a",
+  homeSecondary: "#000000",
 
-  awayColor: CLUBS["manchester-united"].color,
-  awaySecondary: CLUBS["manchester-united"].secondary,
+  awayColor: "#7a7a7a",
+  awaySecondary: "#000000",
 
   competitionLogo:
     "assets/competitions/premier-league.png",
@@ -717,7 +771,7 @@ function buildState() {
 
 
   if (!home || !away) {
-    return;
+    return false;
   }
 
 
@@ -775,6 +829,8 @@ function buildState() {
       Number($("awayScore").value) || 0
     );
 
+  return true;
+
 }
 
 
@@ -825,9 +881,150 @@ function sendState() {
 
 function update() {
 
-  buildState();
+  if (!buildState()) {
+    return;
+  }
 
   sendState();
+
+}
+
+
+/* ============================================================
+   UNIQUE ROOM + OBS LINK
+============================================================ */
+
+function makeRoomId() {
+
+  const random =
+    Math.random()
+      .toString(36)
+      .substring(2, 10);
+
+  return "match-" + random;
+
+}
+
+
+function getOverlayUrl() {
+
+  const url =
+    new URL("index.html", window.location.href);
+
+  url.searchParams.set(
+    "room",
+    $("room").value.trim()
+  );
+
+  return url.href;
+
+}
+
+
+function updateObsUrl() {
+
+  const room =
+    $("room").value.trim();
+
+  $("obsUrl").value =
+    room ? getOverlayUrl() : "";
+
+}
+
+
+function newRoom() {
+
+  if (
+    connection &&
+    connection.open
+  ) {
+    try {
+      connection.close();
+    } catch (e) {}
+  }
+
+  if (peer) {
+    try {
+      peer.destroy();
+    } catch (e) {}
+  }
+
+  connection = null;
+  peer = null;
+  connecting = false;
+
+  $("room").value = makeRoomId();
+
+  // Reset the match when creating a new OBS link.
+  $("homeClub").value = "";
+  $("awayClub").value = "";
+  $("homeName").value = "";
+  $("awayName").value = "";
+  $("homeScore").value = 0;
+  $("awayScore").value = 0;
+
+  state = {
+    ...state,
+    homeName: "...",
+    awayName: "...",
+    homeClub: "",
+    awayClub: "",
+    homeLogo: "assets/clubs-and-countries/default.png",
+    awayLogo: "assets/clubs-and-countries/default.png",
+    homeColor: "#7a7a7a",
+    homeSecondary: "#000000",
+    awayColor: "#7a7a7a",
+    awaySecondary: "#000000",
+    homeScore: 0,
+    awayScore: 0,
+    elapsedMs: 0,
+    running: false,
+    startedAt: null
+  };
+
+  updateClubPreview("home");
+  updateClubPreview("away");
+  updateObsUrl();
+
+  status(
+    "New match link generated. Add the URL to OBS.",
+    false
+  );
+
+}
+
+
+async function copyObsUrl() {
+
+  updateObsUrl();
+
+  const url =
+    $("obsUrl").value;
+
+  if (!url) {
+    return;
+  }
+
+  try {
+
+    await navigator.clipboard.writeText(url);
+
+    status(
+      "✓ OBS URL copied",
+      true
+    );
+
+  } catch (error) {
+
+    $("obsUrl").select();
+    document.execCommand("copy");
+
+    status(
+      "✓ OBS URL copied",
+      true
+    );
+
+  }
 
 }
 
@@ -843,14 +1040,24 @@ function connect() {
   }
 
 
-  const room =
+  let room =
     $("room").value.trim();
 
 
   if (!room) {
 
+    room = makeRoomId();
+
+    $("room").value = room;
+
+    updateObsUrl();
+
+  }
+
+  if (!buildState()) {
+
     status(
-      "Enter a room name.",
+      "Choose both clubs before connecting.",
       false
     );
 
@@ -1314,6 +1521,12 @@ function setTime() {
    INPUT EVENTS
 ============================================================ */
 
+$("room").addEventListener(
+  "input",
+  updateObsUrl
+);
+
+
 $("homeClub").addEventListener(
   "change",
   () => {
@@ -1409,6 +1622,12 @@ $("competition").addEventListener(
 /* ============================================================
    INITIAL
 ============================================================ */
+
+if (!$("room").value.trim()) {
+  $("room").value = makeRoomId();
+}
+
+updateObsUrl();
 
 updateClubPreview("home");
 updateClubPreview("away");

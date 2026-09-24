@@ -7,11 +7,9 @@ const params =
     window.location.search
   );
 
-
 const room =
   params.get("room") ||
-  "premier-league-match";
-
+  "match-preview";
 
 const displayId =
   "scoreboard-" +
@@ -51,8 +49,8 @@ let state = {
   homeName: "...",
   awayName: "...",
 
-  homeClub: "default",
-  awayClub: "default",
+  homeClub: "",
+  awayClub: "",
 
   homeLogo:
     "assets/clubs-and-countries/default.png",
@@ -232,11 +230,11 @@ function getElapsedSeconds() {
 function render() {
 
   homeName.textContent =
-    state.homeName || "FUL";
+    state.homeName || "...";
 
 
   awayName.textContent =
-    state.awayName || "MUN";
+    state.awayName || "...";
 
 
   homeScore.textContent =
@@ -278,28 +276,28 @@ function render() {
   homePanel.style.setProperty(
     "--club-color",
     state.homeColor ||
-    "#000000"
+    "#7a7a7a"
   );
 
 
   homePanel.style.setProperty(
     "--club-secondary",
     state.homeSecondary ||
-    "#ffffff"
+    "#000000"
   );
 
 
   awayPanel.style.setProperty(
     "--club-color",
     state.awayColor ||
-    "#111111"
+    "#7a7a7a"
   );
 
 
   awayPanel.style.setProperty(
     "--club-secondary",
     state.awaySecondary ||
-    "#ffffff"
+    "#000000"
   );
 
 
