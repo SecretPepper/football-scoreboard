@@ -64,7 +64,7 @@ let state = {
   homeSecondary: "#000",
 
   awayColor: "#7a7a7a",
-  awaySecondary: "#000000",
+  awaySecondary: "#000",
 
   competitionLogo:
     "assets/competitions/premier-league.png",
