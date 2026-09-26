@@ -300,6 +300,9 @@ function render() {
     "#000000"
   );
 
+  homePanel.dataset.club = state.homeClub || "";
+  awayPanel.dataset.club = state.awayClub || "";
+
 
   timer.textContent =
     formatTime(
