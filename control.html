@@ -19,6 +19,7 @@
     }
 
     .container {
+      width: 100%;
       max-width: 900px;
       margin: auto;
     }
@@ -29,6 +30,7 @@
     }
 
     .card {
+      width: 100%;
       background: #181b1f;
       border: 1px solid #2d3238;
       border-radius: 12px;
@@ -43,7 +45,7 @@
 
     .grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       gap: 15px;
     }
 
@@ -61,6 +63,7 @@
     input,
     select {
       width: 100%;
+      min-width: 0;
       padding: 12px;
       border-radius: 8px;
       border: 1px solid #444;
@@ -201,6 +204,167 @@
       width: 100%;
     }
 
+    /* TEAM PICKER */
+
+    .team-picker {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .team-picker img {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+      flex: 0 0 36px;
+    }
+
+    .team-picker select {
+      flex: 1;
+      min-width: 0;
+      width: auto;
+    }
+
+    /* PLAYER PICKER */
+
+    .player-picker {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .player-suggestions {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 50px;
+      right: 0;
+      z-index: 1000;
+      display: none;
+      max-height: 240px;
+      overflow-y: auto;
+      background: #101010;
+      border: 1px solid #444;
+      border-radius: 8px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    .player-suggestion {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 10px;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: white;
+      text-align: left;
+      font-size: 14px;
+      font-weight: normal;
+    }
+
+    .player-suggestion:hover,
+    .player-suggestion.active {
+      background: #252525;
+    }
+
+    .player-suggestion img {
+      width: 32px;
+      height: 32px;
+      flex: 0 0 32px;
+    }
+
+    .player-suggestion-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .player-picker img {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 50%;
+      flex: 0 0 40px;
+      background: #222;
+    }
+
+    .player-picker select {
+      flex: 1;
+      min-width: 0;
+      width: auto;
+    }
+
+    .player-name {
+      flex: 0 0 auto;
+      min-width: 0;
+      max-width: 130px;
+      font-weight: bold;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .goal-input-row {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .goal-input-row input {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .goal-input-row button {
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .scorers {
+      margin-top: 15px;
+    }
+
+    .scorer-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #2d3238;
+    }
+
+    .scorer-row img {
+      width: 32px;
+      height: 32px;
+      object-fit: cover;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .scorer-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .scorer-name {
+      font-weight: bold;
+    }
+
+    .scorer-time {
+      color: #aaa;
+      font-size: 13px;
+    }
+
+    .remove-scorer {
+      padding: 6px 9px;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+
     @media (max-width: 700px) {
       .grid {
         grid-template-columns: 1fr;
@@ -208,6 +372,10 @@
 
       .clock-buttons {
         grid-template-columns: 1fr 1fr;
+      }
+
+      .player-name {
+        max-width: 100px;
       }
     }
   </style>
@@ -251,9 +419,11 @@
     </button>
 
     <div class="obs-link-wrap">
+
       <label>OBS Browser Source URL</label>
 
       <div class="obs-link-row">
+
         <input
           id="obsUrl"
           type="text"
@@ -267,6 +437,7 @@
         >
           COPY
         </button>
+
       </div>
 
       <button
@@ -276,6 +447,7 @@
       >
         NEW OBS LINK / NEW MATCH
       </button>
+
     </div>
 
   </div>
@@ -304,7 +476,12 @@
       </select>
 
       <div class="preview competition-preview">
-        <img id="competitionPreview" alt="">
+
+        <img
+          id="competitionPreview"
+          alt=""
+        >
+
       </div>
 
     </div>
@@ -327,49 +504,90 @@
 
         <label>Club</label>
 
-        <select id="homeClub">
+        <div class="team-picker">
 
-          <option value="" selected disabled>Choose a club...</option>
-          <option value="fulham">Fulham</option>
-          <option value="manchester-united">Manchester United</option>
-          <option value="arsenal">Arsenal</option>
-          <option value="chelsea">Chelsea</option>
-          <option value="liverpool">Liverpool</option>
-          <option value="manchester-city">Manchester City</option>
-          <option value="tottenham">Tottenham Hotspur</option>
-          <option value="newcastle">Newcastle United</option>
-          <option value="brighton">Brighton</option>
-          <option value="aston-villa">Aston Villa</option>
-          <option value="west-ham">West Ham United</option>
-          <option value="crystal-palace">Crystal Palace</option>
-          <option value="everton">Everton</option>
-          <option value="wolves">Wolverhampton Wanderers</option>
-          <option value="nottingham-forest">Nottingham Forest</option>
-          <option value="brentford">Brentford</option>
-          <option value="bournemouth">Bournemouth</option>
-          <option value="leicester">Leicester City</option>
-          <option value="leeds">Leeds United</option>
-          <option value="sunderland">Sunderland</option>
-          <option value="netherlands">Netherlands</option>
-          <option value="germany">Germany</option>
-          <option value="portugal">Portugal</option>
-          <option value="wales">Wales</option>
-          <option value="france">France</option>
-          <option value="turkey">Turkey</option>
-          <option value="italy">Italy</option>
-          <option value="belgium">Belgium</option>
-          <option value="england">England</option>
-          <option value="spain">Spain</option>
-          <option value="slovenia">Slovenia</option>
-          <option value="scotland">Scotland</option>
-          <option value="serbia">Serbia</option>
-          <option value="norway">Norway</option>
+          <img
+            id="homeClubIcon"
+            src="assets/clubs-and-countries/default.png"
+            alt=""
+          >
 
-        </select>
+          <select id="homeClub">
+
+            <option value="" selected>
+              Choose a club...
+            </option>
+
+            <option value="barcelona">Barcelona</option>
+            <option value="fulham">Fulham</option>
+            <option value="manchester-united">Manchester United</option>
+            <option value="arsenal">Arsenal</option>
+            <option value="chelsea">Chelsea</option>
+            <option value="liverpool">Liverpool</option>
+            <option value="manchester-city">Manchester City</option>
+            <option value="tottenham">Tottenham Hotspur</option>
+            <option value="newcastle">Newcastle United</option>
+            <option value="brighton">Brighton</option>
+            <option value="aston-villa">Aston Villa</option>
+            <option value="west-ham">West Ham United</option>
+            <option value="crystal-palace">Crystal Palace</option>
+            <option value="everton">Everton</option>
+            <option value="wolves">Wolverhampton Wanderers</option>
+            <option value="nottingham-forest">Nottingham Forest</option>
+            <option value="brentford">Brentford</option>
+            <option value="bournemouth">Bournemouth</option>
+            <option value="leicester">Leicester City</option>
+            <option value="leeds">Leeds United</option>
+            <option value="sunderland">Sunderland</option>
+
+          </select>
+
+        </div>
 
         <div id="homeStyle" class="club-style"></div>
 
       </div>
+
+
+      <div class="field">
+
+        <label>Country</label>
+
+        <div class="team-picker">
+
+          <img
+            id="homeCountryIcon"
+            src="assets/clubs-and-countries/default.png"
+            alt=""
+          >
+
+          <select id="homeCountry">
+
+            <option value="" selected>
+              Choose a country...
+            </option>
+
+            <option value="netherlands">Netherlands</option>
+            <option value="germany">Germany</option>
+            <option value="portugal">Portugal</option>
+            <option value="wales">Wales</option>
+            <option value="france">France</option>
+            <option value="turkey">Turkey</option>
+            <option value="italy">Italy</option>
+            <option value="belgium">Belgium</option>
+            <option value="england">England</option>
+            <option value="spain">Spain</option>
+            <option value="slovenia">Slovenia</option>
+            <option value="scotland">Scotland</option>
+            <option value="serbia">Serbia</option>
+            <option value="norway">Norway</option>
+
+          </select>
+
+        </div>
+
+      </div>
+
 
       <div class="field">
 
@@ -382,6 +600,7 @@
         >
 
       </div>
+
 
       <div class="field">
 
@@ -396,21 +615,20 @@
 
         <div class="score-controls">
 
-          <button onclick="changeScore('home', -1)">
-            −1
-          </button>
-
-          <button onclick="changeScore('home', 1)">
-            +1
-          </button>
+          <button onclick="changeScore('home', -1)">−1</button>
+          <button onclick="changeScore('home', 1)">+1</button>
 
         </div>
 
       </div>
 
+
       <div class="preview">
 
-        <img id="homePreview" alt="">
+        <img
+          id="homePreview"
+          alt=""
+        >
 
         <span
           id="homePreviewName"
@@ -420,6 +638,67 @@
         </span>
 
       </div>
+
+
+      <!-- HOME GOAL SCORER -->
+
+      <div class="field">
+
+        <label>Goal scorer</label>
+
+        <div class="player-picker">
+
+          <img
+            id="homePlayerIcon"
+            src="https://res.cloudinary.com/vbqf3fz4/image/upload/v1790598910/default.png"
+            alt=""
+          >
+
+          <span
+            id="homePlayerName"
+            class="player-name"
+          >
+            Choose player...
+          </span>
+
+          <input
+            id="homePlayer"
+            type="text"
+            placeholder="Search player..."
+            autocomplete="off"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div class="field">
+
+        <label>Goal time</label>
+
+        <div class="goal-input-row">
+
+          <input
+            id="homeGoalTime"
+            type="number"
+            min="0"
+            placeholder="Time"
+          >
+
+          <button onclick="addScorer('home')">
+            ADD GOAL
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div
+        id="homeScorers"
+        class="scorers"
+      ></div>
 
     </div>
 
@@ -434,49 +713,90 @@
 
         <label>Club</label>
 
-        <select id="awayClub">
+        <div class="team-picker">
 
-          <option value="" selected disabled>Choose a club...</option>
-          <option value="fulham">Fulham</option>
-          <option value="manchester-united">Manchester United</option>
-          <option value="arsenal">Arsenal</option>
-          <option value="chelsea">Chelsea</option>
-          <option value="liverpool">Liverpool</option>
-          <option value="manchester-city">Manchester City</option>
-          <option value="tottenham">Tottenham Hotspur</option>
-          <option value="newcastle">Newcastle United</option>
-          <option value="brighton">Brighton</option>
-          <option value="aston-villa">Aston Villa</option>
-          <option value="west-ham">West Ham United</option>
-          <option value="crystal-palace">Crystal Palace</option>
-          <option value="everton">Everton</option>
-          <option value="wolves">Wolverhampton Wanderers</option>
-          <option value="nottingham-forest">Nottingham Forest</option>
-          <option value="brentford">Brentford</option>
-          <option value="bournemouth">Bournemouth</option>
-          <option value="leicester">Leicester City</option>
-          <option value="leeds">Leeds United</option>
-          <option value="sunderland">Sunderland</option>
-          <option value="netherlands">Netherlands</option>
-          <option value="germany">Germany</option>
-          <option value="portugal">Portugal</option>
-          <option value="wales">Wales</option>
-          <option value="france">France</option>
-          <option value="turkey">Turkey</option>
-          <option value="italy">Italy</option>
-          <option value="belgium">Belgium</option>
-          <option value="england">England</option>
-          <option value="spain">Spain</option>
-          <option value="slovenia">Slovenia</option>
-          <option value="scotland">Scotland</option>
-          <option value="serbia">Serbia</option>
-          <option value="norway">Norway</option>
+          <img
+            id="awayClubIcon"
+            src="assets/clubs-and-countries/default.png"
+            alt=""
+          >
 
-        </select>
+          <select id="awayClub">
+
+            <option value="" selected>
+              Choose a club...
+            </option>
+
+            <option value="barcelona">Barcelona</option>
+            <option value="fulham">Fulham</option>
+            <option value="manchester-united">Manchester United</option>
+            <option value="arsenal">Arsenal</option>
+            <option value="chelsea">Chelsea</option>
+            <option value="liverpool">Liverpool</option>
+            <option value="manchester-city">Manchester City</option>
+            <option value="tottenham">Tottenham Hotspur</option>
+            <option value="newcastle">Newcastle United</option>
+            <option value="brighton">Brighton</option>
+            <option value="aston-villa">Aston Villa</option>
+            <option value="west-ham">West Ham United</option>
+            <option value="crystal-palace">Crystal Palace</option>
+            <option value="everton">Everton</option>
+            <option value="wolves">Wolverhampton Wanderers</option>
+            <option value="nottingham-forest">Nottingham Forest</option>
+            <option value="brentford">Brentford</option>
+            <option value="bournemouth">Bournemouth</option>
+            <option value="leicester">Leicester City</option>
+            <option value="leeds">Leeds United</option>
+            <option value="sunderland">Sunderland</option>
+
+          </select>
+
+        </div>
 
         <div id="awayStyle" class="club-style"></div>
 
       </div>
+
+
+      <div class="field">
+
+        <label>Country</label>
+
+        <div class="team-picker">
+
+          <img
+            id="awayCountryIcon"
+            src="assets/clubs-and-countries/default.png"
+            alt=""
+          >
+
+          <select id="awayCountry">
+
+            <option value="" selected>
+              Choose a country...
+            </option>
+
+            <option value="netherlands">Netherlands</option>
+            <option value="germany">Germany</option>
+            <option value="portugal">Portugal</option>
+            <option value="wales">Wales</option>
+            <option value="france">France</option>
+            <option value="turkey">Turkey</option>
+            <option value="italy">Italy</option>
+            <option value="belgium">Belgium</option>
+            <option value="england">England</option>
+            <option value="spain">Spain</option>
+            <option value="slovenia">Slovenia</option>
+            <option value="scotland">Scotland</option>
+            <option value="serbia">Serbia</option>
+            <option value="norway">Norway</option>
+
+          </select>
+
+        </div>
+
+      </div>
+
 
       <div class="field">
 
@@ -489,6 +809,7 @@
         >
 
       </div>
+
 
       <div class="field">
 
@@ -503,21 +824,20 @@
 
         <div class="score-controls">
 
-          <button onclick="changeScore('away', -1)">
-            −1
-          </button>
-
-          <button onclick="changeScore('away', 1)">
-            +1
-          </button>
+          <button onclick="changeScore('away', -1)">−1</button>
+          <button onclick="changeScore('away', 1)">+1</button>
 
         </div>
 
       </div>
 
+
       <div class="preview">
 
-        <img id="awayPreview" alt="">
+        <img
+          id="awayPreview"
+          alt=""
+        >
 
         <span
           id="awayPreviewName"
@@ -528,10 +848,70 @@
 
       </div>
 
+
+      <!-- AWAY GOAL SCORER -->
+
+      <div class="field">
+
+        <label>Goal scorer</label>
+
+        <div class="player-picker">
+
+          <img
+            id="awayPlayerIcon"
+            src="https://res.cloudinary.com/vbqf3fz4/image/upload/v1790598910/default.png"
+            alt=""
+          >
+
+          <span
+            id="awayPlayerName"
+            class="player-name"
+          >
+            Choose player...
+          </span>
+
+          <input
+            id="awayPlayer"
+            type="text"
+            placeholder="Search player..."
+            autocomplete="off"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div class="field">
+
+        <label>Goal time</label>
+
+        <div class="goal-input-row">
+
+          <input
+            id="awayGoalTime"
+            type="number"
+            min="0"
+            placeholder="Time"
+          >
+
+          <button onclick="addScorer('away')">
+            ADD GOAL
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div
+        id="awayScorers"
+        class="scorers"
+      ></div>
+
     </div>
 
   </div>
-
 
   <!-- CLOCK -->
 
@@ -539,7 +919,10 @@
 
     <h2>Match Clock</h2>
 
-    <div id="clock" class="clock">
+    <div
+      id="clock"
+      class="clock"
+    >
       00:00
     </div>
 
@@ -562,6 +945,11 @@
 <script>
 
 const CLUBS = {
+
+  barcelona: {
+    short: "BAR",
+    logo: "assets/clubs-and-countries/barcelona.png",
+  },
 
   fulham: {
     short: "FUL",
@@ -661,7 +1049,12 @@ const CLUBS = {
   sunderland: {
     short: "SUN",
     logo: "assets/clubs-and-countries/sunderland.png",
-  },
+  }
+
+};
+
+
+const COUNTRIES = {
 
   netherlands: {
     short: "NET",
@@ -703,14 +1096,14 @@ const CLUBS = {
     logo: "assets/clubs-and-countries/belgium.png",
   },
 
-  spain: {
-    short: "SPA",
-    logo: "assets/clubs-and-countries/spain.png",
-  },
-
   england: {
     short: "ENG",
     logo: "assets/clubs-and-countries/england.png",
+  },
+
+  spain: {
+    short: "SPA",
+    logo: "assets/clubs-and-countries/spain.png",
   },
 
   slovenia: {
@@ -736,9 +1129,802 @@ const CLUBS = {
 };
 
 
-/* ============================================================
-   STATE
-============================================================ */
+const PLAYERS = [
+
+  {
+    id: "lamine-yamal",
+    name: "Lamine Yamal",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599067/lamine-yamal.png"
+  },
+
+  {
+    id: "joan-garcia",
+    name: "Joan García",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599066/joan-garcia.png"
+  },
+
+  {
+    id: "wojciech-szczesny",
+    name: "Wojciech Szczęsny",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599065/wojciech-szczesny.png"
+  },
+
+  {
+    id: "dominik-livakovic",
+    name: "Dominik Livaković",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599064/dominik-livakovic.png"
+  },
+
+  {
+    id: "eder-aller",
+    name: "Eder Aller",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599063/eder-aller.png"
+  },
+
+  {
+    id: "jules-kounde",
+    name: "Jules Koundé",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599063/jules-kounde.png"
+  },
+
+  {
+    id: "pau-cubarsi",
+    name: "Pau Cubarsí",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599062/pau-cubarsi.png"
+  },
+
+  {
+    id: "andreas-christensen",
+    name: "Andreas Christensen",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599061/andreas-christensen.png"
+  },
+
+  {
+    id: "gerard-martin",
+    name: "Gerard Martín",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599172/gerard-martin.png"
+  },
+
+  {
+    id: "eric-garcia",
+    name: "Eric García",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599171/eric-garcia.png"
+  },
+
+  {
+    id: "joao-cancelo",
+    name: "João Cancelo",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599170/joao-cancelo.png"
+  },
+
+  {
+    id: "alejandro-balde",
+    name: "Alejandro Balde",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599170/alejandro-balde.png"
+  },
+
+  {
+    id: "xavi-espart",
+    name: "Xavi Espart",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599169/xavi-espart.png"
+  },
+
+  {
+    id: "gavi",
+    name: "Gavi",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599168/gavi.png"
+  },
+
+  {
+    id: "pedri",
+    name: "Pedri",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599167/pedri.png"
+  },
+
+  {
+    id: "rodri",
+    name: "Rodri",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599166/rodri.png"
+  },
+
+  {
+    id: "frenkie-de-jong",
+    name: "Frenkie de Jong",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599165/frenkie-de-jong.png"
+  },
+
+  {
+    id: "marc-bernal",
+    name: "Marc Bernal",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599165/marc-bernal.png"
+  },
+
+  {
+    id: "brian-farinas",
+    name: "Brian Fariñas",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599163/brian-farinas.png"
+  },
+
+  {
+    id: "fermin-lopez",
+    name: "Fermín López",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599162/fermin-lopez.png"
+  },
+
+  {
+    id: "dani-olmo",
+    name: "Dani Olmo",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599162/dani-olmo.png"
+  },
+
+  {
+    id: "karim-adeyemi",
+    name: "Karim Adeyemi",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599161/karim-adeyemi.png"
+  },
+
+  {
+    id: "roony-bardghji",
+    name: "Roony Bardghji",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599160/roony-bardghji.png"
+  },
+
+  {
+    id: "raphinha",
+    name: "Raphinha",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599159/raphinha.png"
+  },
+
+  {
+    id: "anthony-gordon",
+    name: "Anthony Gordon",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599159/anthony-gordon.png"
+  },
+
+  {
+    id: "jesse-bisiwu",
+    name: "Jesse Bisiwu",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599157/jesse-bisiwu.png"
+  },
+
+  {
+    id: "gabriel-jesus",
+    name: "Gabriel Jesus",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599156/gabriel-jesus.png"
+  },
+
+  {
+    id: "hamza-abdelkarim",
+    name: "Hamza Abdelkarim",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599156/hamza-abdelkarim.png"
+  },
+
+  {
+    id: "senne-lammens",
+    name: "Senne Lammens",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599155/senne-lammens.png"
+  },
+
+  {
+    id: "maarten-vandevoordt",
+    name: "Maarten Vandevoordt",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599154/maarten-vandevoordt.png"
+  },
+
+  {
+    id: "jari-de-busser",
+    name: "Jari De Busser",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599153/jari-de-busser.png"
+  },
+
+  {
+    id: "mike-penders",
+    name: "Mike Penders",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599152/mike-penders.png"
+  },
+
+  {
+    id: "kyriani-sabbe",
+    name: "Kyriani Sabbe",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599151/kyriani-sabbe.png"
+  },
+
+  {
+    id: "timothy-castagne",
+    name: "Timothy Castagne",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599150/timothy-castagne.png"
+  },
+
+  {
+    id: "zeno-debast",
+    name: "Zeno Debast",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599149/zeno-debast.png"
+  },
+
+  {
+    id: "arthur-theate",
+    name: "Arthur Theate",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599146/arthur-theate.png"
+  },
+
+  {
+    id: "brandon-mechele",
+    name: "Brandon Mechele",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599147/brandon-mechele.png"
+  },
+
+  {
+    id: "nathan-ngoy",
+    name: "Nathan Ngoy",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599148/nathan-ngoy.png"
+  },
+
+  {
+    id: "koni-de-winter",
+    name: "Koni De Winter",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599147/koni-de-winter.png"
+  },
+
+  {
+    id: "maxim-de-cuyper",
+    name: "Maxim De Cuyper",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599142/maxim-de-cuyper.png"
+  },
+
+  {
+    id: "joaquin-seys",
+    name: "Joaquin Seys",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599141/joaquin-seys.png"
+  },
+
+  {
+    id: "romeo-lavia",
+    name: "Roméo Lavia",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599144/romeo-lavia.png"
+  },
+
+  {
+    id: "youri-tielemans",
+    name: "Youri Tielemans",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599145/youri-tielemans.png"
+  },
+
+  {
+    id: "nicolas-raskin",
+    name: "Nicolas Raskin",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599143/nicolas-raskin.png"
+  },
+
+  {
+    id: "mandela-keita",
+    name: "Mandela Keita",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599141/mandela-keita.png"
+  },
+
+  {
+    id: "kevin-de-bruyne",
+    name: "Kevin De Bruyne",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599138/kevin-de-bruyne.png"
+  },
+
+  {
+    id: "charles-de-ketelaere",
+    name: "Charles De Ketelaere",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599134/charles-de-ketelaere.png"
+  },
+
+  {
+    id: "hans-vanaken",
+    name: "Hans Vanaken",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599137/hans-vanaken.png"
+  },
+
+  {
+    id: "dodi-lukebakio",
+    name: "Dodi Lukébakio",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599136/dodi-lukebakio.png"
+  },
+
+  {
+    id: "diego-moreira",
+    name: "Diego Moreira",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599135/diego-moreira.png"
+  },
+
+  {
+    id: "malick-fofana",
+    name: "Malick Fofana",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599140/malick-fofana.png"
+  },
+
+  {
+    id: "leandro-trossard",
+    name: "Leandro Trossard",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599139/leandro-trossard.png"
+  },
+
+  {
+    id: "mika-godts",
+    name: "Mika Godts",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599132/mika-godts.png"
+  },
+
+  {
+    id: "romelu-lukaku",
+    name: "Romelu Lukaku",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599133/romelu-lukaku.png"
+  },
+
+  {
+    id: "lois-openda",
+    name: "Loïs Openda",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599130/lois-openda.png"
+  },
+
+  {
+    id: "matias-fernandez-pardo",
+    name: "Matias Fernandez-Pardo",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599131/matias-fernandez-pardo.png"
+  },
+
+  {
+    id: "guillaume-restes",
+    name: "Guillaume Restes",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599129/guillaume-restes.png"
+  },
+
+  {
+    id: "mike-maignan",
+    name: "Mike Maignan",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599133/mike-maignan.png"
+  },
+
+  {
+    id: "jean-butez",
+    name: "Jean Butez",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599126/jean-butez.png"
+  },
+
+  {
+    id: "robin-risser",
+    name: "Robin Risser",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599128/robin-risser.png"
+  },
+
+  {
+    id: "pierre-kalulu",
+    name: "Pierre Kalulu",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599128/pierre-kalulu.png"
+  },
+
+  {
+    id: "dayot-upamecano",
+    name: "Dayot Upamecano",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599125/dayot-upamecano.png"
+  },
+
+  {
+    id: "leny-yoro",
+    name: "Leny Yoro",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599126/leny-yoro.png"
+  },
+
+  {
+    id: "maxence-lacroix",
+    name: "Maxence Lacroix",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599123/maxence-lacroix.png"
+  },
+
+  {
+    id: "jeremy-jacquet",
+    name: "Jérémy Jacquet",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599121/jeremy-jacquet.png"
+  },
+
+  {
+    id: "adrien-truffert",
+    name: "Adrien Truffert",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599119/adrien-truffert.png"
+  },
+
+  {
+    id: "eduardo-camavinga",
+    name: "Eduardo Camavinga",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599120/eduardo-camavinga.png"
+  },
+
+  {
+    id: "manu-kone",
+    name: "Manu Koné",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599122/manu-kone.png"
+  },
+
+  {
+    id: "lucas-da-cunha",
+    name: "Lucas Da Cunha",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599121/lucas-da-cunha.png"
+  },
+
+  {
+    id: "adrien-rabiot",
+    name: "Adrien Rabiot",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599118/adrien-rabiot.png"
+  },
+
+  {
+    id: "warren-zaire-emery",
+    name: "Warren Zaïre-Emery",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599124/warren-zaire-emery.png"
+  },
+
+  {
+    id: "andy-diouf",
+    name: "Andy Diouf",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599113/andy-diouf.png"
+  },
+
+  {
+    id: "rayan-cherki",
+    name: "Rayan Cherki",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599117/rayan-cherki.png"
+  },
+
+  {
+    id: "michael-olise",
+    name: "Michael Olise",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599116/michael-olise.png"
+  },
+
+  {
+    id: "maghnes-akliouche",
+    name: "Maghnes Akliouche",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599115/maghnes-akliouche.png"
+  },
+
+  {
+    id: "desire-doue",
+    name: "Désiré Doué",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599115/desire-doue.png"
+  },
+
+  {
+    id: "bradley-barcola",
+    name: "Bradley Barcola",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599113/bradley-barcola.png"
+  },
+
+  {
+    id: "ousmane-dembele",
+    name: "Ousmane Dembélé",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599112/ousmane-dembele.png"
+  },
+
+  {
+    id: "kylian-mbappe",
+    name: "Kylian Mbappé",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599111/kylian-mbappe.png"
+  },
+
+  {
+    id: "esteban-lepaul",
+    name: "Estéban Lepaul",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599109/esteban-lepaul.png"
+  },
+
+  {
+    id: "matej-kovar",
+    name: "Matěj Kovár",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599111/matej-kovar.png"
+  },
+
+  {
+    id: "lukas-hornicek",
+    name: "Lukás Hornícek",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599107/lukas-hornicek.png"
+  },
+
+  {
+    id: "antonin-kinsky",
+    name: "Antonín Kinský",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599106/antonin-kinsky.png"
+  },
+
+  {
+    id: "vladimir-coufal",
+    name: "Vladimír Coufal",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599108/vladimir-coufal.png"
+  },
+
+  {
+    id: "michal-sacek",
+    name: "Michal Sácek",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599107/michal-sacek.png"
+  },
+
+  {
+    id: "david-zima",
+    name: "David Zima",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599099/david-zima.png"
+  },
+
+  {
+    id: "ondrej-kricfalusi",
+    name: "Ondřej Kričfaluši",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599102/ondrej-kricfalusi.png"
+  },
+
+  {
+    id: "robin-hranac",
+    name: "Robin Hranác",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599103/robin-hranac.png"
+  },
+
+  {
+    id: "stepan-chaloupek",
+    name: "Stepán Chaloupek",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599104/stepan-chaloupek.png"
+  },
+
+  {
+    id: "ladislav-krejci",
+    name: "Ladislav Krejcí",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599101/ladislav-krejci.png"
+  },
+
+  {
+    id: "martin-vitik",
+    name: "Martin Vitík",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599101/martin-vitik.png"
+  },
+
+  {
+    id: "tomas-vlcek",
+    name: "Tomás Vlček",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599105/tomas-vlcek.png"
+  },
+
+  {
+    id: "ondrej-zmrzly",
+    name: "Ondřej Zmrzlý",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599098/ondrej-zmrzly.png"
+  },
+
+  {
+    id: "jiri-slama",
+    name: "Jirí Sláma",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599095/jiri-slama.png"
+  },
+
+  {
+    id: "matej-rynes",
+    name: "Matěj Ryneš",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599096/matej-rynes.png"
+  },
+
+  {
+    id: "michal-sadilek",
+    name: "Michal Sadílek",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599098/michal-sadilek.png"
+  },
+
+  {
+    id: "lukas-cerv",
+    name: "Lukás Červ",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599096/lukas-cerv.png"
+  },
+
+  {
+    id: "roman-macek",
+    name: "Roman Macek",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599100/roman-macek.png"
+  },
+
+  {
+    id: "alex-kral",
+    name: "Alex Král",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599090/alex-kral.png"
+  },
+
+  {
+    id: "lukas-ambros",
+    name: "Lukás Ambros",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599090/lukas-ambros.png"
+  },
+
+  {
+    id: "pavel-bucha",
+    name: "Pavel Bucha",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599093/pavel-bucha.png"
+  },
+
+  {
+    id: "pavel-sulc",
+    name: "Pavel Šulc",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599094/pavel-sulc.png"
+  },
+
+  {
+    id: "matej-radosta",
+    name: "Matěj Radosta",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599092/matej-radosta.png"
+  },
+
+  {
+    id: "adam-karabec",
+    name: "Adam Karabec",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599088/adam-karabec.png"
+  },
+
+  {
+    id: "martin-subert",
+    name: "Martin Šubert",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599091/martin-subert.png"
+  },
+
+  {
+    id: "daniel-vasulin",
+    name: "Daniel Vasulín",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599084/daniel-vasulin.png"
+  },
+
+  {
+    id: "ondrej-lingr",
+    name: "Ondřej Lingr",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599087/ondrej-lingr.png"
+  },
+
+  {
+    id: "adam-hlozek",
+    name: "Adam Hložek",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599083/adam-hlozek.png"
+  },
+
+  {
+    id: "vaclav-sejk",
+    name: "Václav Sejk",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599088/vaclav-sejk.png"
+  },
+
+  {
+    id: "jordan-pickford",
+    name: "Jordan Pickford",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599086/jordan-pickford.png"
+  },
+
+  {
+    id: "james-trafford",
+    name: "James Trafford",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599085/james-trafford.png"
+  },
+
+  {
+    id: "jason-steele",
+    name: "Jason Steele",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599080/jason-steele.png"
+  },
+
+  {
+    id: "trent-alexander-arnold",
+    name: "Trent Alexander-Arnold",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599082/trent-alexander-arnold.png"
+  },
+
+  {
+    id: "ezri-konsa",
+    name: "Ezri Konsa",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599078/ezri-konsa.png"
+  },
+
+  {
+    id: "marc-guehi",
+    name: "Marc Guéhi",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599081/marc-guehi.png"
+  },
+
+  {
+    id: "trevoh-chalobah",
+    name: "Trevoh Chalobah",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599083/trevoh-chalobah.png"
+  },
+
+  {
+    id: "jarrad-branthwaite",
+    name: "Jarrad Branthwaite",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599079/jarrad-branthwaite.png"
+  },
+
+  {
+    id: "jarell-quansah",
+    name: "Jarell Quansah",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599079/jarell-quansah.png"
+  },
+
+  {
+    id: "nico-o-reilly",
+    name: "Nico O'Reilly",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599078/nico-o-reilly.png"
+  },
+
+  {
+    id: "lewis-hall",
+    name: "Lewis Hall",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599076/lewis-hall.png"
+  },
+
+  {
+    id: "myles-lewis-skelly",
+    name: "Myles Lewis-Skelly",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599077/myles-lewis-skelly.png"
+  },
+
+  {
+    id: "alex-scott",
+    name: "Alex Scott",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599073/alex-scott.png"
+  },
+
+  {
+    id: "elliot-anderson",
+    name: "Elliot Anderson",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599074/elliot-anderson.png"
+  },
+
+  {
+    id: "james-garner",
+    name: "James Garner",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599074/james-garner.png"
+  },
+
+  {
+    id: "jude-bellingham",
+    name: "Jude Bellingham",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599075/jude-bellingham.png"
+  },
+
+  {
+    id: "morgan-rogers",
+    name: "Morgan Rogers",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599071/morgan-rogers.png"
+  },
+
+  {
+    id: "morgan-gibbs-white",
+    name: "Morgan Gibbs-White",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599071/morgan-gibbs-white.png"
+  },
+
+  {
+    id: "eberechi-eze",
+    name: "Eberechi Eze",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599069/eberechi-eze.png"
+  },
+
+  {
+    id: "bukayo-saka",
+    name: "Bukayo Saka",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599067/bukayo-saka.png"
+  },
+
+  {
+    id: "rio-ngumoha",
+    name: "Rio Ngumoha",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599072/rio-ngumoha.png"
+  },
+
+  {
+    id: "harry-kane",
+    name: "Harry Kane",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599070/harry-kane.png"
+  },
+
+  {
+    id: "dominic-calvert-lewin",
+    name: "Dominic Calvert-Lewin",
+    profile: "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790599068/dominic-calvert-lewin.png"
+  }
+
+];
+
 
 let state = {
 
@@ -763,6 +1949,9 @@ let state = {
   homeScore: 0,
   awayScore: 0,
 
+  homeScorers: [],
+  awayScorers: [],
+
   elapsedMs: 0,
   running: false,
   startedAt: null
@@ -779,10 +1968,6 @@ const $ = id =>
   document.getElementById(id);
 
 
-/* ============================================================
-   STATUS
-============================================================ */
-
 function status(text, connected = false) {
 
   const el = $("status");
@@ -797,59 +1982,102 @@ function status(text, connected = false) {
 }
 
 
-/* ============================================================
-   BUILD CURRENT STATE
-============================================================ */
+function getSelectedTeam(side) {
+
+  const clubSelect =
+    side === "home"
+      ? $("homeClub")
+      : $("awayClub");
+
+  const countrySelect =
+    side === "home"
+      ? $("homeCountry")
+      : $("awayCountry");
+
+
+  if (clubSelect.value) {
+
+    return {
+      id: clubSelect.value,
+      team: CLUBS[clubSelect.value]
+    };
+
+  }
+
+
+  if (countrySelect.value) {
+
+    return {
+      id: countrySelect.value,
+      team: COUNTRIES[countrySelect.value]
+    };
+
+  }
+
+
+  return null;
+
+}
+
 
 function buildState() {
 
-  const home =
-    CLUBS[$("homeClub").value];
+  const homeSelected =
+    getSelectedTeam("home");
 
-  const away =
-    CLUBS[$("awayClub").value];
+  const awaySelected =
+    getSelectedTeam("away");
 
 
-  if (!home || !away) {
+  if (
+    !homeSelected ||
+    !awaySelected
+  ) {
+
     return false;
+
   }
 
 
   state.homeClub =
-    $("homeClub").value;
+    homeSelected.id;
 
   state.awayClub =
-    $("awayClub").value;
+    awaySelected.id;
 
 
   state.homeName =
     $("homeName").value.trim() ||
-    home.short;
+    homeSelected.team.short;
 
   state.awayName =
     $("awayName").value.trim() ||
-    away.short;
+    awaySelected.team.short;
 
 
   state.homeLogo =
-    home.logo;
+    homeSelected.team.logo;
 
   state.awayLogo =
-    away.logo;
+    awaySelected.team.logo;
 
 
   state.homeColor =
-    home.color;
+    homeSelected.team.color ||
+    "#7a7a7a";
 
   state.homeSecondary =
-    home.secondary;
+    homeSelected.team.secondary ||
+    "#000000";
 
 
   state.awayColor =
-    away.color;
+    awaySelected.team.color ||
+    "#7a7a7a";
 
   state.awaySecondary =
-    away.secondary;
+    awaySelected.team.secondary ||
+    "#000000";
 
 
   state.competitionLogo =
@@ -869,14 +2097,11 @@ function buildState() {
       Number($("awayScore").value) || 0
     );
 
+
   return true;
 
 }
 
-
-/* ============================================================
-   SEND
-============================================================ */
 
 function sendState() {
 
@@ -915,10 +2140,6 @@ function sendState() {
 }
 
 
-/* ============================================================
-   BUILD + SEND
-============================================================ */
-
 function update() {
 
   if (!buildState()) {
@@ -929,10 +2150,6 @@ function update() {
 
 }
 
-
-/* ============================================================
-   UNIQUE ROOM + OBS LINK
-============================================================ */
 
 function makeRoomId() {
 
@@ -978,53 +2195,97 @@ function newRoom() {
     connection &&
     connection.open
   ) {
+
     try {
       connection.close();
     } catch (e) {}
+
   }
 
+
   if (peer) {
+
     try {
       peer.destroy();
     } catch (e) {}
+
   }
+
 
   connection = null;
   peer = null;
   connecting = false;
 
-  $("room").value = makeRoomId();
 
-  // Reset the match when creating a new OBS link.
+  $("room").value =
+    makeRoomId();
+
+
   $("homeClub").value = "";
+  $("homeCountry").value = "";
+
   $("awayClub").value = "";
+  $("awayCountry").value = "";
+
+
   $("homeName").value = "";
   $("awayName").value = "";
+
+
   $("homeScore").value = 0;
   $("awayScore").value = 0;
 
+
+  $("homeGoalTime").value = "";
+  $("awayGoalTime").value = "";
+
+
   state = {
+
     ...state,
+
     homeName: "...",
     awayName: "...",
+
     homeClub: "",
     awayClub: "",
-    homeLogo: "assets/clubs-and-countries/default.png",
-    awayLogo: "assets/clubs-and-countries/default.png",
+
+    homeLogo:
+      "assets/clubs-and-countries/default.png",
+
+    awayLogo:
+      "assets/clubs-and-countries/default.png",
+
     homeColor: "#7a7a7a",
     homeSecondary: "#000000",
+
     awayColor: "#7a7a7a",
     awaySecondary: "#000000",
+
     homeScore: 0,
     awayScore: 0,
+
+    homeScorers: [],
+    awayScorers: [],
+
     elapsedMs: 0,
     running: false,
     startedAt: null
+
   };
 
-  updateClubPreview("home");
-  updateClubPreview("away");
+
+  updateTeamPreview("home");
+  updateTeamPreview("away");
+
+  updatePlayerList("home");
+  updatePlayerList("away");
+
+  renderScorers("home");
+  renderScorers("away");
+
   updateObsUrl();
+
 
   status(
     "New match link generated. Add the URL to OBS.",
@@ -1041,9 +2302,11 @@ async function copyObsUrl() {
   const url =
     $("obsUrl").value;
 
+
   if (!url) {
     return;
   }
+
 
   try {
 
@@ -1057,6 +2320,7 @@ async function copyObsUrl() {
   } catch (error) {
 
     $("obsUrl").select();
+
     document.execCommand("copy");
 
     status(
@@ -1068,10 +2332,6 @@ async function copyObsUrl() {
 
 }
 
-
-/* ============================================================
-   CONNECT
-============================================================ */
 
 function connect() {
 
@@ -1086,18 +2346,21 @@ function connect() {
 
   if (!room) {
 
-    room = makeRoomId();
+    room =
+      makeRoomId();
 
-    $("room").value = room;
+    $("room").value =
+      room;
 
     updateObsUrl();
 
   }
 
+
   if (!buildState()) {
 
     status(
-      "Choose both clubs before connecting.",
+      "Choose both teams before connecting.",
       false
     );
 
@@ -1200,11 +2463,6 @@ function connect() {
           );
 
 
-          /*
-           * Send the control panel's current
-           * state immediately.
-           */
-
           buildState();
 
           sendState();
@@ -1222,11 +2480,6 @@ function connect() {
             message
           );
 
-
-          /*
-           * OBS can request the current state
-           * after refreshing.
-           */
 
           if (
             message &&
@@ -1317,61 +2570,537 @@ function connect() {
 }
 
 
-/* ============================================================
-   CLUB PREVIEWS
-============================================================ */
+function updateTeamPreview(side) {
 
-function updateClubPreview(side) {
-
-  const club =
-    CLUBS[
-      side === "home"
-        ? $("homeClub").value
-        : $("awayClub").value
-    ];
+  const selected =
+    getSelectedTeam(side);
 
 
-  if (!club) {
-    return;
-  }
+  const clubIcon =
+    side === "home"
+      ? $("homeClubIcon")
+      : $("awayClubIcon");
+
+  const countryIcon =
+    side === "home"
+      ? $("homeCountryIcon")
+      : $("awayCountryIcon");
+
+  const preview =
+    side === "home"
+      ? $("homePreview")
+      : $("awayPreview");
+
+  const previewName =
+    side === "home"
+      ? $("homePreviewName")
+      : $("awayPreviewName");
+
+  const style =
+    side === "home"
+      ? $("homeStyle")
+      : $("awayStyle");
+
+  const nameInput =
+    side === "home"
+      ? $("homeName")
+      : $("awayName");
 
 
   if (side === "home") {
 
-    $("homePreview").src =
-      club.logo;
+    clubIcon.src =
+      $("homeClub").value
+        ? CLUBS[$("homeClub").value].logo
+        : "assets/clubs-and-countries/default.png";
 
-    $("homePreviewName").textContent =
-      $("homeName").value ||
-      club.short;
-
-    $("homeStyle").textContent =
-      club.color +
-      " / " +
-      club.secondary;
+    countryIcon.src =
+      $("homeCountry").value
+        ? COUNTRIES[$("homeCountry").value].logo
+        : "assets/clubs-and-countries/default.png";
 
   } else {
 
-    $("awayPreview").src =
-      club.logo;
+    clubIcon.src =
+      $("awayClub").value
+        ? CLUBS[$("awayClub").value].logo
+        : "assets/clubs-and-countries/default.png";
 
-    $("awayPreviewName").textContent =
-      $("awayName").value ||
-      club.short;
+    countryIcon.src =
+      $("awayCountry").value
+        ? COUNTRIES[$("awayCountry").value].logo
+        : "assets/clubs-and-countries/default.png";
 
-    $("awayStyle").textContent =
-      club.color +
-      " / " +
-      club.secondary;
+  }
+
+
+  if (!selected) {
+
+    preview.src =
+      "assets/clubs-and-countries/default.png";
+
+    previewName.textContent =
+      "—";
+
+    style.textContent =
+      "";
+
+    return;
+
+  }
+
+
+  preview.src =
+    selected.team.logo;
+
+  previewName.textContent =
+    nameInput.value ||
+    selected.team.short;
+
+  style.textContent =
+    selected.team.color &&
+    selected.team.secondary
+      ? selected.team.color +
+        " / " +
+        selected.team.secondary
+      : "";
+
+}
+
+
+function getAllPlayers() {
+  return PLAYERS;
+}
+
+
+function getPlayerSuggestions(side) {
+
+  const input =
+    side === "home"
+      ? $("homePlayer")
+      : $("awayPlayer");
+
+  const suggestions =
+    side === "home"
+      ? $("homePlayerSuggestions")
+      : $("awayPlayerSuggestions");
+
+  if (!input || !suggestions) {
+    return;
+  }
+
+  const query =
+    normalizePlayerName(input.value.trim());
+
+  if (!query) {
+    suggestions.innerHTML = "";
+    suggestions.style.display = "none";
+    return;
+  }
+
+  const players = getAllPlayers()
+    .map((player, index) => {
+      const name = normalizePlayerName(player.name);
+      let score = 0;
+
+      if (name === query) {
+        score = 1000;
+      } else if (name.startsWith(query)) {
+        score = 500;
+      } else if (name.includes(query)) {
+        score = 250;
+      } else {
+        return null;
+      }
+
+      return {
+        player,
+        index,
+        score
+      };
+    })
+    .filter(Boolean)
+    .sort((a, b) =>
+      b.score - a.score ||
+      a.index - b.index
+    )
+    .slice(0, 6);
+
+  if (!players.length) {
+    suggestions.innerHTML = "";
+    suggestions.style.display = "none";
+    return;
+  }
+
+  suggestions.innerHTML = "";
+
+  players.forEach(({ player }) => {
+    const button = document.createElement("button");
+
+    button.type = "button";
+    button.className = "player-suggestion";
+
+    const image = document.createElement("img");
+    image.src = player.profile;
+    image.alt = "";
+
+    const name = document.createElement("span");
+    name.className = "player-suggestion-name";
+    name.textContent = player.name;
+
+    button.appendChild(image);
+    button.appendChild(name);
+
+    button.addEventListener("mousedown", event => {
+      event.preventDefault();
+      selectPlayer(side, player);
+    });
+
+    suggestions.appendChild(button);
+  });
+
+  suggestions.style.display = "block";
+}
+
+
+
+function selectPlayer(side, player) {
+
+  const input =
+    side === "home"
+      ? $("homePlayer")
+      : $("awayPlayer");
+
+  input.value = player.name;
+  input.dataset.playerId = player.id;
+
+  updatePlayerPreview(side);
+  hidePlayerSuggestions(side);
+}
+
+
+
+function hidePlayerSuggestions(side) {
+
+  const suggestions =
+    side === "home"
+      ? $("homePlayerSuggestions")
+      : $("awayPlayerSuggestions");
+
+  if (suggestions) {
+    suggestions.style.display = "none";
+  }
+
+}
+
+
+
+function updatePlayerList(side) {
+
+  const input =
+    side === "home"
+      ? $("homePlayer")
+      : $("awayPlayer");
+
+  input.value = "";
+  input.dataset.playerId = "";
+
+  updatePlayerPreview(side);
+  hidePlayerSuggestions(side);
+
+}
+
+
+
+function normalizePlayerName(name) {
+
+  return String(name)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
+
+}
+
+
+
+function updatePlayerPreview(side) {
+
+  const input =
+    side === "home"
+      ? $("homePlayer")
+      : $("awayPlayer");
+
+  const image =
+    side === "home"
+      ? $("homePlayerIcon")
+      : $("awayPlayerIcon");
+
+  const name =
+    side === "home"
+      ? $("homePlayerName")
+      : $("awayPlayerName");
+
+
+  const value =
+    normalizePlayerName(input.value);
+
+
+  const player =
+    getAllPlayers().find(
+      item =>
+        normalizePlayerName(item.name) === value
+    );
+
+
+  if (player) {
+
+    input.dataset.playerId =
+      player.id;
+
+    image.src =
+      player.profile;
+
+    name.textContent =
+      player.name;
+
+  } else {
+
+    input.dataset.playerId =
+      "";
+
+    image.src =
+      "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790598910/default.png";
+
+    name.textContent =
+      "Choose player...";
 
   }
 
 }
 
 
-/* ============================================================
-   COMPETITION
-============================================================ */
+function addScorer(side) {
+
+  const playerInput =
+    side === "home"
+      ? $("homePlayer")
+      : $("awayPlayer");
+
+  const timeInput =
+    side === "home"
+      ? $("homeGoalTime")
+      : $("awayGoalTime");
+
+
+  const player =
+    getAllPlayers().find(
+      item =>
+        item.id ===
+        playerInput.dataset.playerId
+    );
+
+
+  const time =
+    Number(timeInput.value);
+
+
+  if (!player) {
+
+    status(
+      "Choose a player first.",
+      false
+    );
+
+    return;
+
+  }
+
+
+  if (
+    !Number.isFinite(time) ||
+    time < 0
+  ) {
+
+    status(
+      "Enter the goal time.",
+      false
+    );
+
+    return;
+
+  }
+
+
+  const scorer = {
+
+    playerId:
+      player.id,
+
+    name:
+      player.name,
+
+    profile:
+      player.profile,
+
+    time:
+      Math.floor(time)
+
+  };
+
+
+  if (side === "home") {
+
+    state.homeScorers.push(
+      scorer
+    );
+
+  } else {
+
+    state.awayScorers.push(
+      scorer
+    );
+
+  }
+
+
+  timeInput.value = "";
+
+  renderScorers(side);
+
+  update();
+
+}
+
+
+function removeScorer(side, index) {
+
+  if (side === "home") {
+
+    state.homeScorers.splice(
+      index,
+      1
+    );
+
+  } else {
+
+    state.awayScorers.splice(
+      index,
+      1
+    );
+
+  }
+
+
+  renderScorers(side);
+
+  update();
+
+}
+
+
+function renderScorers(side) {
+
+  const container =
+    side === "home"
+      ? $("homeScorers")
+      : $("awayScorers");
+
+  const scorers =
+    side === "home"
+      ? state.homeScorers
+      : state.awayScorers;
+
+
+  // Sort goals from earliest to latest
+  scorers.sort(
+    (a, b) =>
+      Number(a.time) - Number(b.time)
+  );
+
+
+  container.innerHTML = "";
+
+
+  scorers.forEach(
+    (scorer, index) => {
+
+      const row =
+        document.createElement("div");
+
+      row.className =
+        "scorer-row";
+
+
+      const image =
+        document.createElement("img");
+
+      image.src =
+        scorer.profile;
+
+      image.alt =
+        "";
+
+
+      const info =
+        document.createElement("div");
+
+      info.className =
+        "scorer-info";
+
+
+      const name =
+        document.createElement("div");
+
+      name.className =
+        "scorer-name";
+
+      name.textContent =
+        scorer.name;
+
+
+      const time =
+        document.createElement("div");
+
+      time.className =
+        "scorer-time";
+
+      time.textContent =
+        scorer.time + "'";
+
+
+      info.appendChild(name);
+      info.appendChild(time);
+
+
+      const remove =
+        document.createElement("button");
+
+      remove.className =
+        "remove-scorer";
+
+      remove.textContent =
+        "REMOVE";
+
+      remove.onclick =
+        () =>
+          removeScorer(
+            side,
+            index
+          );
+
+
+      row.appendChild(image);
+      row.appendChild(info);
+      row.appendChild(remove);
+
+      container.appendChild(row);
+
+    }
+  );
+
+}
+
 
 function updateCompetitionPreview() {
 
@@ -1380,10 +3109,6 @@ function updateCompetitionPreview() {
 
 }
 
-
-/* ============================================================
-   SCORE
-============================================================ */
 
 function changeScore(side, amount) {
 
@@ -1405,17 +3130,14 @@ function changeScore(side, amount) {
   }
 
 
-  input.value = value;
+  input.value =
+    value;
 
 
   update();
 
 }
 
-
-/* ============================================================
-   CLOCK
-============================================================ */
 
 function getElapsed() {
 
@@ -1557,9 +3279,74 @@ function setTime() {
 }
 
 
-/* ============================================================
-   INPUT EVENTS
-============================================================ */
+function handleTeamChange(side, type) {
+
+  const clubSelect =
+    side === "home"
+      ? $("homeClub")
+      : $("awayClub");
+
+  const countrySelect =
+    side === "home"
+      ? $("homeCountry")
+      : $("awayCountry");
+
+
+  if (type === "club") {
+
+    if (clubSelect.value) {
+      countrySelect.value = "";
+    }
+
+  } else {
+
+    if (countrySelect.value) {
+      clubSelect.value = "";
+    }
+
+  }
+
+
+  const selected =
+    getSelectedTeam(side);
+
+
+  const nameInput =
+    side === "home"
+      ? $("homeName")
+      : $("awayName");
+
+
+  if (selected) {
+
+    nameInput.value =
+      selected.team.short;
+
+  } else {
+
+    nameInput.value =
+      "";
+
+  }
+
+
+  if (side === "home") {
+    state.homeScorers = [];
+  } else {
+    state.awayScorers = [];
+  }
+
+
+  updateTeamPreview(side);
+
+  updatePlayerList(side);
+
+  renderScorers(side);
+
+  update();
+
+}
+
 
 $("room").addEventListener(
   "input",
@@ -1569,41 +3356,41 @@ $("room").addEventListener(
 
 $("homeClub").addEventListener(
   "change",
-  () => {
-
-    const club =
-      CLUBS[$("homeClub").value];
-
-
-    $("homeName").value =
-      club.short;
+  () =>
+    handleTeamChange(
+      "home",
+      "club"
+    )
+);
 
 
-    updateClubPreview("home");
-
-    update();
-
-  }
+$("homeCountry").addEventListener(
+  "change",
+  () =>
+    handleTeamChange(
+      "home",
+      "country"
+    )
 );
 
 
 $("awayClub").addEventListener(
   "change",
-  () => {
-
-    const club =
-      CLUBS[$("awayClub").value];
-
-
-    $("awayName").value =
-      club.short;
+  () =>
+    handleTeamChange(
+      "away",
+      "club"
+    )
+);
 
 
-    updateClubPreview("away");
-
-    update();
-
-  }
+$("awayCountry").addEventListener(
+  "change",
+  () =>
+    handleTeamChange(
+      "away",
+      "country"
+    )
 );
 
 
@@ -1613,7 +3400,6 @@ $("homeName").addEventListener(
 
     $("homePreviewName").textContent =
       $("homeName").value;
-
 
     update();
 
@@ -1627,7 +3413,6 @@ $("awayName").addEventListener(
 
     $("awayPreviewName").textContent =
       $("awayName").value;
-
 
     update();
 
@@ -1647,6 +3432,101 @@ $("awayScore").addEventListener(
 );
 
 
+$("homePlayer").addEventListener(
+  "input",
+  () => {
+    updatePlayerPreview("home");
+    getPlayerSuggestions("home");
+  }
+);
+
+$("homePlayer").addEventListener(
+  "keydown",
+  event => {
+    if (event.key === "Enter") {
+      const suggestions =
+        $("homePlayerSuggestions");
+
+      if (
+        suggestions &&
+        suggestions.style.display !== "none"
+      ) {
+        const first =
+          suggestions.querySelector(
+            ".player-suggestion"
+          );
+
+        if (first) {
+          event.preventDefault();
+          first.dispatchEvent(
+            new MouseEvent("mousedown", {
+              bubbles: true,
+              cancelable: true
+            })
+          );
+        }
+      }
+    } else if (event.key === "Escape") {
+      hidePlayerSuggestions("home");
+    }
+  }
+);
+
+
+$("awayPlayer").addEventListener(
+  "input",
+  () => {
+    updatePlayerPreview("away");
+    getPlayerSuggestions("away");
+  }
+);
+
+$("awayPlayer").addEventListener(
+  "keydown",
+  event => {
+    if (event.key === "Enter") {
+      const suggestions =
+        $("awayPlayerSuggestions");
+
+      if (
+        suggestions &&
+        suggestions.style.display !== "none"
+      ) {
+        const first =
+          suggestions.querySelector(
+            ".player-suggestion"
+          );
+
+        if (first) {
+          event.preventDefault();
+          first.dispatchEvent(
+            new MouseEvent("mousedown", {
+              bubbles: true,
+              cancelable: true
+            })
+          );
+        }
+      }
+    } else if (event.key === "Escape") {
+      hidePlayerSuggestions("away");
+    }
+  }
+);
+
+
+document.addEventListener(
+  "click",
+  event => {
+    if (
+      !event.target.closest(".player-picker")
+    ) {
+      hidePlayerSuggestions("home");
+      hidePlayerSuggestions("away");
+    }
+  }
+);
+
+
 $("competition").addEventListener(
   "change",
   () => {
@@ -1659,19 +3539,56 @@ $("competition").addEventListener(
 );
 
 
-/* ============================================================
-   INITIAL
-============================================================ */
-
 if (!$("room").value.trim()) {
-  $("room").value = makeRoomId();
+
+  $("room").value =
+    makeRoomId();
+
 }
+
+
+function createPlayerSuggestionLists() {
+
+  ["home", "away"].forEach(side => {
+
+    const input =
+      side === "home"
+        ? $("homePlayer")
+        : $("awayPlayer");
+
+    const suggestions =
+      document.createElement("div");
+
+    suggestions.id =
+      side + "PlayerSuggestions";
+
+    suggestions.className =
+      "player-suggestions";
+
+    input.parentElement.appendChild(
+      suggestions
+    );
+
+  });
+
+}
+
+
+createPlayerSuggestionLists();
 
 updateObsUrl();
 
-updateClubPreview("home");
-updateClubPreview("away");
+updateTeamPreview("home");
+updateTeamPreview("away");
+
+updatePlayerList("home");
+updatePlayerList("away");
+
+renderScorers("home");
+renderScorers("away");
+
 updateCompetitionPreview();
+
 renderClock();
 
 

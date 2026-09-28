@@ -2,53 +2,14 @@
    FOOTBALL BROADCAST SCOREBOARD
    PREMIUM SPORTS-TV PACKAGE
    VERSION 9 — MODULAR SKIN / LAYOUT SYSTEM
-   ============================================================
-
-   ============================================================
-   HOW TO USE THIS VERSION
-   ============================================================
-
-   Every club/country now has:
-
-      --skin-layout
-      --skin-c1
-      --skin-c2
-      --skin-c3
-
-   Example:
-
-      --skin-layout: var(--layout-vertical-3);
-      --skin-c1: #008000;
-      --skin-c2: #ffffff;
-      --skin-c3: #ff0000;
-
-   AVAILABLE LAYOUTS
-   ------------------
-
-   var(--layout-solid)
-   var(--layout-gradient)
-   var(--layout-vertical-2)
-   var(--layout-vertical-3)
-   var(--layout-horizontal-3)
-   var(--layout-diagonal-3)
-   var(--layout-cross)
-
-   ============================================================
-*/
-
-
-/* ============================================================
-   ROOT
    ============================================================ */
 
 :root {
-
   --dark: #08090b;
   --white: #ffffff;
 
   --scoreboard-width: 1250px;
   --scoreboard-height: 194px;
-
 }
 
 
@@ -62,7 +23,6 @@
 
 html,
 body {
-
   margin: 0;
   padding: 0;
 
@@ -90,7 +50,6 @@ body {
    ============================================================ */
 
 #scoreboard {
-
   position: relative;
 
   width: var(--scoreboard-width);
@@ -118,7 +77,6 @@ body {
    ============================================================ */
 
 #scoreboard::after {
-
   content: "";
 
   position: absolute;
@@ -152,7 +110,6 @@ body {
    ============================================================ */
 
 #scoreboard::before {
-
   content: "";
 
   position: absolute;
@@ -169,20 +126,15 @@ body {
   background:
     linear-gradient(
       90deg,
-
       transparent 0%,
-
       rgba(255,255,255,.08) 12%,
       rgba(255,255,255,.14) 31%,
       rgba(255,255,255,.20) 43%,
-
       transparent 48%,
       transparent 52%,
-
       rgba(255,255,255,.20) 57%,
       rgba(255,255,255,.14) 69%,
       rgba(255,255,255,.08) 88%,
-
       transparent 100%
     );
 
@@ -197,7 +149,6 @@ body {
    ============================================================ */
 
 .team-panel {
-
   position: relative;
 
   height: 125px;
@@ -217,10 +168,13 @@ body {
     var(--skin-c1, #15171b);
 
   /*
-     IMPORTANT:
-     The layout is resolved directly on the panel.
-     This allows --skin-c1 / --skin-c2 / --skin-c3
-     from each individual club selector to control it.
+     AWAY PANEL:
+     skin remains directly on panel.
+
+     HOME PANEL:
+     background is disabled below and the skin is
+     painted through ::before so it can be mirrored
+     without mirroring the panel geometry.
   */
 
   background-image:
@@ -247,7 +201,6 @@ body {
    ============================================================ */
 
 .home-panel {
-
   border-radius:
     13px 0 0 13px;
 
@@ -259,6 +212,14 @@ body {
       100% 100%,
       0 100%
     );
+
+  /*
+     IMPORTANT:
+     Do NOT transform this panel.
+     This keeps the center-facing dent on the right.
+  */
+
+  background-image: none;
 }
 
 
@@ -267,7 +228,6 @@ body {
    ============================================================ */
 
 .away-panel {
-
   border-radius:
     0 13px 13px 0;
 
@@ -288,7 +248,6 @@ body {
 
 .home-panel::before,
 .away-panel::before {
-
   content: "";
 
   position: absolute;
@@ -300,7 +259,6 @@ body {
   z-index: 1;
 
   background:
-
     linear-gradient(
       180deg,
       rgba(255,255,255,.075) 0%,
@@ -328,12 +286,42 @@ body {
 
 
 /* ============================================================
+   HOME SKIN MIRROR
+   ============================================================ */
+
+/*
+   The HOME PANEL itself is NOT mirrored.
+
+   Only its skin is mirrored inside ::before.
+
+   This preserves:
+   - home dent position
+   - home text direction
+   - home logo direction
+   - home panel dimensions
+
+   while reversing the club colours/patterns.
+*/
+
+.home-panel::before {
+  background:
+    var(--skin-layout);
+
+  transform:
+    scaleX(-1);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.12),
+    inset 0 -1px 0 rgba(0,0,0,.55);
+}
+
+
+/* ============================================================
    MAIN GEOMETRIC GRAPHIC
    ============================================================ */
 
 .home-panel::after,
 .away-panel::after {
-
   content: "";
 
   position: absolute;
@@ -350,7 +338,6 @@ body {
   opacity: .82;
 
   background:
-
     linear-gradient(
       126deg,
 
@@ -386,24 +373,52 @@ body {
 
 
 /* ============================================================
-   HOME GRAPHIC
+   HOME AND AWAY GRAPHIC
    ============================================================ */
 
 .home-panel::after {
+  left: 390px;
+  right: auto;
 
-  right: -23px;
+  background:
+    linear-gradient(
+      546deg,
+
+      transparent 0%,
+      transparent 35%,
+
+      rgba(255,255,255,.050) 35%,
+      rgba(255,255,255,.050) 36.8%,
+
+      transparent 36.8%,
+      transparent 49%,
+
+      rgba(255,255,255,.020) 49%,
+      rgba(255,255,255,.020) 50.2%,
+
+      transparent 50.2%,
+      transparent 100%
+    ),
+
+    linear-gradient(
+      54deg,
+
+      transparent 0%,
+      transparent 63%,
+
+      rgba(0,0,0,.15) 63%,
+      rgba(0,0,0,.15) 77%,
+
+      transparent 77%,
+      transparent 100%
+    );
 
   transform:
-    skewX(-9deg);
+    skewX(-9deg)
+    scaleX(-1);
 }
 
-
-/* ============================================================
-   AWAY GRAPHIC
-   ============================================================ */
-
 .away-panel::after {
-
   left: -23px;
 
   transform:
@@ -417,7 +432,6 @@ body {
    ============================================================ */
 
 .team-content {
-
   position: relative;
 
   height: 100%;
@@ -433,7 +447,6 @@ body {
 
 
 .home-content {
-
   justify-content:
     flex-start;
 
@@ -442,7 +455,6 @@ body {
 
 
 .away-content {
-
   justify-content:
     flex-end;
 
@@ -458,7 +470,6 @@ body {
 .home-content::after,
 .away-content::before,
 .away-content::after {
-
   content: none;
 }
 
@@ -468,7 +479,6 @@ body {
    ============================================================ */
 
 .club-logo {
-
   width: 88px;
   height: 88px;
 
@@ -513,13 +523,11 @@ body {
   margin-right: 4px;
 }
 
-
 /* ============================================================
    TEAM NAME
    ============================================================ */
 
 .team-name {
-
   position: relative;
 
   z-index: 20;
@@ -567,7 +575,6 @@ body {
    ============================================================ */
 
 .score {
-
   position: relative;
 
   min-width: 73px;
@@ -605,10 +612,6 @@ body {
 }
 
 
-/* ============================================================
-   SCORE SPACING
-   ============================================================ */
-
 .home-content .score {
   margin-left: 31px;
 }
@@ -624,7 +627,6 @@ body {
    ============================================================ */
 
 .centre {
-
   position: relative;
 
   height: 194px;
@@ -655,7 +657,6 @@ body {
    ============================================================ */
 
 .centre::before {
-
   content: "";
 
   position: absolute;
@@ -706,7 +707,6 @@ body {
    ============================================================ */
 
 .centre::after {
-
   content: "";
 
   position: absolute;
@@ -758,7 +758,6 @@ body {
    ============================================================ */
 
 .competition-wrap {
-
   position: relative;
 
   width: 125px;
@@ -776,7 +775,6 @@ body {
 
 
 .competition-wrap::before {
-
   content: "";
 
   position: absolute;
@@ -805,7 +803,6 @@ body {
 
 
 .competition-logo {
-
   width: 95px;
   height: 95px;
 
@@ -833,7 +830,6 @@ body {
    ============================================================ */
 
 .timer {
-
   position: relative;
 
   width: 185px;
@@ -896,7 +892,6 @@ body {
 
 
 .timer::before {
-
   content: "";
 
   position: absolute;
@@ -923,7 +918,6 @@ body {
 
 
 .timer::after {
-
   content: "";
 
   position: absolute;
@@ -957,7 +951,6 @@ body {
    ============================================================ */
 
 .team-panel {
-
   --skin-c1: #272b31;
   --skin-c2: #0c0e12;
   --skin-c3: #171a1f;
@@ -981,12 +974,11 @@ body {
 
 
 /* ============================================================
-   BRIGHTON
+   CLUB SKINS
    ============================================================ */
 
 .home-panel[data-club="brighton"],
 .away-panel[data-club="brighton"] {
-
   --skin-c1: #0b8bdc;
   --skin-c2: #004580;
   --skin-c3: #0068bd;
@@ -997,18 +989,13 @@ body {
   --skin-score: #ffffff;
 
   --skin-layout:
-    linear-gradient(135deg, #0057b8 0%, #0057b8 38%, #ffffff 38%, #ffffff 62%, #0057b8 62%, #0057b8 100%), linear-gradient(160deg, rgba(255,255,255,.16), transparent 55%)
-;
+    linear-gradient(135deg, #0057b8 0%, #0057b8 38%, #ffffff 38%, #ffffff 62%, #0057b8 62%, #0057b8 100%),
+    linear-gradient(160deg, rgba(255,255,255,.16), transparent 55%);
 }
 
 
-/* ============================================================
-   LIVERPOOL
-   ============================================================ */
-
 .home-panel[data-club="liverpool"],
 .away-panel[data-club="liverpool"] {
-
   --skin-c1: #f0203c;
   --skin-c2: #720713;
   --skin-c3: #c8102e;
@@ -1019,18 +1006,13 @@ body {
   --skin-score: #ffffff;
 
   --skin-layout:
-    linear-gradient(145deg, #c8102e 0%, #c8102e 48%, #8b0d20 48%, #8b0d20 58%, #c8102e 58%, #c8102e 100%), linear-gradient(35deg, transparent 0%, transparent 70%, rgba(255,255,255,.14) 70%, rgba(255,255,255,.14) 100%)
-;
+    linear-gradient(145deg, #c8102e 0%, #c8102e 48%, #8b0d20 48%, #8b0d20 58%, #c8102e 58%, #c8102e 100%),
+    linear-gradient(35deg, transparent 0%, transparent 70%, rgba(255,255,255,.14) 70%, rgba(255,255,255,.14) 100%);
 }
 
 
-/* ============================================================
-   ARSENAL
-   ============================================================ */
-
 .home-panel[data-club="arsenal"],
 .away-panel[data-club="arsenal"] {
-
   --skin-c1: #f00d1a;
   --skin-c2: #780005;
   --skin-c3: #db0007;
@@ -1041,18 +1023,13 @@ body {
   --skin-score: #ffffff;
 
   --skin-layout:
-    linear-gradient(135deg, #db0007 0%, #db0007 58%, #9c0005 58%, #9c0005 72%, #db0007 72%, #db0007 100%), linear-gradient(35deg, transparent 0%, transparent 72%, rgba(255,255,255,.12) 72%, rgba(255,255,255,.12) 100%)
-;
+    linear-gradient(135deg, #db0007 0%, #db0007 58%, #9c0005 58%, #9c0005 72%, #db0007 72%, #db0007 100%),
+    linear-gradient(35deg, transparent 0%, transparent 72%, rgba(255,255,255,.12) 72%, rgba(255,255,255,.12) 100%);
 }
 
 
-/* ============================================================
-   CHELSEA
-   ============================================================ */
-
 .home-panel[data-club="chelsea"],
 .away-panel[data-club="chelsea"] {
-
   --skin-c1: #0873dc;
   --skin-c2: #012653;
   --skin-c3: #034694;
@@ -1063,58 +1040,9 @@ body {
   --skin-score: #ffffff;
 
   --skin-layout:
-    linear-gradient(145deg, #034694 0%, #034694 44%, #012a5a 44%, #012a5a 57%, #034694 57%, #034694 100%), linear-gradient(25deg, transparent 0%, transparent 72%, rgba(255,255,255,.14) 72%, rgba(255,255,255,.14) 100%)
-;
+    linear-gradient(145deg, #034694 0%, #034694 44%, #012a5a 44%, #012a5a 57%, #034694 57%, #034694 100%),
+    linear-gradient(25deg, transparent 0%, transparent 72%, rgba(255,255,255,.14) 72%, rgba(255,255,255,.14) 100%);
 }
-
-
-/* ============================================================
-   MANCHESTER UNITED
-   ============================================================ */
-
-.home-panel[data-club="man-united"],
-.away-panel[data-club="man-united"] {
-
-  --skin-c1: #f3262d;
-  --skin-c2: #75090f;
-  --skin-c3: #da291c;
-
-  --skin-border: #ff747a;
-  --skin-accent: #111111;
-  --skin-text: #ffffff;
-  --skin-score: #ffffff;
-
-  --skin-layout:
-    linear-gradient(145deg, #da291c 0%, #da291c 46%, #8f1117 46%, #8f1117 58%, #da291c 58%, #da291c 100%), linear-gradient(35deg, transparent 0%, transparent 68%, #fbe122 68%, #fbe122 73%, transparent 73%, transparent 100%)
-;
-}
-
-
-/* ============================================================
-   MANCHESTER CITY
-   ============================================================ */
-
-.home-panel[data-club="man-city"],
-.away-panel[data-club="man-city"] {
-
-  --skin-c1: #91dcff;
-  --skin-c2: #2b7eab;
-  --skin-c3: #6cabdd;
-
-  --skin-border: #d4f2ff;
-  --skin-accent: #ffffff;
-  --skin-text: #ffffff;
-  --skin-score: #ffffff;
-
-  --skin-layout:
-    linear-gradient(145deg, #6cabdd 0%, #6cabdd 42%, #2b7eab 42%, #2b7eab 56%, #6cabdd 56%, #6cabdd 100%), linear-gradient(35deg, transparent 0%, transparent 68%, #b9e7ff 68%, #b9e7ff 73%, transparent 73%, transparent 100%)
-;
-}
-
-
-/* ============================================================
-   MANCHESTER NAME ALIASES
-   ============================================================ */
 
 .home-panel[data-club="manchester-city"],
 .away-panel[data-club="manchester-city"] {
@@ -1125,10 +1053,12 @@ body {
   --skin-accent: #ffffff;
   --skin-text: #ffffff;
   --skin-score: #ffffff;
+
   --skin-layout:
     linear-gradient(145deg, #6cabdd 0%, #6cabdd 42%, #2b7eab 42%, #2b7eab 56%, #6cabdd 56%, #6cabdd 100%),
     linear-gradient(35deg, transparent 0%, transparent 68%, #b9e7ff 68%, #b9e7ff 73%, transparent 73%, transparent 100%);
 }
+
 
 .home-panel[data-club="manchester-united"],
 .away-panel[data-club="manchester-united"] {
@@ -1139,19 +1069,15 @@ body {
   --skin-accent: #fbe122;
   --skin-text: #ffffff;
   --skin-score: #ffffff;
+
   --skin-layout:
     linear-gradient(145deg, #da291c 0%, #da291c 46%, #8f1117 46%, #8f1117 58%, #da291c 58%, #da291c 100%),
     linear-gradient(35deg, transparent 0%, transparent 68%, #fbe122 68%, #fbe122 73%, transparent 73%, transparent 100%);
 }
 
 
-/* ============================================================
-   TOTTENHAM
-   ============================================================ */
-
 .home-panel[data-club="tottenham"],
 .away-panel[data-club="tottenham"] {
-
   --skin-c1: #30477f;
   --skin-c2: #070d25;
   --skin-c3: #132257;
@@ -1162,18 +1088,13 @@ body {
   --skin-score: #ffffff;
 
   --skin-layout:
-    linear-gradient(145deg, #ffffff 0%, #ffffff 55%, #e9eef4 55%, #e9eef4 72%, #ffffff 72%, #ffffff 100%), linear-gradient(35deg, transparent 0%, transparent 70%, #132257 70%, #132257 74%, transparent 74%, transparent 100%)
-;
+    linear-gradient(145deg, #ffffff 0%, #ffffff 55%, #e9eef4 55%, #e9eef4 72%, #ffffff 72%, #ffffff 100%),
+    linear-gradient(35deg, transparent 0%, transparent 70%, #132257 70%, #132257 74%, transparent 74%, transparent 100%);
 }
 
 
-/* ============================================================
-   NEWCASTLE
-   ============================================================ */
-
 .home-panel[data-club="newcastle"],
 .away-panel[data-club="newcastle"] {
-
   --skin-c1: #0c0c0e;
   --skin-c2: #f0f0f0;
   --skin-c3: #0c0c0e;
@@ -1184,18 +1105,13 @@ body {
   --skin-score: #ffffff;
 
   --skin-layout:
-    linear-gradient(90deg, #0b0d10 0%, #0b0d10 18%, #f5f5f5 18%, #f5f5f5 36%, #0b0d10 36%, #0b0d10 54%, #f5f5f5 54%, #f5f5f5 72%, #0b0d10 72%, #0b0d10 100%), linear-gradient(135deg, rgba(255,255,255,.10), transparent 60%)
-;
+    linear-gradient(90deg, #0b0d10 0%, #0b0d10 18%, #f5f5f5 18%, #f5f5f5 36%, #0b0d10 36%, #0b0d10 54%, #f5f5f5 54%, #f5f5f5 72%, #0b0d10 72%, #0b0d10 100%),
+    linear-gradient(135deg, rgba(255,255,255,.10), transparent 60%);
 }
 
 
-/* ============================================================
-   ASTON VILLA
-   ============================================================ */
-
 .home-panel[data-club="aston-villa"],
 .away-panel[data-club="aston-villa"] {
-
   --skin-c1: #871748;
   --skin-c2: #35071d;
   --skin-c3: #670e36;
@@ -1206,18 +1122,13 @@ body {
   --skin-score: #ffffff;
 
   --skin-layout:
-    linear-gradient(145deg, #670c19 0%, #670c19 44%, #95bfe5 44%, #95bfe5 58%, #670c19 58%, #670c19 100%), linear-gradient(35deg, transparent 0%, transparent 72%, rgba(255,255,255,.13) 72%, rgba(255,255,255,.13) 100%)
-;
+    linear-gradient(145deg, #670c19 0%, #670c19 44%, #95bfe5 44%, #95bfe5 58%, #670c19 58%, #670c19 100%),
+    linear-gradient(35deg, transparent 0%, transparent 72%, rgba(255,255,255,.13) 72%, rgba(255,255,255,.13) 100%);
 }
 
 
-/* ============================================================
-   WEST HAM
-   ============================================================ */
-
 .home-panel[data-club="west-ham"],
 .away-panel[data-club="west-ham"] {
-
   --skin-c1: #96354d;
   --skin-c2: #40131f;
   --skin-c3: #7a263a;
@@ -1228,18 +1139,13 @@ body {
   --skin-score: #ffffff;
 
   --skin-layout:
-    linear-gradient(145deg, #7a263a 0%, #7a263a 48%, #1bb1e7 48%, #1bb1e7 58%, #7a263a 58%, #7a263a 100%), linear-gradient(35deg, transparent 0%, transparent 72%, rgba(255,255,255,.12) 72%, rgba(255,255,255,.12) 100%)
-;
+    linear-gradient(145deg, #7a263a 0%, #7a263a 48%, #1bb1e7 48%, #1bb1e7 58%, #7a263a 58%, #7a263a 100%),
+    linear-gradient(35deg, transparent 0%, transparent 72%, rgba(255,255,255,.12) 72%, rgba(255,255,255,.12) 100%);
 }
 
 
-/* ============================================================
-   CRYSTAL PALACE
-   ============================================================ */
-
 .home-panel[data-club="crystal-palace"],
 .away-panel[data-club="crystal-palace"] {
-
   --skin-c1: #d91836;
   --skin-c2: #244f9b;
   --skin-c3: #102b61;
@@ -1250,18 +1156,13 @@ body {
   --skin-score: #ffffff;
 
   --skin-layout:
-    linear-gradient(145deg, #0052a5 0%, #0052a5 44%, #70c9ff 44%, #70c9ff 58%, #0052a5 58%, #0052a5 100%), linear-gradient(35deg, transparent 0%, transparent 70%, rgba(255,255,255,.16) 70%, rgba(255,255,255,.16) 75%, transparent 75%, transparent 100%)
-;
+    linear-gradient(145deg, #0052a5 0%, #0052a5 44%, #70c9ff 44%, #70c9ff 58%, #0052a5 58%, #0052a5 100%),
+    linear-gradient(35deg, transparent 0%, transparent 70%, rgba(255,255,255,.16) 70%, rgba(255,255,255,.16) 75%, transparent 75%, transparent 100%);
 }
 
 
-/* ============================================================
-   EVERTON
-   ============================================================ */
-
 .home-panel[data-club="everton"],
 .away-panel[data-club="everton"] {
-
   --skin-c1: #0864ca;
   --skin-c2: #001a50;
   --skin-c3: #003399;
@@ -1272,18 +1173,13 @@ body {
   --skin-score: #ffffff;
 
   --skin-layout:
-    linear-gradient(145deg, #003399 0%, #003399 48%, #001f63 48%, #001f63 60%, #003399 60%, #003399 100%), linear-gradient(35deg, transparent 0%, transparent 72%, rgba(255,255,255,.14) 72%, rgba(255,255,255,.14) 100%)
-;
+    linear-gradient(145deg, #003399 0%, #003399 48%, #001f63 48%, #001f63 60%, #003399 60%, #003399 100%),
+    linear-gradient(35deg, transparent 0%, transparent 72%, rgba(255,255,255,.14) 72%, rgba(255,255,255,.14) 100%);
 }
 
 
-/* ============================================================
-   WOLVES
-   ============================================================ */
-
 .home-panel[data-club="wolves"],
 .away-panel[data-club="wolves"] {
-
   --skin-c1: #ffd33c;
   --skin-c2: #b77a00;
   --skin-c3: #fdb913;
@@ -1294,18 +1190,13 @@ body {
   --skin-score: #111111;
 
   --skin-layout:
-    linear-gradient(145deg, #fdb913 0%, #fdb913 46%, #b97900 46%, #b97900 58%, #fdb913 58%, #fdb913 100%), linear-gradient(35deg, transparent 0%, transparent 70%, rgba(0,0,0,.16) 70%, rgba(0,0,0,.16) 76%, transparent 76%, transparent 100%)
-;
+    linear-gradient(145deg, #fdb913 0%, #fdb913 46%, #b97900 46%, #b97900 58%, #fdb913 58%, #fdb913 100%),
+    linear-gradient(35deg, transparent 0%, transparent 70%, rgba(0,0,0,.16) 70%, rgba(0,0,0,.16) 76%, transparent 76%, transparent 100%);
 }
 
 
-/* ============================================================
-   BRENTFORD
-   ============================================================ */
-
 .home-panel[data-club="brentford"],
 .away-panel[data-club="brentford"] {
-
   --skin-c1: #ed0715;
   --skin-c2: #b9000b;
   --skin-c3: #111111;
@@ -1316,18 +1207,13 @@ body {
   --skin-score: #ffffff;
 
   --skin-layout:
-    linear-gradient(145deg, #e30613 0%, #e30613 46%, #9f0010 46%, #9f0010 58%, #e30613 58%, #e30613 100%), linear-gradient(35deg, transparent 0%, transparent 72%, rgba(255,255,255,.13) 72%, rgba(255,255,255,.13) 100%)
-;
+    linear-gradient(145deg, #e30613 0%, #e30613 46%, #9f0010 46%, #9f0010 58%, #e30613 58%, #e30613 100%),
+    linear-gradient(35deg, transparent 0%, transparent 72%, rgba(255,255,255,.13) 72%, rgba(255,255,255,.13) 100%);
 }
 
 
-/* ============================================================
-   BOURNEMOUTH
-   ============================================================ */
-
 .home-panel[data-club="bournemouth"],
 .away-panel[data-club="bournemouth"] {
-
   --skin-c1: #111111;
   --skin-c2: #da291c;
   --skin-c3: #111111;
@@ -1338,18 +1224,13 @@ body {
   --skin-score: #ffffff;
 
   --skin-layout:
-    linear-gradient(145deg, #da291c 0%, #da291c 46%, #111111 46%, #111111 58%, #da291c 58%, #da291c 100%), linear-gradient(35deg, transparent 0%, transparent 72%, rgba(255,255,255,.10) 72%, rgba(255,255,255,.10) 100%)
-;
+    linear-gradient(145deg, #da291c 0%, #da291c 46%, #111111 46%, #111111 58%, #da291c 58%, #da291c 100%),
+    linear-gradient(35deg, transparent 0%, transparent 72%, rgba(255,255,255,.10) 72%, rgba(255,255,255,.10) 100%);
 }
 
 
-/* ============================================================
-   LEICESTER
-   ============================================================ */
-
 .home-panel[data-club="leicester"],
 .away-panel[data-club="leicester"] {
-
   --skin-c1: #1e55c4;
   --skin-c2: #001b51;
   --skin-c3: #003090;
@@ -1360,18 +1241,13 @@ body {
   --skin-score: #ffffff;
 
   --skin-layout:
-    linear-gradient(145deg, #003090 0%, #003090 46%, #001d5b 46%, #001d5b 58%, #003090 58%, #003090 100%), linear-gradient(35deg, transparent 0%, transparent 72%, rgba(255,255,255,.14) 72%, rgba(255,255,255,.14) 100%)
-;
+    linear-gradient(145deg, #003090 0%, #003090 46%, #001d5b 46%, #001d5b 58%, #003090 58%, #003090 100%),
+    linear-gradient(35deg, transparent 0%, transparent 72%, rgba(255,255,255,.14) 72%, rgba(255,255,255,.14) 100%);
 }
 
 
-/* ============================================================
-   LEEDS
-   ============================================================ */
-
 .home-panel[data-club="leeds"],
 .away-panel[data-club="leeds"] {
-
   --skin-c1: #ffe05a;
   --skin-c2: #b88f00;
   --skin-c3: #ffcd00;
@@ -1382,18 +1258,13 @@ body {
   --skin-score: #111111;
 
   --skin-layout:
-    linear-gradient(145deg, #ffe05a 0%, #ffe05a 48%, rgb(93, 163, 255) 48%, rgb(93, 163, 255) 60%, #ffffff 60%, #ffffff 100%), linear-gradient(35deg, transparent 0%, transparent 70%, #1d428a 70%, #1d428a 74%, transparent 74%, transparent 100%)
-;
+    linear-gradient(145deg, #ffe05a 0%, #ffe05a 48%, rgb(93, 163, 255) 48%, rgb(93, 163, 255) 60%, #ffffff 60%, #ffffff 100%),
+    linear-gradient(35deg, transparent 0%, transparent 70%, #1d428a 70%, #1d428a 74%, transparent 74%, transparent 100%);
 }
 
 
-/* ============================================================
-   SUNDERLAND
-   ============================================================ */
-
 .home-panel[data-club="sunderland"],
 .away-panel[data-club="sunderland"] {
-
   --skin-c1: #ed1b2f;
   --skin-c2: #f5f5f5;
   --skin-c3: #ed1b2f;
@@ -1404,18 +1275,17 @@ body {
   --skin-score: #111111;
 
   --skin-layout:
-    linear-gradient(90deg, #e30613 0%, #e30613 18%, #ffffff 18%, #ffffff 36%, #e30613 36%, #e30613 54%, #ffffff 54%, #ffffff 72%, #e30613 72%, #e30613 100%), linear-gradient(135deg, rgba(255,255,255,.12), transparent 60%)
-;
+    linear-gradient(90deg, #e30613 0%, #e30613 18%, #ffffff 18%, #ffffff 36%, #e30613 36%, #e30613 54%, #ffffff 54%, #ffffff 72%, #e30613 72%, #e30613 100%),
+    linear-gradient(135deg, rgba(255,255,255,.12), transparent 60%);
 }
 
 
 /* ============================================================
-   ITALY
+   COUNTRIES
    ============================================================ */
 
 .home-panel[data-club="italy"],
 .away-panel[data-club="italy"] {
-
   --skin-c1: #009246;
   --skin-c2: #f1f1f1;
   --skin-c3: #ce2b37;
@@ -1437,13 +1307,9 @@ body {
     );
 }
 
-/* ============================================================
-   NETHERLANDS
-   ============================================================ */
 
 .home-panel[data-club="netherlands"],
 .away-panel[data-club="netherlands"] {
-
   --skin-c1: #ae1c28;
   --skin-c2: #f4f4f4;
   --skin-c3: #21468b;
@@ -1466,15 +1332,10 @@ body {
 }
 
 
-/* ============================================================
-   GERMANY
-   ============================================================ */
-
 .home-panel[data-club="germany"],
 .away-panel[data-club="germany"] {
-
   --skin-c1: #0b0b0c;
-  --skin-c2: #d2d2d2;
+  --skin-c2: #da291c;
   --skin-c3: #ffce00;
 
   --skin-border: #ffffff;
@@ -1494,14 +1355,7 @@ body {
     );
 }
 
-
-/* ============================================================
-   FRANCE
-   ============================================================ */
-
-.home-panel[data-club="france"],
 .away-panel[data-club="france"] {
-
   --skin-c1: #0055a4;
   --skin-c2: #f4f4f4;
   --skin-c3: #ef4135;
@@ -1523,17 +1377,32 @@ body {
     );
 }
 
+.home-panel[data-club="france"] {
+  --skin-c1: #ef4135;
+  --skin-c2: #f4f4f4;
+  --skin-c3: #0055a4;
 
-/* ============================================================
-   PORTUGAL
-   ============================================================ */
+  --skin-border: #ffffff;
+  --skin-accent: #0055a4;
+  --skin-text: #111111;
+  --skin-score: #111111;
+
+  --skin-layout:
+    linear-gradient(
+      90deg,
+      var(--skin-c1) 0%,
+      var(--skin-c1) 33.333%,
+      var(--skin-c2) 33.333%,
+      var(--skin-c2) 66.666%,
+      var(--skin-c3) 66.666%,
+      var(--skin-c3) 100%
+    );
+}
+
 
 .home-panel[data-club="portugal"],
 .away-panel[data-club="portugal"] {
-
   --skin-layout:
-
-    /* yellow circle */
     radial-gradient(
       circle at 32% 50%,
       #ffcd00 0%,
@@ -1541,8 +1410,6 @@ body {
       transparent 9.5%,
       transparent 100%
     ),
-
-    /* Portugal flag */
     linear-gradient(
       90deg,
       #046a38 0%,
@@ -1562,13 +1429,8 @@ body {
 }
 
 
-/* ============================================================
-   WALES
-   ============================================================ */
-
 .home-panel[data-club="wales"],
 .away-panel[data-club="wales"] {
-
   --skin-c1: #ed233b;
   --skin-c2: #780819;
   --skin-c3: #c8102e;
@@ -1588,13 +1450,8 @@ body {
 }
 
 
-/* ============================================================
-   TURKEY
-   ============================================================ */
-
 .home-panel[data-club="turkey"],
 .away-panel[data-club="turkey"] {
-
   --skin-c1: #f02230;
   --skin-c2: #8d0610;
   --skin-c3: #e30a17;
@@ -1613,14 +1470,7 @@ body {
     );
 }
 
-
-/* ============================================================
-   BELGIUM
-   ============================================================ */
-
-.home-panel[data-club="belgium"],
 .away-panel[data-club="belgium"] {
-
   --skin-c1: #0b0b0c;
   --skin-c2: #f0c820;
   --skin-c3: #e30a17;
@@ -1642,14 +1492,31 @@ body {
     );
 }
 
+.home-panel[data-club="belgium"] {
+  --skin-c1: #e30a17;
+  --skin-c2: #f0c820;
+  --skin-c3: #0b0b0c;
 
-/* ============================================================
-   SPAIN
-   ============================================================ */
+  --skin-border: #ffffff;
+  --skin-accent: #ffffff;
+  --skin-text: #ffffff;
+  --skin-score: #ffffff;
+
+  --skin-layout:
+    linear-gradient(
+      90deg,
+      var(--skin-c1) 0%,
+      var(--skin-c1) 33.333%,
+      var(--skin-c2) 33.333%,
+      var(--skin-c2) 66.666%,
+      var(--skin-c3) 66.666%,
+      var(--skin-c3) 100%
+    );
+}
+
 
 .home-panel[data-club="spain"],
 .away-panel[data-club="spain"] {
-
   --skin-c1: #aa151b;
   --skin-c2: #f1bf00;
   --skin-c3: #c60b1e;
@@ -1671,9 +1538,6 @@ body {
     );
 }
 
-/* ============================================================
-   SLOVENIA
-   ============================================================ */
 
 .home-panel[data-club="slovenia"],
 .away-panel[data-club="slovenia"] {
@@ -1698,9 +1562,6 @@ body {
   --skin-score: #ffffff;
 }
 
-/* ============================================================
-   SERBIA
-   ============================================================ */
 
 .home-panel[data-club="serbia"],
 .away-panel[data-club="serbia"] {
@@ -1725,16 +1586,10 @@ body {
   --skin-score: #ffffff;
 }
 
-/* ============================================================
-   NORWAY
-   ============================================================ */
 
 .home-panel[data-club="norway"],
 .away-panel[data-club="norway"] {
-
   --skin-layout:
-
-    /* BLUE vertical */
     linear-gradient(
       90deg,
       transparent 0%,
@@ -1744,8 +1599,6 @@ body {
       transparent 38%,
       transparent 100%
     ),
-
-    /* BLUE horizontal */
     linear-gradient(
       180deg,
       transparent 0%,
@@ -1755,8 +1608,6 @@ body {
       transparent 64%,
       transparent 100%
     ),
-
-    /* WHITE vertical */
     linear-gradient(
       90deg,
       transparent 0%,
@@ -1766,8 +1617,6 @@ body {
       transparent 40%,
       transparent 100%
     ),
-
-    /* WHITE horizontal */
     linear-gradient(
       180deg,
       transparent 0%,
@@ -1777,8 +1626,6 @@ body {
       transparent 70%,
       transparent 100%
     ),
-
-    /* RED */
     linear-gradient(
       135deg,
       #d52c2c 0%,
@@ -1795,9 +1642,6 @@ body {
   --skin-score: #ffffff;
 }
 
-/* ============================================================
-   SCOTLAND
-   ============================================================ */
 
 .home-panel[data-club="scotland"],
 .away-panel[data-club="scotland"] {
@@ -1837,10 +1681,6 @@ body {
 }
 
 
-/* ============================================================
-   ENGLAND
-   ============================================================ */
-
 .home-panel[data-club="england"],
 .away-panel[data-club="england"] {
   --skin-layout:
@@ -1879,13 +1719,8 @@ body {
 }
 
 
-/* ============================================================
-   FULHAM
-   ============================================================ */
-
 .home-panel[data-club="fulham"],
 .away-panel[data-club="fulham"] {
-
   --skin-c1: #ffffff;
   --skin-c2: #111111;
   --skin-c3: #ffffff;
@@ -1896,17 +1731,81 @@ body {
   --skin-score: #ffffff;
 
   --skin-layout:
-    linear-gradient(145deg, #ffffff 0%, #ffffff 52%, #e8e8e8 52%, #e8e8e8 64%, #111111 64%, #111111 100%), linear-gradient(35deg, transparent 0%, transparent 72%, rgba(0,0,0,.10) 72%, rgba(0,0,0,.10) 100%);
+    linear-gradient(145deg, #ffffff 0%, #ffffff 52%, #e8e8e8 52%, #e8e8e8 64%, #111111 64%, #111111 100%),
+    linear-gradient(35deg, transparent 0%, transparent 72%, rgba(0,0,0,.10) 72%, rgba(0,0,0,.10) 100%);
+}
+
+.home-panel[data-club="barcelona"],
+.away-panel[data-club="barcelona"] {
+
+  --skin-layout:
+    /* bright Barça blue diagonal */
+    linear-gradient(
+      118deg,
+      transparent 0%,
+      transparent 24%,
+      #004d98 24%,
+      #004d98 39%,
+      transparent 39%,
+      transparent 100%
+    ),
+
+    /* deep red diagonal */
+    linear-gradient(
+      118deg,
+      transparent 0%,
+      transparent 39%,
+      #a50044 39%,
+      #a50044 55%,
+      transparent 55%,
+      transparent 100%
+    ),
+
+    /* blue secondary cut */
+    linear-gradient(
+      118deg,
+      transparent 0%,
+      transparent 55%,
+      #003b73 55%,
+      #003b73 68%,
+      transparent 68%,
+      transparent 100%
+    ),
+
+    /* red secondary cut */
+    linear-gradient(
+      118deg,
+      transparent 0%,
+      transparent 68%,
+      #7d0038 68%,
+      #7d0038 81%,
+      transparent 81%,
+      transparent 100%
+    ),
+
+    /* dark Barça base */
+    linear-gradient(
+      105deg,
+      #030d20 0%,
+      #071b3b 42%,
+      #06132c 72%,
+      #020817 100%
+    );
+
+  --skin-c1: #06132c;
+  --skin-c2: #a50044;
+  --skin-c3: #004d98;
+
+  --skin-border: #a50044;
+  --skin-accent: #edbb3f;
+
+  --skin-text: #ffffff;
+  --skin-score: #ffffff;
 }
 
 
-/* ============================================================
-   NOTTINGHAM FOREST
-   ============================================================ */
-
 .home-panel[data-club="nottingham-forest"],
 .away-panel[data-club="nottingham-forest"] {
-
   --skin-c1: #ef3934;
   --skin-c2: #730b12;
   --skin-c3: #c8102e;
@@ -1917,39 +1816,127 @@ body {
   --skin-score: #ffffff;
 
   --skin-layout:
-    linear-gradient(145deg, #d71920 0%, #d71920 46%, #8e1015 46%, #8e1015 58%, #d71920 58%, #d71920 100%), linear-gradient(35deg, transparent 0%, transparent 72%, rgba(255,255,255,.13) 72%, rgba(255,255,255,.13) 100%)
-;
+    linear-gradient(145deg, #d71920 0%, #d71920 46%, #8e1015 46%, #8e1015 58%, #d71920 58%, #d71920 100%),
+    linear-gradient(35deg, transparent 0%, transparent 72%, rgba(255,255,255,.13) 72%, rgba(255,255,255,.13) 100%);
 }
 
 
 /* ============================================================
    LIGHT-SKIN TEXT PROTECTION
+   ALL CLUBS + COUNTRIES
    ============================================================ */
+
+.home-panel[data-club="brighton"] .team-name,
+.home-panel[data-club="brighton"] .score,
+.away-panel[data-club="brighton"] .team-name,
+.away-panel[data-club="brighton"] .score,
+
+.home-panel[data-club="liverpool"] .team-name,
+.home-panel[data-club="liverpool"] .score,
+.away-panel[data-club="liverpool"] .team-name,
+.away-panel[data-club="liverpool"] .score,
+
+.home-panel[data-club="arsenal"] .team-name,
+.home-panel[data-club="arsenal"] .score,
+.away-panel[data-club="arsenal"] .team-name,
+.away-panel[data-club="arsenal"] .score,
+
+.home-panel[data-club="chelsea"] .team-name,
+.home-panel[data-club="chelsea"] .score,
+.away-panel[data-club="chelsea"] .team-name,
+.away-panel[data-club="chelsea"] .score,
+
+.home-panel[data-club="manchester-city"] .team-name,
+.home-panel[data-club="manchester-city"] .score,
+.away-panel[data-club="manchester-city"] .team-name,
+.away-panel[data-club="manchester-city"] .score,
+
+.home-panel[data-club="manchester-united"] .team-name,
+.home-panel[data-club="manchester-united"] .score,
+.away-panel[data-club="manchester-united"] .team-name,
+.away-panel[data-club="manchester-united"] .score,
+
+.home-panel[data-club="tottenham"] .team-name,
+.home-panel[data-club="tottenham"] .score,
+.away-panel[data-club="tottenham"] .team-name,
+.away-panel[data-club="tottenham"] .score,
+
+.home-panel[data-club="newcastle"] .team-name,
+.home-panel[data-club="newcastle"] .score,
+.away-panel[data-club="newcastle"] .team-name,
+.away-panel[data-club="newcastle"] .score,
+
+.home-panel[data-club="aston-villa"] .team-name,
+.home-panel[data-club="aston-villa"] .score,
+.away-panel[data-club="aston-villa"] .team-name,
+.away-panel[data-club="aston-villa"] .score,
+
+.home-panel[data-club="west-ham"] .team-name,
+.home-panel[data-club="west-ham"] .score,
+.away-panel[data-club="west-ham"] .team-name,
+.away-panel[data-club="west-ham"] .score,
+
+.home-panel[data-club="crystal-palace"] .team-name,
+.home-panel[data-club="crystal-palace"] .score,
+.away-panel[data-club="crystal-palace"] .team-name,
+.away-panel[data-club="crystal-palace"] .score,
+
+.home-panel[data-club="everton"] .team-name,
+.home-panel[data-club="everton"] .score,
+.away-panel[data-club="everton"] .team-name,
+.away-panel[data-club="everton"] .score,
 
 .home-panel[data-club="wolves"] .team-name,
 .home-panel[data-club="wolves"] .score,
 .away-panel[data-club="wolves"] .team-name,
 .away-panel[data-club="wolves"] .score,
 
+.home-panel[data-club="brentford"] .team-name,
+.home-panel[data-club="brentford"] .score,
+.away-panel[data-club="brentford"] .team-name,
+.away-panel[data-club="brentford"] .score,
+
+.home-panel[data-club="bournemouth"] .team-name,
+.home-panel[data-club="bournemouth"] .score,
+.away-panel[data-club="bournemouth"] .team-name,
+.away-panel[data-club="bournemouth"] .score,
+
+.home-panel[data-club="leicester"] .team-name,
+.home-panel[data-club="leicester"] .score,
+.away-panel[data-club="leicester"] .team-name,
+.away-panel[data-club="leicester"] .score,
+
 .home-panel[data-club="leeds"] .team-name,
 .home-panel[data-club="leeds"] .score,
 .away-panel[data-club="leeds"] .team-name,
 .away-panel[data-club="leeds"] .score,
+
+.home-panel[data-club="sunderland"] .team-name,
+.home-panel[data-club="sunderland"] .score,
+.away-panel[data-club="sunderland"] .team-name,
+.away-panel[data-club="sunderland"] .score,
 
 .home-panel[data-club="fulham"] .team-name,
 .home-panel[data-club="fulham"] .score,
 .away-panel[data-club="fulham"] .team-name,
 .away-panel[data-club="fulham"] .score,
 
+.home-panel[data-club="barcelona"] .team-name,
+.home-panel[data-club="barcelona"] .score,
+.away-panel[data-club="barcelona"] .team-name,
+.away-panel[data-club="barcelona"] .score,
+
+.home-panel[data-club="nottingham-forest"] .team-name,
+.home-panel[data-club="nottingham-forest"] .score,
+.away-panel[data-club="nottingham-forest"] .team-name,
+.away-panel[data-club="nottingham-forest"] .score,
+
+/* COUNTRIES */
+
 .home-panel[data-club="italy"] .team-name,
 .home-panel[data-club="italy"] .score,
 .away-panel[data-club="italy"] .team-name,
 .away-panel[data-club="italy"] .score,
-
-.home-panel[data-club="france"] .team-name,
-.home-panel[data-club="france"] .score,
-.away-panel[data-club="france"] .team-name,
-.away-panel[data-club="france"] .score,
 
 .home-panel[data-club="netherlands"] .team-name,
 .home-panel[data-club="netherlands"] .score,
@@ -1961,11 +1948,60 @@ body {
 .away-panel[data-club="germany"] .team-name,
 .away-panel[data-club="germany"] .score,
 
+.home-panel[data-club="france"] .team-name,
+.home-panel[data-club="france"] .score,
+.away-panel[data-club="france"] .team-name,
+.away-panel[data-club="france"] .score,
+
+.home-panel[data-club="portugal"] .team-name,
+.home-panel[data-club="portugal"] .score,
+.away-panel[data-club="portugal"] .team-name,
+.away-panel[data-club="portugal"] .score,
+
+.home-panel[data-club="wales"] .team-name,
+.home-panel[data-club="wales"] .score,
+.away-panel[data-club="wales"] .team-name,
+.away-panel[data-club="wales"] .score,
+
+.home-panel[data-club="turkey"] .team-name,
+.home-panel[data-club="turkey"] .score,
+.away-panel[data-club="turkey"] .team-name,
+.away-panel[data-club="turkey"] .score,
+
+.home-panel[data-club="belgium"] .team-name,
+.home-panel[data-club="belgium"] .score,
+.away-panel[data-club="belgium"] .team-name,
+.away-panel[data-club="belgium"] .score,
+
 .home-panel[data-club="spain"] .team-name,
 .home-panel[data-club="spain"] .score,
 .away-panel[data-club="spain"] .team-name,
-.away-panel[data-club="spain"] .score {
+.away-panel[data-club="spain"] .score,
 
+.home-panel[data-club="slovenia"] .team-name,
+.home-panel[data-club="slovenia"] .score,
+.away-panel[data-club="slovenia"] .team-name,
+.away-panel[data-club="slovenia"] .score,
+
+.home-panel[data-club="serbia"] .team-name,
+.home-panel[data-club="serbia"] .score,
+.away-panel[data-club="serbia"] .team-name,
+.away-panel[data-club="serbia"] .score,
+
+.home-panel[data-club="norway"] .team-name,
+.home-panel[data-club="norway"] .score,
+.away-panel[data-club="norway"] .team-name,
+.away-panel[data-club="norway"] .score,
+
+.home-panel[data-club="scotland"] .team-name,
+.home-panel[data-club="scotland"] .score,
+.away-panel[data-club="scotland"] .team-name,
+.away-panel[data-club="scotland"] .score,
+
+.home-panel[data-club="england"] .team-name,
+.home-panel[data-club="england"] .score,
+.away-panel[data-club="england"] .team-name,
+.away-panel[data-club="england"] .score {
   text-shadow:
     0 1px 0 rgba(255,255,255,.24),
     0 2px 2px rgba(0,0,0,.40);
@@ -2033,7 +2069,9 @@ body {
 .away-panel[data-club="england"] .team-name,
 .away-panel[data-club="england"] .score {
   color: #ffffff;
+
   -webkit-text-stroke: 1.25px #000000;
+
   text-shadow:
     -1px -1px 0 #000000,
      1px -1px 0 #000000,
@@ -2063,14 +2101,6 @@ body {
 .home-panel[data-club="chelsea"] .score,
 .away-panel[data-club="chelsea"] .team-name,
 .away-panel[data-club="chelsea"] .score,
-.home-panel[data-club="man-united"] .team-name,
-.home-panel[data-club="man-united"] .score,
-.away-panel[data-club="man-united"] .team-name,
-.away-panel[data-club="man-united"] .score,
-.home-panel[data-club="man-city"] .team-name,
-.home-panel[data-club="man-city"] .score,
-.away-panel[data-club="man-city"] .team-name,
-.away-panel[data-club="man-city"] .score,
 .home-panel[data-club="tottenham"] .team-name,
 .home-panel[data-club="tottenham"] .score,
 .away-panel[data-club="tottenham"] .team-name,
@@ -2123,12 +2153,18 @@ body {
 .home-panel[data-club="fulham"] .score,
 .away-panel[data-club="fulham"] .team-name,
 .away-panel[data-club="fulham"] .score,
+.home-panel[data-club="barcelona"] .team-name,
+.home-panel[data-club="barcelona"] .score,
+.away-panel[data-club="barcelona"] .team-name,
+.away-panel[data-club="barcelona"] .score,
 .home-panel[data-club="nottingham-forest"] .team-name,
 .home-panel[data-club="nottingham-forest"] .score,
 .away-panel[data-club="nottingham-forest"] .team-name,
 .away-panel[data-club="nottingham-forest"] .score {
   color: #ffffff;
+
   -webkit-text-stroke: 1.25px #000000;
+
   text-shadow:
     -1px -1px 0 #000000,
      1px -1px 0 #000000,
@@ -2150,12 +2186,82 @@ body {
 .club-logo,
 .competition-logo,
 .centre {
-
   backface-visibility:
     hidden;
 
   transform:
     translateZ(0);
+}
+
+
+/* ============================================================
+   GOAL SCORERS
+   ============================================================ */
+
+.goal-scorers {
+  position: absolute;
+
+  top: 150px;
+
+  z-index: 50;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+
+  pointer-events: none;
+}
+
+
+.home-goal-scorers {
+  left: 34px;
+
+  align-items: flex-start;
+}
+
+
+.away-goal-scorers {
+  right: 34px;
+
+  align-items: flex-end;
+}
+
+
+.goal-scorer {
+  display: flex;
+  align-items: center;
+
+  gap: 15px;
+
+  color: #ffffff;
+
+  font-size: 35px;
+  font-weight: 700;
+
+  line-height: 60px;
+
+  white-space: nowrap;
+
+  text-shadow:
+    0 2px 6px rgba(0,0,0,.9);
+
+  -webkit-font-smoothing: antialiased;
+}
+
+
+.goal-scorer img {
+  width: 50px;
+  height: 50px;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+
+  flex-shrink: 0;
+
+  display: block;
 }
 
 

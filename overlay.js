@@ -70,6 +70,9 @@ let state = {
   homeScore: 0,
   awayScore: 0,
 
+  homeScorers: [],
+  awayScorers: [],
+
   elapsedMs: 0,
   running: false,
   startedAt: null
@@ -147,6 +150,18 @@ const timer =
   );
 
 
+const homeScorersEl =
+  document.getElementById(
+    "home-scorers"
+  );
+
+
+const awayScorersEl =
+  document.getElementById(
+    "away-scorers"
+  );
+
+
 /* ============================================================
    CLOCK
 ============================================================ */
@@ -218,6 +233,68 @@ function getElapsedSeconds() {
         clockStartTime
       ) / 1000
     )
+  );
+
+}
+
+
+/* ============================================================
+   GOAL SCORERS
+============================================================ */
+
+function renderScorers(side, scorers) {
+
+  const container =
+    side === "home"
+      ? homeScorersEl
+      : awayScorersEl;
+
+
+  container.innerHTML = "";
+
+
+  if (!Array.isArray(scorers)) {
+    return;
+  }
+
+
+  scorers.forEach(
+    scorer => {
+
+      const row =
+        document.createElement("div");
+
+      row.className =
+        "goal-scorer";
+
+
+      const image =
+        document.createElement("img");
+
+      image.src =
+        scorer.profile ||
+        "assets/players/default.png";
+
+      image.alt =
+        "";
+
+
+      const text =
+        document.createElement("span");
+
+      text.textContent =
+        scorer.name +
+        " " +
+        scorer.time +
+        "'";
+
+
+      row.appendChild(image);
+      row.appendChild(text);
+
+      container.appendChild(row);
+
+    }
   );
 
 }
@@ -300,8 +377,25 @@ function render() {
     "#000000"
   );
 
-  homePanel.dataset.club = state.homeClub || "";
-  awayPanel.dataset.club = state.awayClub || "";
+
+  homePanel.dataset.club =
+    state.homeClub || "";
+
+
+  awayPanel.dataset.club =
+    state.awayClub || "";
+
+
+  renderScorers(
+    "home",
+    state.homeScorers
+  );
+
+
+  renderScorers(
+    "away",
+    state.awayScorers
+  );
 
 
   timer.textContent =
@@ -454,11 +548,6 @@ function createPeer() {
             "CONTROL CONNECTION OPEN"
           );
 
-
-          /*
-           * Ask the control panel for its
-           * current state.
-           */
 
           connection.send({
             type: "request-state"
