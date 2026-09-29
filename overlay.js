@@ -53,10 +53,10 @@ let state = {
   awayClub: "",
 
   homeLogo:
-    "assets/clubs-and-countries/default.png",
+    "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790691349/clubflagicon.png",
 
   awayLogo:
-    "assets/clubs-and-countries/default.png",
+    "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790691349/clubflagicon.png",
 
   homeColor: "#7a7a7a",
   homeSecondary: "#000",
@@ -65,7 +65,7 @@ let state = {
   awaySecondary: "#000",
 
   competitionLogo:
-    "assets/competitions/premier-league.png",
+    "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790692020/premier-league.png",
 
   homeScore: 0,
   awayScore: 0,

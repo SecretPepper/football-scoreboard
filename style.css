@@ -202,7 +202,7 @@ body {
 
 .home-panel {
   border-radius:
-    13px 0 0 13px;
+    13px;
 
   clip-path:
     polygon(
@@ -229,7 +229,7 @@ body {
 
 .away-panel {
   border-radius:
-    0 13px 13px 0;
+    13px;
 
   clip-path:
     polygon(
@@ -239,6 +239,18 @@ body {
       0 100%,
       1.8% 50%
     );
+}
+
+/* ============================================================
+   FIX PANEL CORNER ARTIFACTS
+   ============================================================ */
+
+.home-panel,
+.away-panel {
+  border-radius: 13px;
+  overflow: hidden;
+  -webkit-clip-path: inherit;
+  clip-path: inherit;
 }
 
 
@@ -283,6 +295,7 @@ body {
     inset 0 1px 0 rgba(255,255,255,.12),
     inset 0 -1px 0 rgba(0,0,0,.55);
 }
+
 
 
 /* ============================================================
@@ -1399,6 +1412,177 @@ body {
     );
 }
 
+/* ============================================================
+   CZECHIA 🇨🇿
+   ============================================================ */
+
+.away-panel[data-club="czechia"] {
+
+  --skin-c1: #ffffff;
+  --skin-c2: #d7141a;
+  --skin-c3: #11457e;
+
+  --skin-border: #ffffff;
+  --skin-accent: #11457e;
+  --skin-text: #111111;
+  --skin-score: #111111;
+
+  /* WHITE / RED FLAG */
+  background-image:
+    linear-gradient(
+      180deg,
+      #ffffff 0 50%,
+      #d7141a 50% 100%
+    );
+}
+
+/* BLUE TRIANGLE */
+.away-panel[data-club="czechia"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  background: #11457e;
+
+  clip-path: polygon(
+    0 0,
+    28% 50%,
+    0 100%
+  );
+
+  transform: translateX(45px);
+  pointer-events: none;
+}
+
+.home-panel[data-club="czechia"] {
+
+  --skin-c1: #ffffff;
+  --skin-c2: #d7141a;
+  --skin-c3: #11457e;
+
+  --skin-border: #ffffff;
+  --skin-accent: #11457e;
+  --skin-text: #111111;
+  --skin-score: #111111;
+
+  /* WHITE / RED FLAG */
+  background-image:
+    linear-gradient(
+      180deg,
+      #ffffff 0 50%,
+      #d7141a 50% 100%
+    );
+}
+
+/* BLUE TRIANGLE */
+.home-panel[data-club="czechia"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  background: #11457e;
+
+  clip-path: polygon(
+    0 0,
+    28% 50%,
+    0 100%
+  );
+
+  transform: none;
+  pointer-events: none;
+}
+
+/* ============================================================
+   CROATIA 🇭🇷
+   ============================================================ */
+
+.home-panel[data-club="croatia"],
+.away-panel[data-club="croatia"] {
+
+  --skin-c1: #ff0000;
+  --skin-c2: #ffffff;
+  --skin-c3: #171796;
+
+  --skin-border: #ffffff;
+  --skin-accent: #ff0000;
+  --skin-text: #111111;
+  --skin-score: #111111;
+
+  --skin-layout:
+    /* TOP RED */
+    linear-gradient(
+      to bottom,
+      #ff0000 0%,
+      #ff0000 33.333%,
+      transparent 33.333%,
+      transparent 100%
+    ),
+
+    /* BOTTOM BLUE */
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      transparent 66.666%,
+      #171796 66.666%,
+      #171796 100%
+    ),
+
+    /* MIDDLE CHECKERBOARD */
+    repeating-conic-gradient(
+      #ff0000 0deg 90deg,
+      #ffffff 90deg 180deg
+    );
+}
+
+
+/* AWAY PANEL */
+.away-panel[data-club="croatia"] {
+
+  background-image: var(--skin-layout);
+
+  background-size:
+    100% 100%,
+    100% 100%,
+    16px 16px;
+
+  background-repeat:
+    no-repeat,
+    no-repeat,
+    repeat;
+
+  background-position:
+    0 0,
+    0 0,
+    0 0;
+}
+
+
+/* HOME PANEL */
+.home-panel[data-club="croatia"]::before {
+
+  background-image: var(--skin-layout);
+
+  background-size:
+    100% 100%,
+    100% 100%,
+    16px 16px;
+
+  background-repeat:
+    no-repeat,
+    no-repeat,
+    repeat;
+
+  background-position:
+    0 0,
+    0 0,
+    0 0;
+
+  transform: scaleX(-1);
+}
+
+
 
 .home-panel[data-club="portugal"],
 .away-panel[data-club="portugal"] {
@@ -1998,6 +2182,16 @@ body {
 .away-panel[data-club="scotland"] .team-name,
 .away-panel[data-club="scotland"] .score,
 
+.home-panel[data-club="croatia"] .team-name,
+.home-panel[data-club="croatia"] .score,
+.away-panel[data-club="croatia"] .team-name,
+.away-panel[data-club="croatia"] .score,
+
+.home-panel[data-club="czechia"] .team-name,
+.home-panel[data-club="czechia"] .score,
+.away-panel[data-club="czechia"] .team-name,
+.away-panel[data-club="czechia"] .score,
+
 .home-panel[data-club="england"] .team-name,
 .home-panel[data-club="england"] .score,
 .away-panel[data-club="england"] .team-name,
@@ -2016,6 +2210,14 @@ body {
 .home-panel[data-club="italy"] .score,
 .away-panel[data-club="italy"] .team-name,
 .away-panel[data-club="italy"] .score,
+.home-panel[data-club="croatia"] .team-name,
+.home-panel[data-club="croatia"] .score,
+.away-panel[data-club="croatia"] .team-name,
+.away-panel[data-club="croatia"] .score,
+.home-panel[data-club="czechia"] .team-name,
+.home-panel[data-club="czechia"] .score,
+.away-panel[data-club="czechia"] .team-name,
+.away-panel[data-club="czechia"] .score,
 .home-panel[data-club="netherlands"] .team-name,
 .home-panel[data-club="netherlands"] .score,
 .away-panel[data-club="netherlands"] .team-name,
@@ -2219,6 +2421,10 @@ body {
   left: 34px;
 
   align-items: flex-start;
+}
+
+.home-goal-scorers .goal-scorer {
+  flex-direction: row-reverse;
 }
 
 
