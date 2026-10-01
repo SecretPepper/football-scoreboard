@@ -1336,10 +1336,10 @@ body {
     linear-gradient(
       180deg,
       var(--skin-c1) 0%,
-      var(--skin-c1) 33.333%,
-      var(--skin-c2) 33.333%,
-      var(--skin-c2) 66.666%,
-      var(--skin-c3) 66.666%,
+      var(--skin-c1) 20%,
+      var(--skin-c2) 20%,
+      var(--skin-c2) 80%,
+      var(--skin-c3) 80%,
       var(--skin-c3) 100%
     );
 }
@@ -1612,27 +1612,165 @@ body {
   --skin-score: #ffffff;
 }
 
+/* ============================================================
+   WALES 🐉
+   ============================================================ */
 
 .home-panel[data-club="wales"],
 .away-panel[data-club="wales"] {
-  --skin-c1: #ed233b;
-  --skin-c2: #780819;
-  --skin-c3: #c8102e;
+  --skin-c1: #c8102e;
+  --skin-c2: #ffffff;
+  --skin-c3: #008a3b;
+
+  --skin-border: #ffffff;
+  --skin-accent: #c8102e;
+  --skin-text: #ffffff;
+  --skin-score: #ffffff;
+
+  position: relative;
+  overflow: hidden;
+
+  /* Welsh flag */
+  background-image:
+    url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyODIgMjE5Ij48cGF0aCBmaWxsPSIjYzgxMDJlIiBkPSJNMCAzOSBMNiA0NSBMMjQgNjMgTDI0IDU1IEw1MCA1NSBMNTAgNTggTDQ2IDU4IEw0OCA2MSBMNDggNzAgTDUxIDc4IEw1MyA3NiBMNTQgNjkgTDU2IDY2IEw1OCA2OSBMNjMgNjIgTDcxIDYyIEw2NiA2NyBMNjcgNzIgTDYyIDc2IEw2MSA4NSBMNTcgODkgTDU2IDk1IEw1MSAxMDMgTDUyIDExMSBMNDggMTE5IEw1MSAxMjggTDQ5IDEzMiBMNDYgMTMwIEw0MSAxMzAgTDM4IDEyNiBMMzQgMTI0IEwzMyAxMjAgTDI5IDExOCBMMjggMTEwIEwyNyAxMTAgTDI0IDkwIEwzMCA4MiBMMjkgNzEgTDI2IDY4IEwyNCA2OCBMMjUgNzYgTDIzIDc3IEwxOCA2OCBMMTUgNjUgTDEwIDY0IEwxNCA3MSBMMTAgNzcgTDYgNzIgTDAgNzAgTDQgNzcgTDEgODUgTDMgODcgTDMgOTIgTDcgOTYgTDYgMTA2IEw5IDExMSBMOSAxMTQgTDUgMTE3IEw1IDEyMiBMMyAxMjQgTDQgMTI3IEw4IDEzMCBMMyAxMzcgTDEwIDEzNiBMMTMgMTMzIEwxNSAxMjcgTDE4IDEyNyBMMjUgMTQxIEw0NSAxNjYgTDQ0IDE4MSBMNTEgMTc0IEw1NSAxNjQgTDY0IDE2MiBMNjYgMTY1IEw2MyAxNjkgTDY0IDE3MyBMNjAgMTc5IEw2MCAxODQgTDUyIDE5NCBMNDMgMTk0IEwzMiAxODcgTDI3IDE4NyBMMjAgMTkxIEwxOSAxOTQgTDI4IDE5NCBMMjcgMTk2IEwyMSAxOTkgTDE1IDIwNyBMMTYgMjA4IEwyNCAyMDQgTDI4IDIwOCBMMjQgMjEyIEwyMiAyMTcgTDIzIDIxOCBMMjggMjE0IEwzNyAyMTYgTDM5IDIxNCBMNDQgMjE0IEw0OCAyMTAgTDU2IDIxMSBMNjEgMjA4IEw2NiAyMDggTDY5IDIxMSBMNzggMjEyIEw4MSAyMDggTDg0IDIwOCBMODkgMjEyIEw4OSAyMDggTDg1IDIwMyBMNzkgMjAwIEw2NyAxOTkgTDc3IDE4NyBMODggMTY5IEw5MSAxNzQgTDk0IDE4NSBMOTYgMTgxIEw5OCAxNjggTDEwMiAxNjkgTDEwOSAxNjUgTDExNyAxNjUgTDEyNCAxNjAgTDEzMCAxNTggTDEzMSAxNjQgTDE0MiAxNzcgTDE1MSAxNzcgTDE1NCAxODAgTDE1MSAxODMgTDE0OCAxODMgTDEzOCAxOTEgTDEyOCAxOTEgTDExNiAxODQgTDEwOCAxODUgTDEwMyAxOTAgTDExMCAxODkgTDExMiAxOTEgTDEwNSAxOTYgTDEwMCAyMDIgTDEwMCAyMDUgTDEwNiAyMDEgTDEwOCAyMDEgTDExMiAyMDUgTDEwOCAyMDkgTDEwNyAyMTUgTDExNCAyMTAgTDEyMSAyMTMgTDEyMyAyMTEgTDEyOCAyMTEgTDEzMiAyMDcgTDE0MiAyMDcgTDE0NyAyMDQgTDE1MCAyMDQgTDE1MyAyMDcgTDE1NyAyMDcgTDE2MCAyMDkgTDE2MiAyMDkgTDE2NiAyMDQgTDE3MyAyMDkgTDE3MyAyMDQgTDE2OCAxOTkgTDE1NyAxOTYgTDE3MCAxODkgTDE4MyAxNzUgTDE4OSAxNzUgTDE5NiAxODAgTDE5NCAxNzMgTDE4OCAxNjcgTDE3NCAxNjMgTDE3MCAxNjAgTDE2OSAxNTQgTDE3NiAxNDQgTDE4MSAxNDYgTDE4NSAxNTEgTDE5MCAxNTMgTDE5NSAxNTIgTDE5OCAxNTUgTDIwNSAxNTUgTDIwOCAxNTMgTDIxMCAxNTUgTDIxNyAxNTQgTDIyNyAxNjEgTDIyNyAxNjUgTDIyOSAxNjcgTDIyOCAxNzMgTDIzMCAxNzYgTDIyOCAxODAgTDIzMCAxODUgTDIyNiAxOTEgTDIxOSAxOTIgTDIwNiAxODUgTDE5OSAxODUgTDE5MyAxOTAgTDIwMSAxOTEgTDE5MSAyMDAgTDE4OSAyMDUgTDE5NSAyMDIgTDE5OCAyMDIgTDIwMyAyMDUgTDE5OSAyMDggTDE5NiAyMTUgTDIwMyAyMTEgTDIxMSAyMTMgTDIxMyAyMTEgTDIxOCAyMTEgTDIyMiAyMDcgTDIyOSAyMDggTDIzNSAyMDUgTDI0MCAyMDUgTDI0MiAyMDcgTDI0NiAyMDcgTDI0OSAyMDkgTDI1MiAyMDkgTDI1NiAyMDUgTDI2MyAyMTAgTDI2MyAyMDYgTDI1OCAyMDAgTDI1MyAxOTcgTDI0NiAxOTcgTDI0NCAxOTUgTDI0NCAxODYgTDI0OCAxNzAgTDI0NyAxNTUgTDI0OSAxNTQgTDI2MyAxNjEgTDI1NiAxNDkgTDI1MiAxNDUgTDIzMCAxMzQgTDIyNiAxMzAgTDI0OSAxMjMgTDI1NiAxMTggTDI2MyAxMTAgTDI2NyA5OCBMMjY2IDgzIEwyNzEgNjQgTDI3NiA3MyBMMjgxIDc4IEwyNzYgNTQgTDI3NCAzMCBMMjU5IDU0IEwyNDYgNjcgTDI0NiA2OSBMMjUyIDY4IEwyNjIgNjMgTDI2MyA2NCBMMjYwIDc1IEwyNTcgNzYgTDI0NyA3MiBMMjM4IDczIEwyMzAgNzcgTDIyNCA4NSBMMjI1IDk2IEwyMzQgMTAzIEwyNDYgMTAzIEwyNDcgMTA0IEwyNDUgMTA2IEwyMzUgMTA5IEwyMjUgMTA5IEwyMDQgMTAzIEwxODYgMTAwIEwxODcgOTggTDE5OCA5NCBMMjA1IDk3IEwyMTMgOTYgTDIxNCA5NCBMMjA3IDkwIEwyMDcgODMgTDIwOSA3NyBMMjE0IDcyIEwyMjkgNjUgTDI0MiA2NSBMMjQ3IDY0IEwyNTAgNjEgTDI1MCA1OSBMMjQxIDU5IEwyMzggNTUgTDIzNyA0OCBMMjQxIDM5IEwyNTEgMzAgTDI1OCAyOCBMMjYxIDI1IEwyNjEgMjIgTDIzMCAzMCBMMjI1IDI5IEwyMjggMjAgTDIzNiAxMSBMMjQ0IDcgTDI0NSAyIEwxNzYgMjcgTDE1MCAzOSBMMTM4IDQ3IEwxMjQgNjEgTDExOSA3MCBMMTI1IDc4IEwxMjYgOTAgTDEyMyAxMDAgTDExOCAxMDggTDExNCAxMDggTDEwOCAxMDUgTDEwNCAxMDAgTDEwMiA5MyBMMTE3IDkzIEwxMTEgODYgTDEwMiA4MCBMMTA0IDc3IEwxMTIgNzcgTDExOSA3OSBMMTEwIDY5IEwxMDQgNjUgTDEwNSA2MiBMMTE0IDYxIEwxMjAgNjMgTDExNSA1NiBMMTA2IDUwIEwxMDcgNDcgTDEyMCA0NyBMMTE1IDQyIEwxMDIgMzUgTDEwNCAzMyBMMTAxIDI5IEwxMDUgMjQgTDEwOCAyMyBMMTAyIDE5IEwxMDIgNSBMOTUgMTQgTDg4IDE4IEw4NyAxNiBMODkgMTMgTDgyIDEyIEw3NyAyIEw3NCAxIEw3NCAyMyBMNjAgMjMgTDU0IDI4IEw0OSAyOCBMNDYgMzEgTDQzIDMwIEwzNiAzNSBMMjggMzYgTDIyIDQwIEwzOCA0MiBMMzkgNDUgTDQ0IDQ5IEw0MSA1MSBMMjcgNTEgTDI2IDQ5IEwyOCA0NiBMMTYgNDUgTDQgMzggWiIvPjwvc3ZnPg=="),
+    linear-gradient(
+      to bottom,
+      #ffffff 0%,
+      #ffffff 50%,
+      #008a3b 50%,
+      #008a3b 100%
+    ) !important;
+
+  background-repeat: no-repeat, no-repeat !important;
+
+  background-position:
+    center center,
+    center center !important;
+
+  /*
+    Smaller dragon.
+    The first value controls the dragon.
+    */
+  background-size:
+    25% auto,
+    100% 100% !important;
+}
+
+/* Make absolutely sure no old overlay removes the flag */
+.home-panel[data-club="wales"]::before,
+.home-panel[data-club="wales"]::after,
+.away-panel[data-club="wales"]::before,
+.away-panel[data-club="wales"]::after {
+  content: none !important;
+  background: none !important;
+}
+
+/* ============================================================
+   GREECE 🇬🇷
+   Actual Greek flag construction
+   ============================================================ */
+
+.home-panel[data-club="greece"],
+.away-panel[data-club="greece"] {
+  --skin-c1: #0d5eaf;
+  --skin-c2: #ffffff;
+  --skin-c3: #0d5eaf;
 
   --skin-border: #ffffff;
   --skin-accent: #ffffff;
   --skin-text: #ffffff;
   --skin-score: #ffffff;
 
-  --skin-layout:
+  position: relative;
+  overflow: hidden;
+
+  /*
+    9 equal horizontal stripes:
+    BLUE / WHITE / BLUE / WHITE / BLUE /
+    WHITE / BLUE / WHITE / BLUE
+  */
+  background-image:
     linear-gradient(
-      125deg,
-      var(--skin-c1) 0%,
-      var(--skin-c1) 43%,
-      var(--skin-c2) 100%
+      to bottom,
+      #0d5eaf 0%,
+      #0d5eaf 11.111%,
+      #ffffff 11.111%,
+      #ffffff 22.222%,
+      #0d5eaf 22.222%,
+      #0d5eaf 33.333%,
+      #ffffff 33.333%,
+      #ffffff 44.444%,
+      #0d5eaf 44.444%,
+      #0d5eaf 55.555%,
+      #ffffff 55.555%,
+      #ffffff 66.666%,
+      #0d5eaf 66.666%,
+      #0d5eaf 77.777%,
+      #ffffff 77.777%,
+      #ffffff 88.888%,
+      #0d5eaf 88.888%,
+      #0d5eaf 100%
     );
+
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
 }
 
+/* ============================================================
+   BLUE CANTON + WHITE GREEK CROSS
+   ============================================================ */
+
+.home-panel[data-club="greece"]::before,
+.away-panel[data-club="greece"]::before {
+  content: "";
+
+  position: absolute;
+  z-index: 2;
+
+  left: 0;
+  top: 0;
+
+  /*
+    Canton = 5 stripe widths high.
+    Since the flag is 2:3, this produces the
+    correct square canton.
+  */
+  width: 55.555%;
+  height: 55.555%;
+
+  background:
+    /* White vertical arm */
+    linear-gradient(
+      to right,
+      transparent 0%,
+      transparent 45%,
+      #ffffff 45%,
+      #ffffff 55%,
+      transparent 55%,
+      transparent 100%
+    ),
+
+    /* White horizontal arm */
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      transparent 40%,
+      #ffffff 40%,
+      #ffffff 60%,
+      transparent 60%,
+      transparent 100%
+    ),
+
+    /* Blue canton */
+    #0d5eaf;
+
+  background-repeat:
+    no-repeat,
+    no-repeat,
+    no-repeat;
+
+  pointer-events: none;
+}
 
 .home-panel[data-club="turkey"],
 .away-panel[data-club="turkey"] {
@@ -2192,6 +2330,11 @@ body {
 .away-panel[data-club="czechia"] .team-name,
 .away-panel[data-club="czechia"] .score,
 
+.home-panel[data-club="greece"] .team-name,
+.home-panel[data-club="greece"] .score,
+.away-panel[data-club="greece"] .team-name,
+.away-panel[data-club="greece"] .score,
+
 .home-panel[data-club="england"] .team-name,
 .home-panel[data-club="england"] .score,
 .away-panel[data-club="england"] .team-name,
@@ -2214,6 +2357,10 @@ body {
 .home-panel[data-club="croatia"] .score,
 .away-panel[data-club="croatia"] .team-name,
 .away-panel[data-club="croatia"] .score,
+.home-panel[data-club="greece"] .team-name,
+.home-panel[data-club="greece"] .score,
+.away-panel[data-club="greece"] .team-name,
+.away-panel[data-club="greece"] .score,
 .home-panel[data-club="czechia"] .team-name,
 .home-panel[data-club="czechia"] .score,
 .away-panel[data-club="czechia"] .team-name,
