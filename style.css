@@ -1297,11 +1297,32 @@ body {
    COUNTRIES
    ============================================================ */
 
-.home-panel[data-club="italy"],
 .away-panel[data-club="italy"] {
-  --skin-c1: #009246;
+  --skin-c1: #008C45;
   --skin-c2: #f1f1f1;
-  --skin-c3: #ce2b37;
+  --skin-c3: #CD212A;
+
+  --skin-border: #ffffff;
+  --skin-accent: #ffffff;
+  --skin-text: #111111;
+  --skin-score: #111111;
+
+  --skin-layout:
+    linear-gradient(
+      90deg,
+      var(--skin-c1) 0%,
+      var(--skin-c1) 33.333%,
+      var(--skin-c2) 33.333%,
+      var(--skin-c2) 66.666%,
+      var(--skin-c3) 66.666%,
+      var(--skin-c3) 100%
+    );
+}
+
+.home-panel[data-club="italy"] {
+  --skin-c1: #CD212A;
+  --skin-c2: #f1f1f1;
+  --skin-c3: #008C45;
 
   --skin-border: #ffffff;
   --skin-accent: #ffffff;
@@ -1336,10 +1357,10 @@ body {
     linear-gradient(
       180deg,
       var(--skin-c1) 0%,
-      var(--skin-c1) 20%,
-      var(--skin-c2) 20%,
-      var(--skin-c2) 80%,
-      var(--skin-c3) 80%,
+      var(--skin-c1) 25%,
+      var(--skin-c2) 25%,
+      var(--skin-c2) 75%,
+      var(--skin-c3) 75%,
       var(--skin-c3) 100%
     );
 }
@@ -1360,21 +1381,21 @@ body {
     linear-gradient(
       180deg,
       var(--skin-c1) 0%,
-      var(--skin-c1) 33.333%,
-      var(--skin-c2) 33.333%,
-      var(--skin-c2) 66.666%,
-      var(--skin-c3) 66.666%,
+      var(--skin-c1) 25%,
+      var(--skin-c2) 25%,
+      var(--skin-c2) 75%,
+      var(--skin-c3) 75%,
       var(--skin-c3) 100%
     );
 }
 
 .away-panel[data-club="france"] {
-  --skin-c1: #0055a4;
+  --skin-c1: #000091;
   --skin-c2: #f4f4f4;
-  --skin-c3: #ef4135;
+  --skin-c3: #E1000F;
 
   --skin-border: #ffffff;
-  --skin-accent: #0055a4;
+  --skin-accent: #000091;
   --skin-text: #111111;
   --skin-score: #111111;
 
@@ -1391,12 +1412,12 @@ body {
 }
 
 .home-panel[data-club="france"] {
-  --skin-c1: #ef4135;
+  --skin-c1: #E1000F;
   --skin-c2: #f4f4f4;
-  --skin-c3: #0055a4;
+  --skin-c3: #000091;
 
   --skin-border: #ffffff;
-  --skin-accent: #0055a4;
+  --skin-accent: #000091;
   --skin-text: #111111;
   --skin-score: #111111;
 
@@ -1582,9 +1603,6 @@ body {
   transform: scaleX(-1);
 }
 
-
-
-.home-panel[data-club="portugal"],
 .away-panel[data-club="portugal"] {
   --skin-layout:
     radial-gradient(
@@ -1612,11 +1630,37 @@ body {
   --skin-score: #ffffff;
 }
 
+.home-panel[data-club="portugal"] {
+  --skin-layout:
+    radial-gradient(
+      circle at 32% 50%,
+      #ffcd00 0%,
+      #ffcd00 9%,
+      transparent 9.5%,
+      transparent 100%
+    ),
+    linear-gradient(
+      90deg,
+      #da291c 0%,
+      #da291c 32%,
+      #046a38 32%,
+      #046a38 100%
+    );
+
+  --skin-c1: #046a38;
+  --skin-c2: #da291c;
+  --skin-c3: #ffcd00;
+
+  --skin-border: #ffcd00;
+  --skin-accent: #ffcd00;
+  --skin-text: #ffffff;
+  --skin-score: #ffffff;
+}
+
 /* ============================================================
    WALES 🐉
    ============================================================ */
 
-.home-panel[data-club="wales"],
 .away-panel[data-club="wales"] {
   --skin-c1: #c8102e;
   --skin-c2: #ffffff;
@@ -1644,7 +1688,53 @@ body {
   background-repeat: no-repeat, no-repeat !important;
 
   background-position:
-    center center,
+    15% center,
+    center center !important;
+
+  /*
+    Smaller dragon.
+    The first value controls the dragon.
+    */
+  background-size:
+    25% auto,
+    100% 100% !important;
+}
+
+/* Make absolutely sure no old overlay removes the flag */
+.away-panel[data-club="wales"]::before,
+.away-panel[data-club="wales"]::after {
+  content: none !important;
+  background: none !important;
+}
+
+.home-panel[data-club="wales"] {
+  --skin-c1: #c8102e;
+  --skin-c2: #ffffff;
+  --skin-c3: #008a3b;
+
+  --skin-border: #ffffff;
+  --skin-accent: #c8102e;
+  --skin-text: #ffffff;
+  --skin-score: #ffffff;
+
+  position: relative;
+  overflow: hidden;
+
+  /* Welsh flag */
+  background-image:
+    url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyODIgMjE5Ij48cGF0aCBmaWxsPSIjYzgxMDJlIiBkPSJNMCAzOSBMNiA0NSBMMjQgNjMgTDI0IDU1IEw1MCA1NSBMNTAgNTggTDQ2IDU4IEw0OCA2MSBMNDggNzAgTDUxIDc4IEw1MyA3NiBMNTQgNjkgTDU2IDY2IEw1OCA2OSBMNjMgNjIgTDcxIDYyIEw2NiA2NyBMNjcgNzIgTDYyIDc2IEw2MSA4NSBMNTcgODkgTDU2IDk1IEw1MSAxMDMgTDUyIDExMSBMNDggMTE5IEw1MSAxMjggTDQ5IDEzMiBMNDYgMTMwIEw0MSAxMzAgTDM4IDEyNiBMMzQgMTI0IEwzMyAxMjAgTDI5IDExOCBMMjggMTEwIEwyNyAxMTAgTDI0IDkwIEwzMCA4MiBMMjkgNzEgTDI2IDY4IEwyNCA2OCBMMjUgNzYgTDIzIDc3IEwxOCA2OCBMMTUgNjUgTDEwIDY0IEwxNCA3MSBMMTAgNzcgTDYgNzIgTDAgNzAgTDQgNzcgTDEgODUgTDMgODcgTDMgOTIgTDcgOTYgTDYgMTA2IEw5IDExMSBMOSAxMTQgTDUgMTE3IEw1IDEyMiBMMyAxMjQgTDQgMTI3IEw4IDEzMCBMMyAxMzcgTDEwIDEzNiBMMTMgMTMzIEwxNSAxMjcgTDE4IDEyNyBMMjUgMTQxIEw0NSAxNjYgTDQ0IDE4MSBMNTEgMTc0IEw1NSAxNjQgTDY0IDE2MiBMNjYgMTY1IEw2MyAxNjkgTDY0IDE3MyBMNjAgMTc5IEw2MCAxODQgTDUyIDE5NCBMNDMgMTk0IEwzMiAxODcgTDI3IDE4NyBMMjAgMTkxIEwxOSAxOTQgTDI4IDE5NCBMMjcgMTk2IEwyMSAxOTkgTDE1IDIwNyBMMTYgMjA4IEwyNCAyMDQgTDI4IDIwOCBMMjQgMjEyIEwyMiAyMTcgTDIzIDIxOCBMMjggMjE0IEwzNyAyMTYgTDM5IDIxNCBMNDQgMjE0IEw0OCAyMTAgTDU2IDIxMSBMNjEgMjA4IEw2NiAyMDggTDY5IDIxMSBMNzggMjEyIEw4MSAyMDggTDg0IDIwOCBMODkgMjEyIEw4OSAyMDggTDg1IDIwMyBMNzkgMjAwIEw2NyAxOTkgTDc3IDE4NyBMODggMTY5IEw5MSAxNzQgTDk0IDE4NSBMOTYgMTgxIEw5OCAxNjggTDEwMiAxNjkgTDEwOSAxNjUgTDExNyAxNjUgTDEyNCAxNjAgTDEzMCAxNTggTDEzMSAxNjQgTDE0MiAxNzcgTDE1MSAxNzcgTDE1NCAxODAgTDE1MSAxODMgTDE0OCAxODMgTDEzOCAxOTEgTDEyOCAxOTEgTDExNiAxODQgTDEwOCAxODUgTDEwMyAxOTAgTDExMCAxODkgTDExMiAxOTEgTDEwNSAxOTYgTDEwMCAyMDIgTDEwMCAyMDUgTDEwNiAyMDEgTDEwOCAyMDEgTDExMiAyMDUgTDEwOCAyMDkgTDEwNyAyMTUgTDExNCAyMTAgTDEyMSAyMTMgTDEyMyAyMTEgTDEyOCAyMTEgTDEzMiAyMDcgTDE0MiAyMDcgTDE0NyAyMDQgTDE1MCAyMDQgTDE1MyAyMDcgTDE1NyAyMDcgTDE2MCAyMDkgTDE2MiAyMDkgTDE2NiAyMDQgTDE3MyAyMDkgTDE3MyAyMDQgTDE2OCAxOTkgTDE1NyAxOTYgTDE3MCAxODkgTDE4MyAxNzUgTDE4OSAxNzUgTDE5NiAxODAgTDE5NCAxNzMgTDE4OCAxNjcgTDE3NCAxNjMgTDE3MCAxNjAgTDE2OSAxNTQgTDE3NiAxNDQgTDE4MSAxNDYgTDE4NSAxNTEgTDE5MCAxNTMgTDE5NSAxNTIgTDE5OCAxNTUgTDIwNSAxNTUgTDIwOCAxNTMgTDIxMCAxNTUgTDIxNyAxNTQgTDIyNyAxNjEgTDIyNyAxNjUgTDIyOSAxNjcgTDIyOCAxNzMgTDIzMCAxNzYgTDIyOCAxODAgTDIzMCAxODUgTDIyNiAxOTEgTDIxOSAxOTIgTDIwNiAxODUgTDE5OSAxODUgTDE5MyAxOTAgTDIwMSAxOTEgTDE5MSAyMDAgTDE4OSAyMDUgTDE5NSAyMDIgTDE5OCAyMDIgTDIwMyAyMDUgTDE5OSAyMDggTDE5NiAyMTUgTDIwMyAyMTEgTDIxMSAyMTMgTDIxMyAyMTEgTDIxOCAyMTEgTDIyMiAyMDcgTDIyOSAyMDggTDIzNSAyMDUgTDI0MCAyMDUgTDI0MiAyMDcgTDI0NiAyMDcgTDI0OSAyMDkgTDI1MiAyMDkgTDI1NiAyMDUgTDI2MyAyMTAgTDI2MyAyMDYgTDI1OCAyMDAgTDI1MyAxOTcgTDI0NiAxOTcgTDI0NCAxOTUgTDI0NCAxODYgTDI0OCAxNzAgTDI0NyAxNTUgTDI0OSAxNTQgTDI2MyAxNjEgTDI1NiAxNDkgTDI1MiAxNDUgTDIzMCAxMzQgTDIyNiAxMzAgTDI0OSAxMjMgTDI1NiAxMTggTDI2MyAxMTAgTDI2NyA5OCBMMjY2IDgzIEwyNzEgNjQgTDI3NiA3MyBMMjgxIDc4IEwyNzYgNTQgTDI3NCAzMCBMMjU5IDU0IEwyNDYgNjcgTDI0NiA2OSBMMjUyIDY4IEwyNjIgNjMgTDI2MyA2NCBMMjYwIDc1IEwyNTcgNzYgTDI0NyA3MiBMMjM4IDczIEwyMzAgNzcgTDIyNCA4NSBMMjI1IDk2IEwyMzQgMTAzIEwyNDYgMTAzIEwyNDcgMTA0IEwyNDUgMTA2IEwyMzUgMTA5IEwyMjUgMTA5IEwyMDQgMTAzIEwxODYgMTAwIEwxODcgOTggTDE5OCA5NCBMMjA1IDk3IEwyMTMgOTYgTDIxNCA5NCBMMjA3IDkwIEwyMDcgODMgTDIwOSA3NyBMMjE0IDcyIEwyMjkgNjUgTDI0MiA2NSBMMjQ3IDY0IEwyNTAgNjEgTDI1MCA1OSBMMjQxIDU5IEwyMzggNTUgTDIzNyA0OCBMMjQxIDM5IEwyNTEgMzAgTDI1OCAyOCBMMjYxIDI1IEwyNjEgMjIgTDIzMCAzMCBMMjI1IDI5IEwyMjggMjAgTDIzNiAxMSBMMjQ0IDcgTDI0NSAyIEwxNzYgMjcgTDE1MCAzOSBMMTM4IDQ3IEwxMjQgNjEgTDExOSA3MCBMMTI1IDc4IEwxMjYgOTAgTDEyMyAxMDAgTDExOCAxMDggTDExNCAxMDggTDEwOCAxMDUgTDEwNCAxMDAgTDEwMiA5MyBMMTE3IDkzIEwxMTEgODYgTDEwMiA4MCBMMTA0IDc3IEwxMTIgNzcgTDExOSA3OSBMMTEwIDY5IEwxMDQgNjUgTDEwNSA2MiBMMTE0IDYxIEwxMjAgNjMgTDExNSA1NiBMMTA2IDUwIEwxMDcgNDcgTDEyMCA0NyBMMTE1IDQyIEwxMDIgMzUgTDEwNCAzMyBMMTAxIDI5IEwxMDUgMjQgTDEwOCAyMyBMMTAyIDE5IEwxMDIgNSBMOTUgMTQgTDg4IDE4IEw4NyAxNiBMODkgMTMgTDgyIDEyIEw3NyAyIEw3NCAxIEw3NCAyMyBMNjAgMjMgTDU0IDI4IEw0OSAyOCBMNDYgMzEgTDQzIDMwIEwzNiAzNSBMMjggMzYgTDIyIDQwIEwzOCA0MiBMMzkgNDUgTDQ0IDQ5IEw0MSA1MSBMMjcgNTEgTDI2IDQ5IEwyOCA0NiBMMTYgNDUgTDQgMzggWiIvPjwvc3ZnPg=="),
+    linear-gradient(
+      to bottom,
+      #ffffff 0%,
+      #ffffff 50%,
+      #008a3b 50%,
+      #008a3b 100%
+    ) !important;
+
+  background-repeat: no-repeat, no-repeat !important;
+
+  background-position:
+    85% center,
     center center !important;
 
   /*
@@ -1658,9 +1748,7 @@ body {
 
 /* Make absolutely sure no old overlay removes the flag */
 .home-panel[data-club="wales"]::before,
-.home-panel[data-club="wales"]::after,
-.away-panel[data-club="wales"]::before,
-.away-panel[data-club="wales"]::after {
+.home-panel[data-club="wales"]::after {
   content: none !important;
   background: none !important;
 }
@@ -1772,11 +1860,16 @@ body {
   pointer-events: none;
 }
 
+/* ============================================================
+   TURKEY 🇹🇷
+   Correct orientation — NO manual mirroring
+   ============================================================ */
+
 .home-panel[data-club="turkey"],
 .away-panel[data-club="turkey"] {
-  --skin-c1: #f02230;
-  --skin-c2: #8d0610;
-  --skin-c3: #e30a17;
+  --skin-c1: #E30A17;
+  --skin-c2: #E30A17;
+  --skin-c3: #E30A17;
 
   --skin-border: #ffffff;
   --skin-accent: #ffffff;
@@ -1785,11 +1878,78 @@ body {
 
   --skin-layout:
     linear-gradient(
-      125deg,
-      var(--skin-c1) 0%,
-      var(--skin-c1) 43%,
-      var(--skin-c2) 100%
+      90deg,
+      #E30A17 0%,
+      #E30A17 100%
     );
+
+  position: relative;
+  overflow: hidden;
+  background: #E30A17;
+}
+
+
+/* ============================================================
+   TURKISH FLAG
+   ============================================================ */
+
+.home-panel[data-club="turkey"]::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  z-index: 1;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 600'%3E%3Crect width='900' height='600' fill='%23E30A17'/%3E%3Ccircle cx='300' cy='300' r='150' fill='%23ffffff'/%3E%3Ccircle cx='350' cy='300' r='120' fill='%23E30A17'/%3E%3Cpolygon fill='%23ffffff' points='510,220 530,275 588,275 541,309 559,365 510,332 461,365 479,309 432,275 490,275'/%3E%3C/svg%3E");
+
+  background-repeat: no-repeat;
+  background-position: 90%;
+  background-size: contain;
+
+  pointer-events: none;
+}
+
+.away-panel[data-club="turkey"]::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  z-index: 1;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 600'%3E%3Crect width='900' height='600' fill='%23E30A17'/%3E%3Ccircle cx='300' cy='300' r='150' fill='%23ffffff'/%3E%3Ccircle cx='350' cy='300' r='120' fill='%23E30A17'/%3E%3Cpolygon fill='%23ffffff' points='510,220 530,275 588,275 541,309 559,365 510,332 461,365 479,309 432,275 490,275'/%3E%3C/svg%3E");
+
+  background-repeat: no-repeat;
+  background-position: 20%;
+  background-size: contain;
+
+  pointer-events: none;
+}
+
+
+/* ============================================================
+   NO EXTRA TRANSFORM
+   ============================================================ */
+
+.home-panel[data-club="turkey"]::before,
+.away-panel[data-club="turkey"]::before {
+  transform: none;
+}
+
+
+/* ============================================================
+   REMOVE OLD TURKEY ELEMENTS
+   ============================================================ */
+
+.home-panel[data-club="turkey"]::after,
+.away-panel[data-club="turkey"]::after {
+  content: none;
+}
+
+.home-panel[data-club="turkey"] .turkey-star,
+.away-panel[data-club="turkey"] .turkey-star {
+  display: none !important;
 }
 
 .away-panel[data-club="belgium"] {
@@ -1852,10 +2012,10 @@ body {
     linear-gradient(
       180deg,
       var(--skin-c1) 0%,
-      var(--skin-c1) 20%,
-      var(--skin-c2) 20%,
-      var(--skin-c2) 80%,
-      var(--skin-c3) 80%,
+      var(--skin-c1) 25%,
+      var(--skin-c2) 25%,
+      var(--skin-c2) 75%,
+      var(--skin-c3) 75%,
       var(--skin-c3) 100%
     );
 }
@@ -1867,10 +2027,10 @@ body {
     linear-gradient(
       180deg,
       #ffffff 0%,
-      #ffffff 20%,
-      #005da4 20%,
-      #005da4 80%,
-      #ed1c24 80%,
+      #ffffff 25%,
+      #005da4 25%,
+      #005da4 75%,
+      #ed1c24 75%,
       #ed1c24 100%
     );
 
@@ -1891,10 +2051,10 @@ body {
     linear-gradient(
       180deg,
       #C6363C 0%,
-      #C6363C 20%,
-      #0C4076 20%,
-      #0C4076 80%,
-      #FFFFFF 80%,
+      #C6363C 25%,
+      #0C4076 25%,
+      #0C4076 75%,
+      #FFFFFF 75%,
       #FFFFFF 100%
     );
 
