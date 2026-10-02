@@ -273,7 +273,7 @@ function renderScorers(side, scorers) {
 
       image.src =
         scorer.profile ||
-        "assets/players/default.png";
+        "https://res.cloudinary.com/vbqf3fz4/image/upload/v1790598910/default.png";
 
       image.alt =
         "";
@@ -315,15 +315,19 @@ function render() {
 
 
   homeScore.textContent =
-    Number(
-      state.homeScore
-    ) || 0;
+    Number.isFinite(
+      Number(state.homeScore)
+    )
+      ? Number(state.homeScore)
+      : 0;
 
 
   awayScore.textContent =
-    Number(
-      state.awayScore
-    ) || 0;
+    Number.isFinite(
+      Number(state.awayScore)
+    )
+      ? Number(state.awayScore)
+      : 0;
 
 
   if (state.homeLogo) {
